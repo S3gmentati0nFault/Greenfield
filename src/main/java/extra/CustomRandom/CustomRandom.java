@@ -21,4 +21,8 @@ public class CustomRandom{
       double randomValue = Math.floor(random.nextDouble() * (upBound - lwBound + 1)) + lwBound;
       return randomValue;
    }
+
+   public int rnInt(int upBound){
+      return (int) rnDouble(0, upBound);
+   }
 }

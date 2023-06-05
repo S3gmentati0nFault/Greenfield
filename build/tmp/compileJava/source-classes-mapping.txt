@@ -1,18 +1,39 @@
-Main.java
- Main
-Simulators Code DPS 2023/Simulator.java
- Simulator
+beans/BotIdentity.java
+ beans.BotIdentity
 Simulators Code DPS 2023/Buffer.java
  Buffer
+Main.java
+ Main
 extra/Timer/Timer.java
  extra.Timer.Timer
 extra/Logger/Colors.java
  extra.Logger.Colors
+cleaningBot/CleaningBot.java
+ cleaningBot.CleaningBot
+AdminServer.java
+ AdminServer
+ AdminServer$1
+ AdminServer$BotRequest
+ AdminServer$BotRequest$1
+ AdminServer$BotRequest$Builder
+ AdminServer$BotRequestOrBuilder
+ AdminServer$BotResponse
+ AdminServer$BotResponse$1
+ AdminServer$BotResponse$Builder
+ AdminServer$BotResponseOrBuilder
 Simulators Code DPS 2023/PM10Simulator.java
  PM10Simulator
-Simulators Code DPS 2023/Measurement.java
- Measurement
 extra/Logger/Logger.java
  extra.Logger.Logger
 extra/CustomRandom/CustomRandom.java
  extra.CustomRandom.CustomRandom
+Simulators Code DPS 2023/Simulator.java
+ Simulator
+Simulators Code DPS 2023/Measurement.java
+ Measurement
+extra/Position/Position.java
+ extra.Position.Position
+adminServer/AdminServer.java
+ adminServer.AdminServer
+beans/BotPositions.java
+ beans.BotPositions
