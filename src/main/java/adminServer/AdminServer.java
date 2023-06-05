@@ -6,6 +6,7 @@ import java.util.List;
 import beans.BotIdentity;
 import beans.BotPositions;
 import cleaningBot.CleaningBot;
+import extra.Position.Position;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -22,7 +23,14 @@ public class AdminServer {
     @POST
     @Consumes({"application/json", "application/xml"})
     public Response joinBot(BotIdentity identity) {
-       return Response.ok(BotPositions.getInstance().joinBot(identity)).build();
+        Position botPosition = BotPositions.getInstance().joinBot(identity);
+        if(botPosition == null){
+            return Response.serverError().build();
+        }
+        else{
+            String jsonString = BotPositions.getInstance().jsonBuilder(botPosition);
+            return Response.ok(jsonString).build();
+        }
     }
 
     @Path("bots")
