@@ -2,8 +2,8 @@ beans/BotIdentity.java
  beans.BotIdentity
 Simulators Code DPS 2023/Buffer.java
  Buffer
-cleaningBot/CleaningBot.java
- cleaningBot.CleaningBot
+Simulators Code DPS 2023/Measurement.java
+ Measurement
 extra/Timer/Timer.java
  extra.Timer.Timer
 extra/Logger/Colors.java
@@ -29,13 +29,18 @@ extra/CustomRandom/CustomRandom.java
  extra.CustomRandom.CustomRandom
 Simulators Code DPS 2023/Simulator.java
  Simulator
-Simulators Code DPS 2023/Measurement.java
- Measurement
+beans/BotPositions.java
+ beans.BotPositions
 extra/Position/Position.java
  extra.Position.Position
 Main.java
  Main
 adminServer/AdminServer.java
  adminServer.AdminServer
-beans/BotPositions.java
- beans.BotPositions
+exceptions/ThreadStoppedException.java
+ exceptions.ThreadStoppedException
+cleaningBot/CleaningBot.java
+ cleaningBot.CleaningBot
+cleaningBot/threads/Bot.java
+ cleaningBot.threads.Bot
+ cleaningBot.threads.Bot$1

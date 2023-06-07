@@ -1,9 +1,12 @@
 package beans;
 
 import extra.CustomRandom.CustomRandom;
+import extra.Logger.Logger;
 import extra.Position.Position;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.IOException;
 import java.util.*;
 
 @XmlRootElement(name = "city-map")
@@ -39,22 +42,21 @@ public class BotPositions {
     }
 
     public String jsonBuilder(Position botPosition) {
-        String json = "\"position\": {" +
-                "\"x\":" + botPosition.getX() +
-                ", \"y\": " + botPosition.getY() +
-                "}," +
-                "\"otherRobots\": [";
-
-        Set<BotIdentity> keys = botPositioning.keySet();
-        for (BotIdentity bot: keys) {
-            Position value = botPositioning.get(bot);
-            json = json +
-                    ", {" +
-                    "\"id\": " + bot.getId() +
-                    ", \"port\": " + bot.getPort() +
-                    ", \"ip\": " + bot.getIp() +
-                    "}";
+        String json = "";
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            json = mapper.writeValueAsString(botPosition);
+            json = json + "-[";
+            Set<BotIdentity> keys = botPositioning.keySet();
+            for (BotIdentity bot: keys) {
+                json = json + mapper.writeValueAsString(bot) + ",";
+            }
+            json = json.replaceAll(",$", "") + "]";
+            Logger.notice(json);
         }
-        return json + "]";
+        catch(IOException e){
+            Logger.error("There was an error while constructing the response");
+        }
+        return json;
     }
 }
