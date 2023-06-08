@@ -39,4 +39,11 @@ public class AdminServer {
         System.out.println(BotPositions.getInstance().getBotPositioning());
         return Response.ok().build();
     }
+
+    @Path("measurements/{id}/{number}")
+    @GET
+    public Response getAvgMeasurement(@PathParam("id") int robotID,
+                                      @PathParam("number") int numberOfMeasurements){
+        return Response.ok().build();
+    }
 }
