@@ -29,18 +29,17 @@ extra/CustomRandom/CustomRandom.java
  extra.CustomRandom.CustomRandom
 Simulators Code DPS 2023/Simulator.java
  Simulator
-beans/BotPositions.java
- beans.BotPositions
+exceptions/ThreadStoppedException.java
+ exceptions.ThreadStoppedException
 extra/Position/Position.java
  extra.Position.Position
 Main.java
  Main
+beans/BotPositions.java
+ beans.BotPositions
 adminServer/AdminServer.java
  adminServer.AdminServer
-exceptions/ThreadStoppedException.java
- exceptions.ThreadStoppedException
 cleaningBot/CleaningBot.java
  cleaningBot.CleaningBot
 cleaningBot/threads/Bot.java
  cleaningBot.threads.Bot
- cleaningBot.threads.Bot$1

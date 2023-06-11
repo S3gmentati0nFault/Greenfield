@@ -1,5 +1,6 @@
 package beans;
 
+import cleaningBot.threads.Bot;
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
 import extra.Position.Position;
@@ -40,6 +41,21 @@ public class BotPositions {
         }
         return null;
     }
+
+//    public synchronized boolean deleteBot(BotIdentity identity) {
+//        Logger.notice("REMOVAL");
+//        if(!botPositioning.containsKey(identity)){
+//            Logger.notice("The bot " +
+//                    identity.toString() +
+//                    " is not present in the city");
+//            return false;
+//        }
+//        else{
+//            Logger.notice("Removing node " + identity.toString());
+//            botPositioning.remove(identity);
+//            return true;
+//        }
+//    }
 
     public String jsonBuilder(Position botPosition) {
         String json = "";

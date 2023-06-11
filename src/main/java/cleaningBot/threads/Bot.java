@@ -3,6 +3,7 @@ package cleaningBot.threads;
 import extra.Logger.Logger;
 import extra.Position.Position;
 import extra.CustomRandom.CustomRandom;
+import extra.Timer.Timer;
 import extra.Variables;
 import beans.BotIdentity;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,7 +31,6 @@ public class Bot extends Thread{
     public void run() {
         if(!startNewBot()){
             Logger.error("There was an error during Thread instantiation");
-            return;
         }
     }
 
@@ -110,12 +110,8 @@ public class Bot extends Thread{
 
         try{
             String[] responseLine = br.readLine().toString().split("-");
-//            Logger.notice(new String(String.valueOf(responseLine.length)));
             position = new ObjectMapper().readValue(responseLine[0], Position.class);
-//            Logger.notice(responseLine[1]);
             otherBots = new ObjectMapper().readValue(responseLine[1], new TypeReference<List<BotIdentity>>(){});
-//            Logger.notice(position.toString());
-//            Logger.notice(otherBots.get(0).toString());
         } catch (IOException e) {
             Logger.error("It was not possible to retrieve the response from the server");
             return false;

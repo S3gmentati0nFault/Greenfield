@@ -13,15 +13,9 @@ import javax.ws.rs.core.Response;
 
 @Path("admin")
 public class AdminServer {
-    List<CleaningBot> bots;
-
-    public AdminServer(){
-        bots = new ArrayList<CleaningBot>();
-    }
-
     @Path("join")
     @POST
-    @Consumes({"application/json", "application/xml"})
+    @Consumes({"application/json"})
     public Response joinBot(BotIdentity identity) {
         Position botPosition = BotPositions.getInstance().joinBot(identity);
         if(botPosition == null){
@@ -35,15 +29,29 @@ public class AdminServer {
 
     @Path("bots")
     @GET
-    public Response getBots(){
+    public Response getBots() {
         System.out.println(BotPositions.getInstance().getBotPositioning());
         return Response.ok().build();
     }
 
+//    @Path("remove")
+//    @DELETE
+//    @Consumes({"application/json"})
+//    public Response deleteBot(BotIdentity identity) {
+//        System.out.println("1");
+//        BotPositions.getInstance().deleteBot(identity);
+//        if(true){
+//            return Response.ok().build();
+//        }
+//        else{
+//            return Response.serverError().build();
+//        }
+//    }
+
     @Path("measurements/{id}/{number}")
     @GET
     public Response getAvgMeasurement(@PathParam("id") int robotID,
-                                      @PathParam("number") int numberOfMeasurements){
+                                      @PathParam("number") int numberOfMeasurements) {
         return Response.ok().build();
     }
 }
