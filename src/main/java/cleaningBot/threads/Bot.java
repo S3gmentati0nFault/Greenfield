@@ -3,7 +3,6 @@ package cleaningBot.threads;
 import extra.Logger.Logger;
 import extra.Position.Position;
 import extra.CustomRandom.CustomRandom;
-import extra.Timer.Timer;
 import extra.Variables;
 import beans.BotIdentity;
 import org.codehaus.jackson.map.ObjectMapper;

@@ -1,11 +1,7 @@
 package adminServer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import beans.BotIdentity;
 import beans.BotPositions;
-import cleaningBot.CleaningBot;
 import extra.Position.Position;
 
 import javax.ws.rs.*;

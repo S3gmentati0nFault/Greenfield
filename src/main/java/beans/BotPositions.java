@@ -1,6 +1,5 @@
 package beans;
 
-import cleaningBot.threads.Bot;
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
 import extra.Position.Position;
