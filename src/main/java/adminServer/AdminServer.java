@@ -7,8 +7,22 @@ import extra.Position.Position;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+/**
+ * REST class for the Administration server. This is the REST class that
+ * handles incoming connections for the administration server.
+ */
 @Path("admin")
 public class AdminServer {
+
+    /**
+     * This function handles the addition of a new bot to the network.
+     * @param identity the identity of the bot, this is an object containing
+     *                 the bot's ID
+     *                 the bot's port
+     *                 the bot's ip address
+     * @return The return value is an HTTP response which is either 200 ok or
+     * Error
+     */
     @Path("join")
     @POST
     @Consumes({"application/json"})
@@ -23,6 +37,10 @@ public class AdminServer {
         }
     }
 
+    /**
+     * This function returns the set of bots registered within the city.
+     * @return The return value is an HTTP response which is only 200 ok.
+     */
     @Path("bots")
     @GET
     public Response getBots() {

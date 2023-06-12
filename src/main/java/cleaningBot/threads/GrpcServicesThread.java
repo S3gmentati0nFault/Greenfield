@@ -8,13 +8,22 @@ import io.grpc.ServerBuilder;
 
 import java.io.IOException;
 
+/**
+ * GrpcServicesThread is a thread that handles incoming communications from other threads.
+ */
 public class GrpcServicesThread extends Thread {
     private int port, id;
     private String ip;
     private BotServices grpcServices;
     private Bot bot;
 
-
+    /**
+     * @see Bot
+     * Custom constructor that starts the communication server up.
+     * @param identity This is the bot identity received from the Bot class.
+     * @param bot This is a reference to the bot object, it is used to keep a synchronized
+     *            copy of the Bot list around.
+     */
     public GrpcServicesThread(BotIdentity identity, Bot bot) {
         port = identity.getPort();
         id = identity.getId();
@@ -24,6 +33,9 @@ public class GrpcServicesThread extends Thread {
         grpcServices = new BotServices(bot);
     }
 
+    /**
+     * Override of the run method that starts the communication server.
+     */
     @Override
     public void run(){
         try{
@@ -37,6 +49,9 @@ public class GrpcServicesThread extends Thread {
         }
     }
 
+    /**
+     * A method that prints the queue.
+     */
     public void printQueue(){
         grpcServices
                 .getContentionQueue()

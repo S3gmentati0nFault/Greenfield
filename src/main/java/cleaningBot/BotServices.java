@@ -10,6 +10,9 @@ import services.grpc.BotServicesGrpc.*;
 
 import java.util.PriorityQueue;
 
+/**
+ * This class implements the GRPC methods defined inside the proto file.
+ */
 public class BotServices extends BotServicesImplBase {
     private PriorityQueue<BotEntry> contentionQueue;
     private Bot bot;

@@ -20,17 +20,31 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 
+/**
+ * @see cleaningBot.CleaningBot
+ * A thread for the CleaningBot class that handles the initial connection with the
+ * administration server
+ */
 public class Bot extends Thread{
     private Position position;
     private List<BotIdentity> otherBots;
     private BotIdentity identity;
 
+    /**
+     * Empty constructor that generates random values for both the id and the
+     * port.
+     */
     public Bot(){
         identity = new BotIdentity(CustomRandom.getInstance().rnInt(100),
                 CustomRandom.getInstance().rnInt(65534),
                 "localhost");
     }
 
+    /**
+     * Override of run method that starts the thread used for inter-bot communication and
+     * initiates the communication channel with the administration server.
+     */
+    @Override
     public void run(){
         GrpcServicesThread grpcThread = new GrpcServicesThread(identity, this);
         grpcThread.start();
@@ -40,6 +54,11 @@ public class Bot extends Thread{
         }
     }
 
+    /**
+     * Method that opens a connection with the administration server and makes its
+     * presence known to both the server and the other bots in the network.
+     * @return It returns true if the operation went well, false otherwise.
+     */
     private boolean startNewBot() {
         URL requestURL;
         ObjectMapper mapper = new ObjectMapper();
@@ -166,6 +185,9 @@ public class Bot extends Thread{
         return true;
     }
 
+    /**
+     * Getter for the bots in the system.
+     */
     public List<BotIdentity> getOtherBots() {
         return otherBots;
     }
