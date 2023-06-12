@@ -12,7 +12,7 @@ public class Main {
     }
 
     private static void adminServerJoinTest() throws IOException {
-        Logger.test("adminServerJoinTest");
+        Logger.green("adminServerJoinTest");
         HttpServer server = HttpServerFactory.create("http://"+ Variables.HOST+":"+Variables.PORT+"/");
         server.start();
 

@@ -1,27 +1,27 @@
 package extra.Logger;
 
 public class Logger {
-    public static void error(String message){
+    public static void red(String message){
         System.out.println(Colors.ANSI_RED + " <<!>> " + message + " <<!>> " + Colors.ANSI_RESET);
     }
 
-    public static void notice(String message){
+    public static void blue(String message){
         System.out.println(Colors.ANSI_BLUE + " <<?>> " + message + " <<?>> " + Colors.ANSI_RESET);
     }
 
-    public static void interact(String message){
-        System.out.print(Colors.ANSI_YELLOW + " <<U>> " + message + " >> " + Colors.ANSI_RESET);
+    public static void yellow(String message){
+        System.out.println(Colors.ANSI_YELLOW + " <<§>> " + message + " <<§>> " + Colors.ANSI_RESET);
     }
 
-    public static void request(String message){
+    public static void purple(String message){
         System.out.println(Colors.ANSI_PURPLE + " <<~>> " + message + " <<~>> " + Colors.ANSI_RESET);
     }
 
-    public static void test(String message) {
+    public static void green(String message) {
         System.out.println(Colors.ANSI_GREEN + " <<@>> " + message + " <<@>> " + Colors.ANSI_RESET);
     }
 
-    public static void message(String message, String name){
-        System.out.println(Colors.ANSI_CYAN + name + Colors.ANSI_RESET + Colors.ANSI_YELLOW + " >> " + Colors.ANSI_RESET + message + Colors.ANSI_YELLOW + " <<.>> " + Colors.ANSI_RESET);
+    public static void cyan(String message){
+        System.out.println(Colors.ANSI_CYAN + " <<ß>> " + message + " <<ß>> " + Colors.ANSI_RESET);
     }
 }

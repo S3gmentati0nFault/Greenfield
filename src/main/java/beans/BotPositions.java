@@ -67,10 +67,10 @@ public class BotPositions {
                 json = json + mapper.writeValueAsString(bot) + ",";
             }
             json = json.replaceAll(",$", "") + "]";
-            Logger.notice(json);
+            Logger.blue(json);
         }
         catch(IOException e){
-            Logger.error("There was an error while constructing the response");
+            Logger.red("There was an error while constructing the response");
         }
         return json;
     }

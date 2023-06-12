@@ -5,8 +5,13 @@ import extra.Position.Position;
 import extra.CustomRandom.CustomRandom;
 import extra.Variables;
 import beans.BotIdentity;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import services.grpc.BotGRPC;
+import services.grpc.BotServicesGrpc;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -26,10 +31,12 @@ public class Bot extends Thread{
                 "localhost");
     }
 
-    @Override
-    public void run() {
+    public void run(){
+        GrpcServicesThread grpcThread = new GrpcServicesThread(identity, this);
+        grpcThread.start();
+
         if(!startNewBot()){
-            Logger.error("There was an error during Thread instantiation");
+            Logger.red("There was an error during Thread instantiation");
         }
     }
 
@@ -43,7 +50,7 @@ public class Bot extends Thread{
                     Variables.PORT +
                     "/admin/join");
         }catch(MalformedURLException e){
-            Logger.error("The url was malformed");
+            Logger.red("The url was malformed");
             return false;
         }
 
@@ -52,14 +59,14 @@ public class Bot extends Thread{
             connection = (HttpURLConnection) requestURL.openConnection();
         }
         catch(IOException e){
-            Logger.error("There was an error during connection opening procedure");
+            Logger.red("There was an error during connection opening procedure");
             return false;
         }
 
         try{
             connection.setRequestMethod("POST");
         }catch(ProtocolException e){
-            Logger.error("There was an error during request method selection");
+            Logger.red("There was an error during request method selection");
             return false;
         }
 
@@ -71,7 +78,7 @@ public class Bot extends Thread{
         try{
             os = connection.getOutputStream();
         }catch(IOException e){
-            Logger.error("There was an error during output stream creation");
+            Logger.red("There was an error during output stream creation");
             return false;
         }
 
@@ -79,7 +86,7 @@ public class Bot extends Thread{
         try{
             json = mapper.writeValueAsString(identity);
         } catch (IOException e) {
-            Logger.error("There was an error while generating the json string");
+            Logger.red("There was an error while generating the json string");
             return false;
         }
 
@@ -87,14 +94,14 @@ public class Bot extends Thread{
         try{
             input = json.getBytes("utf-8");
         } catch (UnsupportedEncodingException e) {
-            Logger.error("There was a problem while turning the string into bytes");
+            Logger.red("There was a problem while turning the string into bytes");
             return false;
         }
 
         try{
             os.write(input, 0, input.length);
         }catch(IOException e){
-            Logger.error("There was an error while writing on output stream");
+            Logger.red("There was an error while writing on output stream");
             return false;
         }
 
@@ -103,19 +110,63 @@ public class Bot extends Thread{
             br = new BufferedReader(
                 new InputStreamReader(connection.getInputStream(), "utf-8"));
         }catch(IOException e){
-            Logger.error("It was not possible to initialize the BufferedReader");
+            Logger.red("It was not possible to initialize the BufferedReader");
             return false;
         }
 
         try{
             String[] responseLine = br.readLine().toString().split("-");
             position = new ObjectMapper().readValue(responseLine[0], Position.class);
-            otherBots = new ObjectMapper().readValue(responseLine[1], new TypeReference<List<BotIdentity>>(){});
+            otherBots = new ObjectMapper().readValue(responseLine[1],
+                    new TypeReference<List<BotIdentity>>(){});
         } catch (IOException e) {
-            Logger.error("It was not possible to retrieve the response from the server");
+            Logger.red("It was not possible to retrieve the response from the server");
             return false;
         }
 
+        if(!otherBots.isEmpty()){
+            Logger.cyan("Contacting the other bots");
+            otherBots.forEach(botIdentity -> {
+                if(botIdentity.equals(identity)){
+                    return;
+                }
+                ManagedChannel channel = ManagedChannelBuilder
+                    .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
+                    .usePlaintext()
+                    .build();
+
+                BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
+                BotGRPC.BotNetworkingInformations identikit = BotGRPC.BotNetworkingInformations
+                        .newBuilder()
+                        .setId(identity.getId())
+                        .setPort(identity.getPort())
+                        .setHost(identity.getIp())
+                        .build();
+                serviceStub.joinAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
+                    @Override
+                    public void onNext(BotGRPC.Acknowledgement value) {
+                        if(!value.getAck()){
+                            Logger.purple("robot " + botIdentity + " didn't add me to its network");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Logger.red("robot " + botIdentity + " sent an error");
+                    }
+
+                    @Override
+                    public void onCompleted() {otherBots.forEach(
+                            botIdentity -> {System.out.println(botIdentity);}
+                    );}
+                });
+            });
+        }
+
         return true;
+    }
+
+    public List<BotIdentity> getOtherBots() {
+        return otherBots;
     }
 }

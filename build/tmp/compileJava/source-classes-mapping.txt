@@ -2,14 +2,16 @@ beans/BotIdentity.java
  beans.BotIdentity
 Simulators Code DPS 2023/Buffer.java
  Buffer
-Simulators Code DPS 2023/Measurement.java
- Measurement
+beans/BotPositions.java
+ beans.BotPositions
+extra/Variables.java
+ extra.Variables
 extra/Timer/Timer.java
  extra.Timer.Timer
 extra/Logger/Colors.java
  extra.Logger.Colors
-extra/Variables.java
- extra.Variables
+Simulators Code DPS 2023/Measurement.java
+ Measurement
 AdminServer.java
  AdminServer
  AdminServer$1
@@ -25,21 +27,68 @@ Simulators Code DPS 2023/PM10Simulator.java
  PM10Simulator
 extra/Logger/Logger.java
  extra.Logger.Logger
+services/grpc/BotGRPC.java
+ services.grpc.BotGRPC
+ services.grpc.BotGRPC$1
+ services.grpc.BotGRPC$Acknowledgement
+ services.grpc.BotGRPC$Acknowledgement$1
+ services.grpc.BotGRPC$Acknowledgement$Builder
+ services.grpc.BotGRPC$AcknowledgementOrBuilder
+ services.grpc.BotGRPC$BotNetworkingInformations
+ services.grpc.BotGRPC$BotNetworkingInformations$1
+ services.grpc.BotGRPC$BotNetworkingInformations$Builder
+ services.grpc.BotGRPC$BotNetworkingInformationsOrBuilder
+ services.grpc.BotGRPC$Identifier
+ services.grpc.BotGRPC$Identifier$1
+ services.grpc.BotGRPC$Identifier$Builder
+ services.grpc.BotGRPC$IdentifierOrBuilder
 extra/CustomRandom/CustomRandom.java
  extra.CustomRandom.CustomRandom
 Simulators Code DPS 2023/Simulator.java
  Simulator
-exceptions/ThreadStoppedException.java
- exceptions.ThreadStoppedException
-extra/Position/Position.java
- extra.Position.Position
-Main.java
- Main
-beans/BotPositions.java
- beans.BotPositions
+services/grpc/BotServicesGrpc.java
+ services.grpc.BotServicesGrpc
+ services.grpc.BotServicesGrpc$1
+ services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesBlockingStub
+ services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesFutureStub
+ services.grpc.BotServicesGrpc$BotServicesImplBase
+ services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesStub
+ services.grpc.BotServicesGrpc$MethodHandlers
 adminServer/AdminServer.java
  adminServer.AdminServer
+cleaningBot/threads/BotEntry.java
+ cleaningBot.threads.BotEntry
+extra/Position/Position.java
+ extra.Position.Position
+BotGRPC.java
+ BotGRPC
+ BotGRPC$1
+ BotGRPC$Acknowledgement
+ BotGRPC$Acknowledgement$1
+ BotGRPC$Acknowledgement$Builder
+ BotGRPC$AcknowledgementOrBuilder
+ BotGRPC$BotNetworkingInformations
+ BotGRPC$BotNetworkingInformations$1
+ BotGRPC$BotNetworkingInformations$Builder
+ BotGRPC$BotNetworkingInformationsOrBuilder
+ BotGRPC$Identifier
+ BotGRPC$Identifier$1
+ BotGRPC$Identifier$Builder
+ BotGRPC$IdentifierOrBuilder
+Main.java
+ Main
+exceptions/ThreadStoppedException.java
+ exceptions.ThreadStoppedException
+cleaningBot/BotServices.java
+ cleaningBot.BotServices
 cleaningBot/CleaningBot.java
  cleaningBot.CleaningBot
+cleaningBot/threads/GrpcServicesThread.java
+ cleaningBot.threads.GrpcServicesThread
 cleaningBot/threads/Bot.java
  cleaningBot.threads.Bot
+ cleaningBot.threads.Bot$1
+ cleaningBot.threads.Bot$2

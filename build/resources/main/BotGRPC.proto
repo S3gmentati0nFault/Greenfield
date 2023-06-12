@@ -1,0 +1,23 @@
+syntax = "proto3";
+package services.grpc;
+
+service BotServices {
+  rpc processQueryGRPC(Identifier) returns (Acknowledgement) {}
+  rpc joinAdvertiseGRPC(BotNetworkingInformations) returns (Acknowledgement) {}
+  rpc crashAdvertiseGRPC(BotNetworkingInformations) returns (Acknowledgement) {}
+}
+
+message Identifier {
+  int32 timestamp = 1;
+  int32 id = 2;
+}
+
+message Acknowledgement {
+  bool ack = 1;
+}
+
+message BotNetworkingInformations {
+  int32 id = 1;
+  int32 port = 2;
+  string host = 3;
+}
