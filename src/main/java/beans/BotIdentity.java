@@ -16,6 +16,11 @@ public class BotIdentity {
     private String ip;
 
     /**
+     * Necessary dummy constructor to process the JSON mapping.
+     */
+    public BotIdentity() {}
+
+    /**
      * The bot identity constructor.
      * @param id An integer value, there are no equal ids in the system.
      * @param port An integer value, there are no equal ports in the system.
