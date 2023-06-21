@@ -15,22 +15,22 @@ public class GrpcServicesThread extends Thread {
     private int port, id;
     private String ip;
     private BotServices grpcServices;
-    private Bot bot;
+    private BotThread botThread;
 
     /**
-     * @see Bot
+     * @see BotThread
      * Custom constructor that starts the communication server up.
      * @param identity This is the bot identity received from the Bot class.
-     * @param bot This is a reference to the bot object, it is used to keep a synchronized
+     * @param botThread This is a reference to the bot object, it is used to keep a synchronized
      *            copy of the Bot list around.
      */
-    public GrpcServicesThread(BotIdentity identity, Bot bot) {
+    public GrpcServicesThread(BotIdentity identity, BotThread botThread) {
         port = identity.getPort();
         id = identity.getId();
         ip = identity.getIp();
-        this.bot = bot;
+        this.botThread = botThread;
 
-        grpcServices = new BotServices(bot);
+        grpcServices = new BotServices(botThread);
     }
 
     /**

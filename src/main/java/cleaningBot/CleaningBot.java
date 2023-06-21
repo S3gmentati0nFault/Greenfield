@@ -1,10 +1,10 @@
 package cleaningBot;
 
-import cleaningBot.threads.Bot;
+import cleaningBot.threads.BotThread;
 
 public class CleaningBot {
     public static void main(String[] args) {
-        Bot botThread = new Bot();
+        BotThread botThread = new BotThread();
         botThread.start();
     }
 }

@@ -25,7 +25,7 @@ import java.util.List;
  * A thread for the CleaningBot class that handles the initial connection with the
  * administration server
  */
-public class Bot extends Thread{
+public class BotThread extends Thread{
     private Position position;
     private List<BotIdentity> otherBots;
     private BotIdentity identity;
@@ -34,7 +34,7 @@ public class Bot extends Thread{
      * Empty constructor that generates random values for both the id and the
      * port.
      */
-    public Bot(){
+    public BotThread(){
         identity = new BotIdentity(CustomRandom.getInstance().rnInt(100),
                 CustomRandom.getInstance().rnInt(65534),
                 "localhost");

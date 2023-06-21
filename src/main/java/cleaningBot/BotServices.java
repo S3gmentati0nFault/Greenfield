@@ -1,7 +1,7 @@
 package cleaningBot;
 
 import beans.BotIdentity;
-import cleaningBot.threads.Bot;
+import cleaningBot.threads.BotThread;
 import cleaningBot.threads.BotEntry;
 import extra.Logger.Logger;
 import io.grpc.stub.StreamObserver;
@@ -15,10 +15,10 @@ import java.util.PriorityQueue;
  */
 public class BotServices extends BotServicesImplBase {
     private PriorityQueue<BotEntry> contentionQueue;
-    private Bot bot;
+    private BotThread botThread;
 
-    public BotServices(Bot bot) {
-        this.bot = bot;
+    public BotServices(BotThread botThread) {
+        this.botThread = botThread;
 
         contentionQueue = new PriorityQueue<>();
     }
@@ -57,7 +57,7 @@ public class BotServices extends BotServicesImplBase {
         Logger.yellow("joinAdvertiseGRPC");
 
         try{
-            bot.getOtherBots().add(
+            botThread.getOtherBots().add(
                     new BotIdentity(request.getId(), request.getPort(), request.getHost())
             );
             responseObserver.onNext(BotGRPC.Acknowledgement
@@ -68,7 +68,7 @@ public class BotServices extends BotServicesImplBase {
             Logger.red(":'(");
             responseObserver.onError(e);
         }
-        bot.getOtherBots().forEach(botIdentity -> {System.out.println(botIdentity);});
+        botThread.getOtherBots().forEach(botIdentity -> {System.out.println(botIdentity);});
         responseObserver.onCompleted();
     }
 
@@ -77,13 +77,13 @@ public class BotServices extends BotServicesImplBase {
         Logger.yellow("crashAdvertiseGRPC");
 
         try{
-            bot.getOtherBots().remove(
+            botThread.getOtherBots().remove(
                     new BotIdentity(request.getId(), request.getPort(), request.getHost())
             );
         }catch(Exception e){
             responseObserver.onError(e);
         }
-        bot.getOtherBots().forEach(botIdentity -> {System.out.println(botIdentity);});
+        botThread.getOtherBots().forEach(botIdentity -> {System.out.println(botIdentity);});
         responseObserver.onCompleted();
     }
 }
