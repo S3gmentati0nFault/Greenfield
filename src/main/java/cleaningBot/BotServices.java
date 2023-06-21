@@ -29,32 +29,12 @@ public class BotServices extends BotServicesImplBase {
 
     public void processQueryGRPC(BotGRPC.Identifier request,
                                  StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
-        Logger.yellow("processQueryGRPC");
-
-        try{
-            if(contentionQueue.add(new BotEntry(request.getTimestamp(), request.getId()))){
-                responseObserver
-                        .onNext(BotGRPC.Acknowledgement
-                                .newBuilder()
-                                .setAck(true)
-                                .build());
-            }
-            else{
-                responseObserver.onNext(BotGRPC.Acknowledgement
-                        .newBuilder()
-                        .setAck(false)
-                        .build());
-            }
-        }catch(Exception e){
-            Logger.red(":(");
-            responseObserver.onError(e);
-        }
-        responseObserver.onCompleted();
+        Logger.cyan("processQueryGRPC");
     }
 
     public void joinAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
-        Logger.yellow("joinAdvertiseGRPC");
+        Logger.cyan("joinAdvertiseGRPC");
 
         try{
             botThread.getOtherBots().add(
@@ -68,13 +48,12 @@ public class BotServices extends BotServicesImplBase {
             Logger.red(":'(");
             responseObserver.onError(e);
         }
-        botThread.getOtherBots().forEach(botIdentity -> {System.out.println(botIdentity);});
         responseObserver.onCompleted();
     }
 
     public void crashAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
-        Logger.yellow("crashAdvertiseGRPC");
+        Logger.cyan("crashAdvertiseGRPC");
 
         try{
             botThread.getOtherBots().remove(

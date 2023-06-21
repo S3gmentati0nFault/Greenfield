@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * GrpcServicesThread is a thread that handles incoming communications from other threads.
  */
-public class GrpcServicesThread extends Thread {
+public class GrpcServices extends Thread {
     private int port, id;
     private String ip;
     private BotServices grpcServices;
@@ -24,7 +24,7 @@ public class GrpcServicesThread extends Thread {
      * @param botThread This is a reference to the bot object, it is used to keep a synchronized
      *            copy of the Bot list around.
      */
-    public GrpcServicesThread(BotIdentity identity, BotThread botThread) {
+    public GrpcServices(BotIdentity identity, BotThread botThread) {
         port = identity.getPort();
         id = identity.getId();
         ip = identity.getIp();
@@ -33,9 +33,6 @@ public class GrpcServicesThread extends Thread {
         grpcServices = new BotServices(botThread);
     }
 
-    /**
-     * Override of the run method that starts the communication server.
-     */
     @Override
     public void run(){
         try{
@@ -48,15 +45,5 @@ public class GrpcServicesThread extends Thread {
         } catch (InterruptedException e) {
             Logger.red("There was an error while trying to stop the grpcServices communication server");
         }
-    }
-
-    /**
-     * A method that prints the queue.
-     */
-    public void printQueue(){
-        grpcServices
-                .getContentionQueue()
-                .forEach(botEntry -> {System.out.println(botEntry);}
-                );
     }
 }

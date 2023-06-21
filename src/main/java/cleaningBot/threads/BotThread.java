@@ -46,12 +46,21 @@ public class BotThread extends Thread{
      */
     @Override
     public void run(){
-        GrpcServicesThread grpcThread = new GrpcServicesThread(identity, this);
+        Logger.yellow("Starting grpc services");
+        GrpcServices grpcThread = new GrpcServices(identity, this);
         grpcThread.start();
 
         if(!startNewBot()){
             Logger.red("There was an error during Thread instantiation");
         }
+
+        Logger.yellow("Starting input thread");
+        InputThread inputThread = new InputThread(this);
+        inputThread.start();
+
+        Logger.yellow("Starting maintenance thread");
+        MaintenanceThread maintenanceThread = new MaintenanceThread();
+        maintenanceThread.start();
     }
 
     /**
@@ -190,5 +199,11 @@ public class BotThread extends Thread{
      */
     public List<BotIdentity> getOtherBots() {
         return otherBots;
+    }
+
+    public void printOtherBots() {
+        for (BotIdentity otherBot : otherBots) {
+            System.out.println(otherBot);
+        }
     }
 }
