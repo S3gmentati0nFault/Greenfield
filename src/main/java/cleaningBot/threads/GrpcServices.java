@@ -39,7 +39,6 @@ public class GrpcServices extends Thread {
             Server server = ServerBuilder.forPort(port).addService(grpcServices).build();
             server.start();
             server.awaitTermination();
-            System.out.println("awaiting termination");
         } catch (IOException e) {
             Logger.red("There was an error while trying to fire up the grpcServices communication server");
         } catch (InterruptedException e) {

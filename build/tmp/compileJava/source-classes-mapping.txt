@@ -2,16 +2,16 @@ beans/BotIdentity.java
  beans.BotIdentity
 Simulators Code DPS 2023/Buffer.java
  Buffer
-cleaningBot/CleaningBot.java
- cleaningBot.CleaningBot
-cleaningBot/threads/BotEntry.java
- cleaningBot.threads.BotEntry
+beans/BotPositions.java
+ beans.BotPositions
+cleaningBot/BotServices.java
+ cleaningBot.BotServices
 extra/Timer/Timer.java
  extra.Timer.Timer
 extra/Logger/Colors.java
  extra.Logger.Colors
-adminServer/AdminServer.java
- adminServer.AdminServer
+cleaningBot/threads/InputThread.java
+ cleaningBot.threads.InputThread
 AdminServer.java
  AdminServer
  AdminServer$1
@@ -23,46 +23,27 @@ AdminServer.java
  AdminServer$BotResponse$1
  AdminServer$BotResponse$Builder
  AdminServer$BotResponseOrBuilder
-BotGRPC.java
- BotGRPC
- BotGRPC$1
- BotGRPC$Acknowledgement
- BotGRPC$Acknowledgement$1
- BotGRPC$Acknowledgement$Builder
- BotGRPC$AcknowledgementOrBuilder
- BotGRPC$BotNetworkingInformations
- BotGRPC$BotNetworkingInformations$1
- BotGRPC$BotNetworkingInformations$Builder
- BotGRPC$BotNetworkingInformationsOrBuilder
- BotGRPC$Identifier
- BotGRPC$Identifier$1
- BotGRPC$Identifier$Builder
- BotGRPC$IdentifierOrBuilder
+cleaningBot/threads/BotThread.java
+ cleaningBot.threads.BotThread
+ cleaningBot.threads.BotThread$1
+ cleaningBot.threads.BotThread$2
 extra/Position/Position.java
  extra.Position.Position
-cleaningBot/threads/InputThread.java
- cleaningBot.threads.InputThread
+Main.java
+ Main
 Simulators Code DPS 2023/Measurement.java
  Measurement
-Simulators Code DPS 2023/Simulator.java
- Simulator
+cleaningBot/threads/MaintenanceThread.java
+ cleaningBot.threads.MaintenanceThread
+ cleaningBot.threads.MaintenanceThread$1
 extra/Variables.java
  extra.Variables
-services/grpc/BotServicesGrpc.java
- services.grpc.BotServicesGrpc
- services.grpc.BotServicesGrpc$1
- services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesBlockingStub
- services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesFutureStub
- services.grpc.BotServicesGrpc$BotServicesImplBase
- services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesStub
- services.grpc.BotServicesGrpc$MethodHandlers
+cleaningBot/CleaningBot.java
+ cleaningBot.CleaningBot
 Simulators Code DPS 2023/PM10Simulator.java
  PM10Simulator
-extra/CustomRandom/CustomRandom.java
- extra.CustomRandom.CustomRandom
+extra/Logger/Logger.java
+ extra.Logger.Logger
 services/grpc/BotGRPC.java
  services.grpc.BotGRPC
  services.grpc.BotGRPC$1
@@ -78,20 +59,39 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Identifier$1
  services.grpc.BotGRPC$Identifier$Builder
  services.grpc.BotGRPC$IdentifierOrBuilder
-extra/Logger/Logger.java
- extra.Logger.Logger
-beans/BotPositions.java
- beans.BotPositions
-Main.java
- Main
-cleaningBot/threads/BotThread.java
- cleaningBot.threads.BotThread
- cleaningBot.threads.BotThread$1
- cleaningBot.threads.BotThread$2
+extra/CustomRandom/CustomRandom.java
+ extra.CustomRandom.CustomRandom
+Simulators Code DPS 2023/Simulator.java
+ Simulator
+services/grpc/BotServicesGrpc.java
+ services.grpc.BotServicesGrpc
+ services.grpc.BotServicesGrpc$1
+ services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesBlockingStub
+ services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesFutureStub
+ services.grpc.BotServicesGrpc$BotServicesImplBase
+ services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesStub
+ services.grpc.BotServicesGrpc$MethodHandlers
+adminServer/AdminServer.java
+ adminServer.AdminServer
 cleaningBot/threads/GrpcServices.java
  cleaningBot.threads.GrpcServices
-cleaningBot/BotServices.java
- cleaningBot.BotServices
-cleaningBot/threads/MaintenanceThread.java
- cleaningBot.threads.MaintenanceThread
- cleaningBot.threads.MaintenanceThread$1
+cleaningBot/threads/BotEntry.java
+ cleaningBot.threads.BotEntry
+BotGRPC.java
+ BotGRPC
+ BotGRPC$1
+ BotGRPC$Acknowledgement
+ BotGRPC$Acknowledgement$1
+ BotGRPC$Acknowledgement$Builder
+ BotGRPC$AcknowledgementOrBuilder
+ BotGRPC$BotNetworkingInformations
+ BotGRPC$BotNetworkingInformations$1
+ BotGRPC$BotNetworkingInformations$Builder
+ BotGRPC$BotNetworkingInformationsOrBuilder
+ BotGRPC$Identifier
+ BotGRPC$Identifier$1
+ BotGRPC$Identifier$Builder
+ BotGRPC$IdentifierOrBuilder

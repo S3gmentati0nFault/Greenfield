@@ -191,9 +191,13 @@ public class BotThread extends Thread{
 
                     @Override
                     public void onCompleted() {
-                        otherBots.forEach(
-                            botIdentity -> {System.out.println(botIdentity);}
-                        );
+                        if(Variables.MODE.equals("DEBUG")) {
+                            otherBots.forEach(
+                                    botIdentity -> {
+                                        System.out.println(botIdentity);
+                                    }
+                            );
+                        }
                         channel.shutdown();
                     }
                 });
