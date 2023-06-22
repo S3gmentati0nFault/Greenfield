@@ -1,5 +1,6 @@
 package cleaningBot.threads;
 
+import cleaningBot.BotServices;
 import extra.Logger.Logger;
 import extra.Position.Position;
 import extra.CustomRandom.CustomRandom;
@@ -29,6 +30,8 @@ public class BotThread extends Thread{
     private Position position;
     private List<BotIdentity> otherBots;
     private BotIdentity identity;
+    private BotServices botServices;
+    private int timestamp;
 
     /**
      * Empty constructor that generates random values for both the id and the
@@ -38,6 +41,9 @@ public class BotThread extends Thread{
         identity = new BotIdentity(CustomRandom.getInstance().rnInt(100),
                 CustomRandom.getInstance().rnInt(65534),
                 "localhost");
+        timestamp = -1;
+
+        botServices = new BotServices(this);
     }
 
     /**
@@ -47,7 +53,7 @@ public class BotThread extends Thread{
     @Override
     public void run(){
         Logger.yellow("Starting grpc services");
-        GrpcServices grpcThread = new GrpcServices(identity, this);
+        GrpcServices grpcThread = new GrpcServices(identity, this, botServices);
         grpcThread.start();
 
         if(!startNewBot()){
@@ -59,7 +65,7 @@ public class BotThread extends Thread{
         inputThread.start();
 
         Logger.yellow("Starting maintenance thread");
-        MaintenanceThread maintenanceThread = new MaintenanceThread();
+        MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
         maintenanceThread.start();
     }
 
@@ -184,9 +190,12 @@ public class BotThread extends Thread{
                     }
 
                     @Override
-                    public void onCompleted() {otherBots.forEach(
+                    public void onCompleted() {
+                        otherBots.forEach(
                             botIdentity -> {System.out.println(botIdentity);}
-                    );}
+                        );
+                        channel.shutdown();
+                    }
                 });
             });
         }
@@ -199,6 +208,18 @@ public class BotThread extends Thread{
      */
     public List<BotIdentity> getOtherBots() {
         return otherBots;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public BotIdentity getIdentity() {
+        return identity;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void printOtherBots() {

@@ -8,33 +8,51 @@ import io.grpc.stub.StreamObserver;
 import services.grpc.*;
 import services.grpc.BotServicesGrpc.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 /**
  * This class implements the GRPC methods defined inside the proto file.
  */
 public class BotServices extends BotServicesImplBase {
-    private PriorityQueue<BotEntry> contentionQueue;
+
+    private List<BotServices> waitingInstances;
     private BotThread botThread;
 
     public BotServices(BotThread botThread) {
         this.botThread = botThread;
 
-        contentionQueue = new PriorityQueue<>();
+        waitingInstances = new ArrayList<BotServices>();
     }
 
-    public PriorityQueue<BotEntry> getContentionQueue() {
-        return contentionQueue;
-    }
-
-    public void processQueryGRPC(BotGRPC.Identifier request,
+    public synchronized void processQueryGRPC(BotGRPC.Identifier request,
                                  StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
-        Logger.cyan("processQueryGRPC");
+        Logger.purple("processQueryGRPC");
+
+        if(request.getTimestamp() > botThread.getTimestamp() &&
+                botThread.getTimestamp() != -1){
+
+            Logger.yellow("The message has a timestamp greater than mine");
+            waitingInstances.add(this);
+            System.out.println("Waiting");
+            try{
+                wait();
+            }catch(Exception e){
+                Logger.red("There was an error during the wakeup process");
+            }
+            System.out.println("Not waiting anymore");
+        }
+        else{
+            Logger.yellow("The message has a lower timestamp than mine");
+        }
+        responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
+        responseObserver.onCompleted();
     }
 
     public void joinAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
-        Logger.cyan("joinAdvertiseGRPC");
+        Logger.purple("joinAdvertiseGRPC");
 
         try{
             botThread.getOtherBots().add(
@@ -53,7 +71,7 @@ public class BotServices extends BotServicesImplBase {
 
     public void crashAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
-        Logger.cyan("crashAdvertiseGRPC");
+        Logger.purple("crashAdvertiseGRPC");
 
         try{
             botThread.getOtherBots().remove(
@@ -65,4 +83,26 @@ public class BotServices extends BotServicesImplBase {
         botThread.getOtherBots().forEach(botIdentity -> {System.out.println(botIdentity);});
         responseObserver.onCompleted();
     }
+
+    public synchronized void clearWaitingQueue() {
+        if(waitingInstances.size() != 0){
+            waitingInstances.forEach(
+                service -> {
+                    System.out.println(service.getBotThread().getIdentity());
+                    Logger.yellow("Waking services up");
+                    service.notify();
+                }
+            );
+        }
+    }
+
+    public List<BotServices> getWaitingInstances() {
+        return waitingInstances;
+    }
+
+    public BotThread getBotThread() {
+        return botThread;
+    }
+
+
 }

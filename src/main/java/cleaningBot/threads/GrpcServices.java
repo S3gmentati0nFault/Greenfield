@@ -12,9 +12,9 @@ import java.io.IOException;
  * GrpcServicesThread is a thread that handles incoming communications from other threads.
  */
 public class GrpcServices extends Thread {
+    private final BotServices grpcServices;
     private int port, id;
     private String ip;
-    private BotServices grpcServices;
     private BotThread botThread;
 
     /**
@@ -24,13 +24,13 @@ public class GrpcServices extends Thread {
      * @param botThread This is a reference to the bot object, it is used to keep a synchronized
      *            copy of the Bot list around.
      */
-    public GrpcServices(BotIdentity identity, BotThread botThread) {
+    public GrpcServices(BotIdentity identity, BotThread botThread, BotServices botServices) {
         port = identity.getPort();
         id = identity.getId();
         ip = identity.getIp();
         this.botThread = botThread;
 
-        grpcServices = new BotServices(botThread);
+        grpcServices = botServices;
     }
 
     @Override

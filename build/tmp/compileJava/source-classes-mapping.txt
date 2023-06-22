@@ -2,16 +2,16 @@ beans/BotIdentity.java
  beans.BotIdentity
 Simulators Code DPS 2023/Buffer.java
  Buffer
-beans/BotPositions.java
- beans.BotPositions
-cleaningBot/BotServices.java
- cleaningBot.BotServices
+cleaningBot/CleaningBot.java
+ cleaningBot.CleaningBot
+cleaningBot/threads/BotEntry.java
+ cleaningBot.threads.BotEntry
 extra/Timer/Timer.java
  extra.Timer.Timer
 extra/Logger/Colors.java
  extra.Logger.Colors
-cleaningBot/threads/InputThread.java
- cleaningBot.threads.InputThread
+adminServer/AdminServer.java
+ adminServer.AdminServer
 AdminServer.java
  AdminServer
  AdminServer$1
@@ -40,20 +40,29 @@ BotGRPC.java
  BotGRPC$IdentifierOrBuilder
 extra/Position/Position.java
  extra.Position.Position
-Main.java
- Main
+cleaningBot/threads/InputThread.java
+ cleaningBot.threads.InputThread
 Simulators Code DPS 2023/Measurement.java
  Measurement
-cleaningBot/threads/GrpcServices.java
- cleaningBot.threads.GrpcServices
+Simulators Code DPS 2023/Simulator.java
+ Simulator
 extra/Variables.java
  extra.Variables
-cleaningBot/CleaningBot.java
- cleaningBot.CleaningBot
+services/grpc/BotServicesGrpc.java
+ services.grpc.BotServicesGrpc
+ services.grpc.BotServicesGrpc$1
+ services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesBlockingStub
+ services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesFutureStub
+ services.grpc.BotServicesGrpc$BotServicesImplBase
+ services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesStub
+ services.grpc.BotServicesGrpc$MethodHandlers
 Simulators Code DPS 2023/PM10Simulator.java
  PM10Simulator
-extra/Logger/Logger.java
- extra.Logger.Logger
+extra/CustomRandom/CustomRandom.java
+ extra.CustomRandom.CustomRandom
 services/grpc/BotGRPC.java
  services.grpc.BotGRPC
  services.grpc.BotGRPC$1
@@ -69,28 +78,20 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Identifier$1
  services.grpc.BotGRPC$Identifier$Builder
  services.grpc.BotGRPC$IdentifierOrBuilder
-extra/CustomRandom/CustomRandom.java
- extra.CustomRandom.CustomRandom
-Simulators Code DPS 2023/Simulator.java
- Simulator
-services/grpc/BotServicesGrpc.java
- services.grpc.BotServicesGrpc
- services.grpc.BotServicesGrpc$1
- services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesBlockingStub
- services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesFutureStub
- services.grpc.BotServicesGrpc$BotServicesImplBase
- services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesStub
- services.grpc.BotServicesGrpc$MethodHandlers
-adminServer/AdminServer.java
- adminServer.AdminServer
-cleaningBot/threads/BotEntry.java
- cleaningBot.threads.BotEntry
+extra/Logger/Logger.java
+ extra.Logger.Logger
+beans/BotPositions.java
+ beans.BotPositions
+Main.java
+ Main
 cleaningBot/threads/BotThread.java
  cleaningBot.threads.BotThread
  cleaningBot.threads.BotThread$1
  cleaningBot.threads.BotThread$2
+cleaningBot/threads/GrpcServices.java
+ cleaningBot.threads.GrpcServices
+cleaningBot/BotServices.java
+ cleaningBot.BotServices
 cleaningBot/threads/MaintenanceThread.java
  cleaningBot.threads.MaintenanceThread
+ cleaningBot.threads.MaintenanceThread$1
