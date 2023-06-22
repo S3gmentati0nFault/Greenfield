@@ -1,7 +1,7 @@
 package cleaningBot.threads;
 
 import beans.BotIdentity;
-import cleaningBot.BotServices;
+import cleaningBot.service.BotServices;
 import extra.Logger.Logger;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;

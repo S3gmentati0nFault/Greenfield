@@ -1,6 +1,6 @@
 package cleaningBot.threads;
 
-import cleaningBot.BotServices;
+import cleaningBot.service.BotServices;
 import extra.Logger.Logger;
 import extra.Position.Position;
 import extra.CustomRandom.CustomRandom;
@@ -31,7 +31,7 @@ public class BotThread extends Thread{
     private List<BotIdentity> otherBots;
     private BotIdentity identity;
     private BotServices botServices;
-    private int timestamp;
+    private long timestamp;
 
     /**
      * Empty constructor that generates random values for both the id and the
@@ -158,12 +158,11 @@ public class BotThread extends Thread{
             return false;
         }
 
+        otherBots.remove(identity);
+
         if(!otherBots.isEmpty()){
             Logger.cyan("Contacting the other bots");
             otherBots.forEach(botIdentity -> {
-                if(botIdentity.equals(identity)){
-                    return;
-                }
                 ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                     .usePlaintext()
@@ -214,7 +213,7 @@ public class BotThread extends Thread{
         return otherBots;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
@@ -222,7 +221,7 @@ public class BotThread extends Thread{
         return identity;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 

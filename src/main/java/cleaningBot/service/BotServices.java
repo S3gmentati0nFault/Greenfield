@@ -1,8 +1,7 @@
-package cleaningBot;
+package cleaningBot.service;
 
 import beans.BotIdentity;
 import cleaningBot.threads.BotThread;
-import cleaningBot.threads.BotEntry;
 import extra.Logger.Logger;
 import extra.Variables;
 import io.grpc.stub.StreamObserver;
@@ -12,19 +11,22 @@ import services.grpc.BotServicesGrpc.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * This class implements the GRPC methods defined inside the proto file.
  */
 public class BotServices extends BotServicesImplBase {
 
-    private List<BotServices> waitingInstances;
+    private Queue<ServiceEntry> waitingInstances;
     private BotThread botThread;
+    private ServiceComparator comparator;
 
     public BotServices(BotThread botThread) {
         this.botThread = botThread;
+        comparator = new ServiceComparator();
 
-        waitingInstances = new ArrayList<BotServices>();
+        waitingInstances = new PriorityQueue<>(comparator);
     }
 
     public synchronized void processQueryGRPC(BotGRPC.Identifier request,
@@ -35,7 +37,7 @@ public class BotServices extends BotServicesImplBase {
                 botThread.getTimestamp() != -1){
 
             Logger.yellow("The message has a timestamp greater than mine");
-            waitingInstances.add(this);
+            waitingInstances.add(new ServiceEntry(this, request.getTimestamp()));
             if(Variables.MODE.equals("DEBUG")){
                 System.out.println("Waiting");
             }
@@ -98,16 +100,17 @@ public class BotServices extends BotServicesImplBase {
             waitingInstances.forEach(
                 service -> {
                     if(Variables.MODE.equals("DEBUG")) {
-                        System.out.println(service.getBotThread().getIdentity());
+                        System.out.println(service.getBotServices().getBotThread().getIdentity());
                     }
-                    Logger.yellow("Waking services up");
-                    service.notify();
+                    Logger.yellow("Waking service " + service.getTimestamp() + " up");
+                    service.getBotServices().notify();
                 }
             );
         }
+        waitingInstances.clear();
     }
 
-    public List<BotServices> getWaitingInstances() {
+    public Queue<ServiceEntry> getWaitingInstances() {
         return waitingInstances;
     }
 

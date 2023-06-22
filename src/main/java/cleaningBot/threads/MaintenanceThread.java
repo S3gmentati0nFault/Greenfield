@@ -1,9 +1,10 @@
 package cleaningBot.threads;
 
 import beans.BotIdentity;
-import cleaningBot.BotServices;
+import cleaningBot.service.BotServices;
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
+import extra.Variables;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -86,6 +87,7 @@ public class MaintenanceThread extends Thread {
                         for (ManagedChannel channel : channels) {
                             channel.shutdown();
                         }
+                        channels.clear();
                     }
                 }
         };
@@ -102,7 +104,10 @@ public class MaintenanceThread extends Thread {
 
             BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
 
-            int timestamp = (int) System.currentTimeMillis();
+            long timestamp = System.currentTimeMillis();
+            if(Variables.MODE.equals("DEBUG")) {
+                System.out.println(timestamp);
+            }
             botThread.setTimestamp(timestamp);
             BotGRPC.Identifier identifier = BotGRPC.Identifier
                     .newBuilder()

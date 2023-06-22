@@ -19,10 +19,10 @@ public final class BotGRPC {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 timestamp = 1;</code>
+     * <code>int64 timestamp = 1;</code>
      * @return The timestamp.
      */
-    int getTimestamp();
+    long getTimestamp();
 
     /**
      * <code>int32 id = 2;</code>
@@ -77,7 +77,7 @@ public final class BotGRPC {
               break;
             case 8: {
 
-              timestamp_ = input.readInt32();
+              timestamp_ = input.readInt64();
               break;
             }
             case 16: {
@@ -118,12 +118,12 @@ public final class BotGRPC {
     }
 
     public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private int timestamp_;
+    private long timestamp_;
     /**
-     * <code>int32 timestamp = 1;</code>
+     * <code>int64 timestamp = 1;</code>
      * @return The timestamp.
      */
-    public int getTimestamp() {
+    public long getTimestamp() {
       return timestamp_;
     }
 
@@ -151,8 +151,8 @@ public final class BotGRPC {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (timestamp_ != 0) {
-        output.writeInt32(1, timestamp_);
+      if (timestamp_ != 0L) {
+        output.writeInt64(1, timestamp_);
       }
       if (id_ != 0) {
         output.writeInt32(2, id_);
@@ -166,9 +166,9 @@ public final class BotGRPC {
       if (size != -1) return size;
 
       size = 0;
-      if (timestamp_ != 0) {
+      if (timestamp_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, timestamp_);
+          .computeInt64Size(1, timestamp_);
       }
       if (id_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -205,7 +205,8 @@ public final class BotGRPC {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-      hash = (53 * hash) + getTimestamp();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
       hash = (37 * hash) + ID_FIELD_NUMBER;
       hash = (53 * hash) + getId();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -341,7 +342,7 @@ public final class BotGRPC {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        timestamp_ = 0;
+        timestamp_ = 0L;
 
         id_ = 0;
 
@@ -421,7 +422,7 @@ public final class BotGRPC {
 
       public Builder mergeFrom(services.grpc.BotGRPC.Identifier other) {
         if (other == services.grpc.BotGRPC.Identifier.getDefaultInstance()) return this;
-        if (other.getTimestamp() != 0) {
+        if (other.getTimestamp() != 0L) {
           setTimestamp(other.getTimestamp());
         }
         if (other.getId() != 0) {
@@ -456,32 +457,32 @@ public final class BotGRPC {
         return this;
       }
 
-      private int timestamp_ ;
+      private long timestamp_ ;
       /**
-       * <code>int32 timestamp = 1;</code>
+       * <code>int64 timestamp = 1;</code>
        * @return The timestamp.
        */
-      public int getTimestamp() {
+      public long getTimestamp() {
         return timestamp_;
       }
       /**
-       * <code>int32 timestamp = 1;</code>
+       * <code>int64 timestamp = 1;</code>
        * @param value The timestamp to set.
        * @return This builder for chaining.
        */
-      public Builder setTimestamp(int value) {
+      public Builder setTimestamp(long value) {
         
         timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 timestamp = 1;</code>
+       * <code>int64 timestamp = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearTimestamp() {
         
-        timestamp_ = 0;
+        timestamp_ = 0L;
         onChanged();
         return this;
       }
@@ -1782,7 +1783,7 @@ public final class BotGRPC {
   static {
     java.lang.String[] descriptorData = {
       "\n\rBotGRPC.proto\022\rservices.grpc\"+\n\nIdenti" +
-      "fier\022\021\n\ttimestamp\030\001 \001(\005\022\n\n\002id\030\002 \001(\005\"\036\n\017A" +
+      "fier\022\021\n\ttimestamp\030\001 \001(\003\022\n\n\002id\030\002 \001(\005\"\036\n\017A" +
       "cknowledgement\022\013\n\003ack\030\001 \001(\010\"C\n\031BotNetwor" +
       "kingInformations\022\n\n\002id\030\001 \001(\005\022\014\n\004port\030\002 \001" +
       "(\005\022\014\n\004host\030\003 \001(\t2\241\002\n\013BotServices\022O\n\020proc" +
