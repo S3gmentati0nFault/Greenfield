@@ -2,8 +2,21 @@ beans/BotIdentity.java
  beans.BotIdentity
 Simulators Code DPS 2023/Buffer.java
  Buffer
-beans/BotPositions.java
- beans.BotPositions
+BotGRPC.java
+ BotGRPC
+ BotGRPC$1
+ BotGRPC$Acknowledgement
+ BotGRPC$Acknowledgement$1
+ BotGRPC$Acknowledgement$Builder
+ BotGRPC$AcknowledgementOrBuilder
+ BotGRPC$BotNetworkingInformations
+ BotGRPC$BotNetworkingInformations$1
+ BotGRPC$BotNetworkingInformations$Builder
+ BotGRPC$BotNetworkingInformationsOrBuilder
+ BotGRPC$Identifier
+ BotGRPC$Identifier$1
+ BotGRPC$Identifier$Builder
+ BotGRPC$IdentifierOrBuilder
 cleaningBot/service/ServiceComparator.java
  cleaningBot.service.ServiceComparator
 extra/Timer/Timer.java
@@ -76,26 +89,13 @@ services/grpc/BotServicesGrpc.java
  services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
  services.grpc.BotServicesGrpc$BotServicesStub
  services.grpc.BotServicesGrpc$MethodHandlers
-adminServer/AdminServer.java
- adminServer.AdminServer
+cleaningBot/service/ServiceEntry.java
+ cleaningBot.service.ServiceEntry
 cleaningBot/threads/GrpcServices.java
  cleaningBot.threads.GrpcServices
 cleaningBot/threads/BotEntry.java
  cleaningBot.threads.BotEntry
-BotGRPC.java
- BotGRPC
- BotGRPC$1
- BotGRPC$Acknowledgement
- BotGRPC$Acknowledgement$1
- BotGRPC$Acknowledgement$Builder
- BotGRPC$AcknowledgementOrBuilder
- BotGRPC$BotNetworkingInformations
- BotGRPC$BotNetworkingInformations$1
- BotGRPC$BotNetworkingInformations$Builder
- BotGRPC$BotNetworkingInformationsOrBuilder
- BotGRPC$Identifier
- BotGRPC$Identifier$1
- BotGRPC$Identifier$Builder
- BotGRPC$IdentifierOrBuilder
-cleaningBot/service/ServiceEntry.java
- cleaningBot.service.ServiceEntry
+adminServer/AdminServer.java
+ adminServer.AdminServer
+beans/BotPositions.java
+ beans.BotPositions

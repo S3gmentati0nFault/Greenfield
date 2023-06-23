@@ -48,19 +48,15 @@ public class AdminServer {
         return Response.ok().build();
     }
 
-//    @Path("remove")
-//    @DELETE
-//    @Consumes({"application/json"})
-//    public Response deleteBot(BotIdentity identity) {
-//        System.out.println("1");
-//        BotPositions.getInstance().deleteBot(identity);
-//        if(true){
-//            return Response.ok().build();
-//        }
-//        else{
-//            return Response.serverError().build();
-//        }
-//    }
+   @Path("remove")
+   @DELETE
+   @Consumes({"application/json"})
+   public Response deleteBot(BotIdentity botIdentity) {
+        if(!BotPositions.getInstance().deleteBot(botIdentity)) {
+            return Response.noContent().build();
+        }
+        return Response.ok().build();
+   }
 
     @Path("measurements/{id}/{number}")
     @GET

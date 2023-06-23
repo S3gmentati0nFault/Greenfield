@@ -63,20 +63,18 @@ public class BotPositions {
         return null;
     }
 
-//    public synchronized boolean deleteBot(BotIdentity identity) {
-//        Logger.notice("REMOVAL");
-//        if(!botPositioning.containsKey(identity)){
-//            Logger.notice("The bot " +
-//                    identity.toString() +
-//                    " is not present in the city");
-//            return false;
-//        }
-//        else{
-//            Logger.notice("Removing node " + identity.toString());
-//            botPositioning.remove(identity);
-//            return true;
-//        }
-//    }
+    public synchronized boolean deleteBot(BotIdentity identity) {
+        Logger.blue("deletion");
+
+        if(botPositioning.containsKey(identity)){
+            botPositioning.remove(identity);
+            return true;
+        }
+        else {
+            Logger.red("The indicated bot is not present in the data structure");
+        }
+        return false;
+    }
 
     /**
      * Method to create a json string to be sent to the bot. Method that creates a json
