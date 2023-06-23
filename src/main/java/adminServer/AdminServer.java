@@ -2,6 +2,7 @@ package adminServer;
 
 import beans.BotIdentity;
 import beans.BotPositions;
+import extra.Logger.Logger;
 import extra.Position.Position;
 
 import javax.ws.rs.*;
@@ -52,6 +53,7 @@ public class AdminServer {
    @DELETE
    @Consumes({"application/json"})
    public Response deleteBot(BotIdentity botIdentity) {
+       Logger.blue("DELETE");
         if(!BotPositions.getInstance().deleteBot(botIdentity)) {
             return Response.noContent().build();
         }

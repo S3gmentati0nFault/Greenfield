@@ -8,6 +8,7 @@ import extra.Variables;
 import beans.BotIdentity;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -64,9 +65,9 @@ public class BotThread extends Thread{
         InputThread inputThread = new InputThread(this);
         inputThread.start();
 
-        Logger.yellow("Starting maintenance thread");
-        MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
-        maintenanceThread.start();
+//        Logger.yellow("Starting maintenance thread");
+//        MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
+//        maintenanceThread.start();
     }
 
     /**
@@ -78,31 +79,9 @@ public class BotThread extends Thread{
         URL requestURL;
         ObjectMapper mapper = new ObjectMapper();
 
-        try{
-            requestURL = new URL("http://" +
-                    Variables.HOST+":" +
-                    Variables.PORT +
-                    "/admin/join");
-        }catch(MalformedURLException e){
-            Logger.red("The url was malformed");
-            return false;
-        }
-
-        HttpURLConnection connection = null;
-        try{
-            connection = (HttpURLConnection) requestURL.openConnection();
-        }
-        catch(IOException e){
-            Logger.red("There was an error during connection opening procedure");
-            return false;
-        }
-
-        try{
-            connection.setRequestMethod("POST");
-        }catch(ProtocolException e){
-            Logger.red("There was an error during request method selection");
-            return false;
-        }
+        HttpURLConnection connection =
+                buildConnection("POST", "http://" +
+                        Variables.HOST+":" + Variables.PORT + "/admin/join");
 
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
@@ -158,6 +137,7 @@ public class BotThread extends Thread{
             return false;
         }
 
+        closeConnection(connection);
         otherBots.remove(identity);
 
         if(!otherBots.isEmpty()){
@@ -176,6 +156,8 @@ public class BotThread extends Thread{
                         .setHost(identity.getIp())
                         .build();
                 serviceStub.joinAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
+                    BotIdentity receiver = botIdentity;
+
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
                         if(!value.getAck()){
@@ -185,7 +167,14 @@ public class BotThread extends Thread{
 
                     @Override
                     public void onError(Throwable t) {
-                        Logger.red("robot " + botIdentity + " sent an error");
+                        Logger.red("robot " + botIdentity + " sent error " + t.getClass());
+                        if(t.getClass() == StatusRuntimeException.class) {
+                            synchronized (this) {
+                                Logger.yellow("Removing dead robot from the field");
+                                otherBots.remove(receiver);
+                                updateOthers(receiver);
+                            }
+                        }
                     }
 
                     @Override
@@ -204,6 +193,99 @@ public class BotThread extends Thread{
         }
 
         return true;
+    }
+
+    public boolean updateOthers(BotIdentity deadRobot) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        HttpURLConnection connection = buildConnection("DELETE", "http://" +
+                    Variables.HOST+":" +
+                    Variables.PORT +
+                    "/admin/remove");
+
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setDoOutput(true);
+
+        OutputStream os;
+        try{
+            os = connection.getOutputStream();
+        }catch(IOException e){
+            Logger.red("There was an error during output stream creation");
+            return false;
+        }
+
+        String json = "";
+        try{
+            json = mapper.writeValueAsString(deadRobot);
+        } catch (IOException e) {
+            Logger.red("There was an error while generating the json string");
+            return false;
+        }
+
+        byte[] input = null;
+        try{
+            input = json.getBytes("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            Logger.red("There was a problem while turning the string into bytes");
+            return false;
+        }
+
+        try{
+            os.write(input, 0, input.length);
+        }catch(IOException e){
+            Logger.red("There was an error while writing on output stream");
+            return false;
+        }
+
+        closeConnection(connection);
+
+        return true;
+    }
+
+    public HttpURLConnection buildConnection(String responseMethod, String url) {
+        URL requestURL;
+
+        try{
+            requestURL = new URL(url);
+        }catch(MalformedURLException e){
+            Logger.red("The url was malformed");
+            return null;
+        }
+
+        HttpURLConnection connection = null;
+        try{
+            connection = (HttpURLConnection) requestURL.openConnection();
+        }
+        catch(IOException e){
+            Logger.red("There was an error during connection opening procedure");
+            return null;
+        }
+
+        try{
+            connection.setRequestMethod(responseMethod);
+        }catch(ProtocolException e){
+            Logger.red("There was an error during request method selection");
+            return null;
+        }
+
+        return connection;
+    }
+
+    public void closeConnection(HttpURLConnection connection) {
+        try{
+            if(connection.getResponseCode() == 200) {
+                Logger.green("The request " + connection.getRequestMethod() + " went fine");
+            }
+            else{
+                Logger.yellow("The response code was > " + connection.getResponseCode());
+            }
+        }catch(Exception e){
+            Logger.red("Something went wrong while retrieving the response code");
+        }
+
+        Logger.yellow("Closing the connection channel");
+        connection.disconnect();
     }
 
     /**

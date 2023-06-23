@@ -15,7 +15,7 @@ public class InputThread extends Thread {
             String input = keyboard.next();
 
             if (input.equals("GET")) {
-                System.out.println(botThread.getIdentity());
+                System.out.println("-> " + botThread.getIdentity());
                 botThread.printOtherBots();
             }
         }

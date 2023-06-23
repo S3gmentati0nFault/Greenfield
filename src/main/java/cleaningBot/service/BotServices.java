@@ -8,10 +8,11 @@ import io.grpc.stub.StreamObserver;
 import services.grpc.*;
 import services.grpc.BotServicesGrpc.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+
+import static extra.Variables.TIMEOUT_MILLIS;
+import static java.lang.Thread.sleep;
 
 /**
  * This class implements the GRPC methods defined inside the proto file.
@@ -42,13 +43,14 @@ public class BotServices extends BotServicesImplBase {
                 System.out.println("Waiting");
             }
             try{
-                wait();
+                wait(TIMEOUT_MILLIS);
             }catch(Exception e){
                 Logger.red("There was an error during the wakeup process");
             }
             if(Variables.MODE.equals("DEBUG")) {
                 System.out.println("Not waiting anymore");
             }
+            waitingInstances.remove(new ServiceEntry(this, request.getTimestamp()));
         }
         else{
             Logger.yellow("The message has a lower timestamp than mine");
@@ -60,6 +62,11 @@ public class BotServices extends BotServicesImplBase {
     public void joinAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("joinAdvertiseGRPC");
+        try {
+            sleep(50000);
+        }catch(Exception e) {
+            Logger.red("There was an error while trying to wake up");
+        }
 
         try{
             botThread.getOtherBots().add(
@@ -107,7 +114,6 @@ public class BotServices extends BotServicesImplBase {
                 }
             );
         }
-        waitingInstances.clear();
     }
 
     public Queue<ServiceEntry> getWaitingInstances() {
