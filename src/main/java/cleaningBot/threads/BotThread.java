@@ -141,6 +141,7 @@ public class BotThread extends Thread{
         otherBots.remove(identity);
 
         if(!otherBots.isEmpty()){
+            printOtherBots();
             Logger.cyan("Contacting the other bots");
             otherBots.forEach(botIdentity -> {
                 ManagedChannel channel = ManagedChannelBuilder

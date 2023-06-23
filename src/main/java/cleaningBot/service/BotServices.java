@@ -12,7 +12,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import static extra.Variables.TIMEOUT_MILLIS;
-import static java.lang.Thread.sleep;
 
 /**
  * This class implements the GRPC methods defined inside the proto file.
@@ -62,20 +61,21 @@ public class BotServices extends BotServicesImplBase {
     public void joinAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("joinAdvertiseGRPC");
-        try {
-            sleep(50000);
-        }catch(Exception e) {
-            Logger.red("There was an error while trying to wake up");
-        }
 
         try{
-            botThread.getOtherBots().add(
+            if(botThread.getOtherBots().contains(
+                    new BotIdentity(request.getId(), request.getPort(), request.getHost()))) {
+                responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
+            }
+            else{
+                botThread.getOtherBots().add(
                     new BotIdentity(request.getId(), request.getPort(), request.getHost())
-            );
-            responseObserver.onNext(BotGRPC.Acknowledgement
-                    .newBuilder()
-                    .setAck(true)
-                    .build());
+                );
+                responseObserver.onNext(BotGRPC.Acknowledgement
+                        .newBuilder()
+                        .setAck(true)
+                        .build());
+            }
         }catch(Exception e){
             Logger.red(":'(");
             responseObserver.onError(e);
