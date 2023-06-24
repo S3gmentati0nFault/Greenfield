@@ -65,9 +65,9 @@ public class BotThread extends Thread{
         InputThread inputThread = new InputThread(this);
         inputThread.start();
 
-//        Logger.yellow("Starting maintenance thread");
-//        MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
-//        maintenanceThread.start();
+        Logger.yellow("Starting maintenance thread");
+        MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
+        maintenanceThread.start();
     }
 
     /**
@@ -196,6 +196,11 @@ public class BotThread extends Thread{
         return true;
     }
 
+    /**
+     * Method used to communicate to the other services in the system that one of the nodes
+     * has stopped working.
+     * @param deadRobot the identity of the robot that has stopped working
+     */
     public boolean updateOthers(BotIdentity deadRobot) {
         ObjectMapper mapper = new ObjectMapper();
 
@@ -244,7 +249,13 @@ public class BotThread extends Thread{
         return true;
     }
 
-    public HttpURLConnection buildConnection(String responseMethod, String url) {
+    /**
+     * Method that builds a new connection towards a certain host
+     * @param requestMethod The HTTP request method
+     * @param url destination URL
+     * @return HttpURLConnection object used to send data in the startNewBot() procedure.
+     */
+    public HttpURLConnection buildConnection(String requestMethod, String url) {
         URL requestURL;
 
         try{
@@ -264,7 +275,7 @@ public class BotThread extends Thread{
         }
 
         try{
-            connection.setRequestMethod(responseMethod);
+            connection.setRequestMethod(requestMethod);
         }catch(ProtocolException e){
             Logger.red("There was an error during request method selection");
             return null;
@@ -273,6 +284,9 @@ public class BotThread extends Thread{
         return connection;
     }
 
+    /**
+     * Method used to close an open connection
+     */
     public void closeConnection(HttpURLConnection connection) {
         try{
             if(connection.getResponseCode() == 200) {
@@ -296,18 +310,31 @@ public class BotThread extends Thread{
         return otherBots;
     }
 
+    /**
+     * Getter for the timestamp of the latest request, the timestamp is -1 if there was no
+     * previous request
+     */
     public long getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Getter for the identity of the bot
+     */
     public BotIdentity getIdentity() {
         return identity;
     }
 
+    /**
+     * Setter for the timestamp of the latest request
+     */
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Method that prints the bots present in the system
+     */
     public void printOtherBots() {
         for (BotIdentity otherBot : otherBots) {
             System.out.println(otherBot);

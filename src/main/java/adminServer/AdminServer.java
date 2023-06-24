@@ -49,16 +49,21 @@ public class AdminServer {
         return Response.ok().build();
     }
 
-   @Path("remove")
-   @DELETE
-   @Consumes({"application/json"})
-   public Response deleteBot(BotIdentity botIdentity) {
-       Logger.blue("DELETE");
+    /**
+     * This function deletes a bot from the city.
+     * @return The return function is a value that can be 200 ok if the bot was actually
+     * present in the city, and it was correctly deleted from the administration server.
+     */
+    @Path("remove")
+    @DELETE
+    @Consumes({"application/json"})
+    public Response deleteBot(BotIdentity botIdentity) {
+        Logger.blue("DELETE");
         if(!BotPositions.getInstance().deleteBot(botIdentity)) {
             return Response.noContent().build();
         }
         return Response.ok().build();
-   }
+    }
 
     @Path("measurements/{id}/{number}")
     @GET

@@ -14,11 +14,18 @@ import services.grpc.BotServicesGrpc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Maintenance class that simulates the error rate of the bots and handles the
+ * Mutual-exclusion
+ */
 public class MaintenanceThread extends Thread {
     private boolean onMaintenance;
     private BotThread botThread;
     private BotServices botServices;
 
+    /**
+     * Generic public constructor
+     */
     public MaintenanceThread(BotThread botThread, BotServices botServices) {
         onMaintenance = false;
 
@@ -26,11 +33,18 @@ public class MaintenanceThread extends Thread {
         this.botServices = botServices;
     }
 
+    /**
+     * Override of the run method that starts the maintenance cycle, which simulates the
+     * malfunction of the robots
+     */
     @Override
     public void run() {
         maintenanceCycle();
     }
 
+    /**
+     * Method that simulates the malfunction of the robots
+     */
     public void maintenanceCycle() {
         while(!onMaintenance) {
             System.out.println("Rolling The Dice");
@@ -47,6 +61,10 @@ public class MaintenanceThread extends Thread {
         }
     }
 
+    /**
+     * Method that handles the mutual-exclusion by contacting via GRPC all the bots present
+     * in the system at the moment of the malfunction
+     */
     public synchronized void agrawalaProcedure() {
         Logger.cyan("Starting the Agrawala procedure");
         List<BotIdentity> fleetSnapshot = botThread.getOtherBots();
@@ -68,28 +86,28 @@ public class MaintenanceThread extends Thread {
                 new StreamObserver<BotGRPC.Acknowledgement>() {
             int counter = 0;
             int total = fleetSnapshot.size();
-                @Override
-                public void onNext(BotGRPC.Acknowledgement value) {
-                    counter++;
-                    Logger.green("The response was positive! We ar at " + counter + " over " + total);
-                }
+            @Override
+            public void onNext(BotGRPC.Acknowledgement value) {
+                counter++;
+                Logger.green("The response was positive! We ar at " + counter + " over " + total);
+            }
 
-                @Override
-                public void onError(Throwable t) {
-                    Logger.red("There was an error during the grpc");
-                }
+            @Override
+            public void onError(Throwable t) {
+                Logger.red("There was an error during the grpc");
+            }
 
-                @Override
-                public void onCompleted() {
-                    if(counter == total){
-                        maintenanceAccess();
-                        Logger.yellow("Shutting down communication channels");
-                        for (ManagedChannel channel : channels) {
-                            channel.shutdown();
-                        }
-                        channels.clear();
+            @Override
+            public void onCompleted() {
+                if(counter == total){
+                    maintenanceAccess();
+                    Logger.yellow("Shutting down communication channels");
+                    for (ManagedChannel channel : channels) {
+                        channel.shutdown();
                     }
+                    channels.clear();
                 }
+            }
         };
 
         for (BotIdentity botIdentity : fleetSnapshot) {
@@ -119,6 +137,9 @@ public class MaintenanceThread extends Thread {
         }
     }
 
+    /**
+     * Method that simulates access to the mechanic
+     */
     public void maintenanceAccess() {
         Logger.yellow("Starting the maintenance process");
         try {

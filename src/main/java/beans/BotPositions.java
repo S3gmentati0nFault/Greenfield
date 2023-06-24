@@ -63,6 +63,14 @@ public class BotPositions {
         return null;
     }
 
+    /**
+     * Method that removes a robot from the city. Synchronized method to remove a function
+     * from the city, it is synchronized because I don't want anything to happen to the
+     * distributed data structure in case multiple requests for deletion happen at the
+     * same time.
+     * @param identity The identity of the robot.
+     * @return It returns true if the deletion operation went well, false otherwise.
+     */
     public synchronized boolean deleteBot(BotIdentity identity) {
         Logger.blue("deletion");
 

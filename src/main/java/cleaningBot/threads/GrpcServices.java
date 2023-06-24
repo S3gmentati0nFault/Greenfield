@@ -33,6 +33,9 @@ public class GrpcServices extends Thread {
         grpcServices = botServices;
     }
 
+    /**
+     * Override of the run method that starts the server up
+     */
     @Override
     public void run(){
         try{
