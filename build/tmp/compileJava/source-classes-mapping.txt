@@ -1,30 +1,18 @@
 beans/BotIdentity.java
  beans.BotIdentity
-Simulators Code DPS 2023/Buffer.java
- Buffer
 beans/BotPositions.java
  beans.BotPositions
-cleaningBot/threads/BotEntry.java
- cleaningBot.threads.BotEntry
+cleaningBot/service/ServiceComparator.java
+ cleaningBot.service.ServiceComparator
 extra/Timer/Timer.java
  extra.Timer.Timer
+cleaningBot/service/QueryResponseObserver.java
+ cleaningBot.service.QueryResponseObserver
+ cleaningBot.service.QueryResponseObserver$1
 extra/Logger/Colors.java
  extra.Logger.Colors
-BotGRPC.java
- BotGRPC
- BotGRPC$1
- BotGRPC$Acknowledgement
- BotGRPC$Acknowledgement$1
- BotGRPC$Acknowledgement$Builder
- BotGRPC$AcknowledgementOrBuilder
- BotGRPC$BotNetworkingInformations
- BotGRPC$BotNetworkingInformations$1
- BotGRPC$BotNetworkingInformations$Builder
- BotGRPC$BotNetworkingInformationsOrBuilder
- BotGRPC$Identifier
- BotGRPC$Identifier$1
- BotGRPC$Identifier$Builder
- BotGRPC$IdentifierOrBuilder
+cleaningBot/threads/InputThread.java
+ cleaningBot.threads.InputThread
 AdminServer.java
  AdminServer
  AdminServer$1
@@ -36,35 +24,40 @@ AdminServer.java
  AdminServer$BotResponse$1
  AdminServer$BotResponse$Builder
  AdminServer$BotResponseOrBuilder
-extra/CustomRandom/CustomRandom.java
- extra.CustomRandom.CustomRandom
+Simulators/Simulator.java
+ Simulators.Simulator
+cleaningBot/threads/BotThread.java
+ cleaningBot.threads.BotThread
+ cleaningBot.threads.BotThread$1
+ cleaningBot.threads.BotThread$2
 extra/Position/Position.java
  extra.Position.Position
+cleaningBot/BotUtilities.java
+ cleaningBot.BotUtilities
+ cleaningBot.BotUtilities$1
 Main.java
  Main
-Simulators Code DPS 2023/Measurement.java
- Measurement
-Simulators Code DPS 2023/Simulator.java
- Simulator
+cleaningBot/threads/MeasurementGatheringThread.java
+ cleaningBot.threads.MeasurementGatheringThread
+cleaningBot/threads/MaintenanceThread.java
+ cleaningBot.threads.MaintenanceThread
+ cleaningBot.threads.MaintenanceThread$1
+Simulators/PM10Simulator.java
+ Simulators.PM10Simulator
 extra/Variables.java
  extra.Variables
-adminServer/AdminServer.java
- adminServer.AdminServer
-Simulators Code DPS 2023/PM10Simulator.java
- PM10Simulator
-services/grpc/BotServicesGrpc.java
- services.grpc.BotServicesGrpc
- services.grpc.BotServicesGrpc$1
- services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesBlockingStub
- services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesFutureStub
- services.grpc.BotServicesGrpc$BotServicesImplBase
- services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesStub
- services.grpc.BotServicesGrpc$MethodHandlers
+cleaningBot/MeasurementBuffer.java
+ cleaningBot.MeasurementBuffer
+cleaningBot/CleaningBot.java
+ cleaningBot.CleaningBot
+cleaningBot/service/BotServices.java
+ cleaningBot.service.BotServices
+cleaningBot/service/WaitingThread.java
+ cleaningBot.service.WaitingThread
 extra/Logger/Logger.java
  extra.Logger.Logger
+Simulators/Buffer.java
+ Simulators.Buffer
 services/grpc/BotGRPC.java
  services.grpc.BotGRPC
  services.grpc.BotGRPC$1
@@ -80,22 +73,40 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Identifier$1
  services.grpc.BotGRPC$Identifier$Builder
  services.grpc.BotGRPC$IdentifierOrBuilder
-cleaningBot/CleaningBot.java
- cleaningBot.CleaningBot
-cleaningBot/threads/InputThread.java
- cleaningBot.threads.InputThread
-cleaningBot/threads/BotThread.java
- cleaningBot.threads.BotThread
- cleaningBot.threads.BotThread$1
- cleaningBot.threads.BotThread$2
-cleaningBot/threads/GrpcServices.java
- cleaningBot.threads.GrpcServices
-cleaningBot/service/ServiceComparator.java
- cleaningBot.service.ServiceComparator
-cleaningBot/service/BotServices.java
- cleaningBot.service.BotServices
-cleaningBot/threads/MaintenanceThread.java
- cleaningBot.threads.MaintenanceThread
- cleaningBot.threads.MaintenanceThread$1
-cleaningBot/service/ServiceEntry.java
- cleaningBot.service.ServiceEntry
+cleaningBot/threads/PollutionSensorThread.java
+ cleaningBot.threads.PollutionSensorThread
+extra/CustomRandom/CustomRandom.java
+ extra.CustomRandom.CustomRandom
+services/grpc/BotServicesGrpc.java
+ services.grpc.BotServicesGrpc
+ services.grpc.BotServicesGrpc$1
+ services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesBlockingStub
+ services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesFutureStub
+ services.grpc.BotServicesGrpc$BotServicesImplBase
+ services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesStub
+ services.grpc.BotServicesGrpc$MethodHandlers
+Simulators/Measurement.java
+ Simulators.Measurement
+BotGRPC.java
+ BotGRPC
+ BotGRPC$1
+ BotGRPC$Acknowledgement
+ BotGRPC$Acknowledgement$1
+ BotGRPC$Acknowledgement$Builder
+ BotGRPC$AcknowledgementOrBuilder
+ BotGRPC$BotNetworkingInformations
+ BotGRPC$BotNetworkingInformations$1
+ BotGRPC$BotNetworkingInformations$Builder
+ BotGRPC$BotNetworkingInformationsOrBuilder
+ BotGRPC$Identifier
+ BotGRPC$Identifier$1
+ BotGRPC$Identifier$Builder
+ BotGRPC$IdentifierOrBuilder
+cleaningBot/threads/GrpcServicesThread.java
+ cleaningBot.threads.GrpcServicesThread
+adminServer/AdminServer.java
+ adminServer.AdminServer
+ adminServer.AdminServer$1

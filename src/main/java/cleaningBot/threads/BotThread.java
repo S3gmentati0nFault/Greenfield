@@ -33,6 +33,7 @@ public class BotThread extends Thread{
     private BotIdentity identity;
     private BotServices botServices;
     private long timestamp;
+    private int district;
 
     /**
      * Empty constructor that generates random values for both the id and the
@@ -54,7 +55,7 @@ public class BotThread extends Thread{
     @Override
     public void run(){
         Logger.yellow("Starting grpc services");
-        GrpcServices grpcThread = new GrpcServices(identity, this, botServices);
+        GrpcServicesThread grpcThread = new GrpcServicesThread(identity, this, botServices);
         grpcThread.start();
 
         if(!startNewBot()){
@@ -68,6 +69,10 @@ public class BotThread extends Thread{
         Logger.yellow("Starting maintenance thread");
         MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
         maintenanceThread.start();
+
+        Logger.yellow("Starting the pollution measurement sensor thread");
+        PollutionSensorThread pollutionSensorThread = new PollutionSensorThread(district);
+        pollutionSensorThread.start();
     }
 
     /**
@@ -76,7 +81,6 @@ public class BotThread extends Thread{
      * @return It returns true if the operation went well, false otherwise.
      */
     private boolean startNewBot() {
-        URL requestURL;
         ObjectMapper mapper = new ObjectMapper();
 
         HttpURLConnection connection =
@@ -191,6 +195,23 @@ public class BotThread extends Thread{
                     }
                 });
             });
+        }
+
+        if(position.getY() < 5) {
+            if(position.getX() < 5) {
+                district = 1;
+            }
+            else{
+                district = 2;
+            }
+        }
+        else{
+            if(position.getX() < 5){
+                district = 4;
+            }
+            else{
+                district = 3;
+            }
         }
 
         return true;

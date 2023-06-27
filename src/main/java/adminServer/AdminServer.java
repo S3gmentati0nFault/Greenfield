@@ -4,9 +4,13 @@ import beans.BotIdentity;
 import beans.BotPositions;
 import extra.Logger.Logger;
 import extra.Position.Position;
+import org.eclipse.paho.client.mqttv3.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.security.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * REST class for the Administration server. This is the REST class that
@@ -14,6 +18,86 @@ import javax.ws.rs.core.Response;
  */
 @Path("admin")
 public class AdminServer {
+    private static List<Float> averageDistrict1;
+    private static List<Float> averageDistrict2;
+    private static List<Float> averageDistrict3;
+    private static List<Float> averageDistrict4;
+
+    public static void main (String[] args) {
+        MqttClient client;
+        String broker = "tcp://localhost:1883";
+        String clientId = MqttClient.generateClientId();
+        String recievingTopic = "greenfield/pollution/#";
+
+        averageDistrict1 = new ArrayList<>();
+        averageDistrict2 = new ArrayList<>();
+        averageDistrict3 = new ArrayList<>();
+        averageDistrict4 = new ArrayList<>();
+
+        int qos = 1;
+
+        try {
+            client = new MqttClient(broker, clientId);
+
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+
+            connOpts.setCleanSession(false);
+
+            System.out.println(clientId + " Connecting Broker " + broker);
+            client.connect(connOpts);
+            System.out.println(clientId + " Connected - Thread PID: " + Thread.currentThread().getId());
+
+            client.setCallback(new MqttCallback() {
+
+                public void messageArrived(String recievingTopic, MqttMessage message)
+                        throws MqttException {
+
+                    String[] stringAverages = (new String(message.getPayload())).split("-");
+                    int district = Integer.parseInt(String.valueOf(recievingTopic.charAt(recievingTopic.length() - 1)));
+                    System.out.println(district);
+                    for (String stringAverage : stringAverages) {
+                        if(!stringAverage.equals("")){
+                            Float average = Float.parseFloat(stringAverage);
+                            switch(district) {
+                                case 1:
+                                    averageDistrict1.add(average);
+                                    break;
+                                case 2:
+                                    averageDistrict2.add(average);
+                                    break;
+                                case 3:
+                                    averageDistrict3.add(average);
+                                    break;
+                                case 4:
+                                    averageDistrict4.add(average);
+                                    break;
+                                default:
+                                    Logger.red("There was an error while adding the data to memory");
+                            }
+                        }
+                    }
+
+                }
+
+                public void connectionLost(Throwable cause) {
+                    Logger.red(clientId + " Connectionlost! cause:" + cause.getMessage()+ "-  Thread PID: " + Thread.currentThread().getId());
+                }
+
+                public void deliveryComplete(IMqttDeliveryToken token) {
+                }
+
+            });
+            client.subscribe(recievingTopic,qos);
+
+        } catch (MqttException me ) {
+            System.out.println("reason " + me.getReasonCode());
+            System.out.println("msg " + me.getMessage());
+            System.out.println("loc " + me.getLocalizedMessage());
+            System.out.println("cause " + me.getCause());
+            System.out.println("excep " + me);
+            me.printStackTrace();
+        }
+    }
 
     /**
      * This function handles the addition of a new bot to the network.
@@ -70,5 +154,21 @@ public class AdminServer {
     public Response getAvgMeasurement(@PathParam("id") int robotID,
                                       @PathParam("number") int numberOfMeasurements) {
         return Response.ok().build();
+    }
+
+    public static List<Float> getAverageDistrict1() {
+        return averageDistrict1;
+    }
+
+    public static List<Float> getAverageDistrict2() {
+        return averageDistrict2;
+    }
+
+    public static List<Float> getAverageDistrict3() {
+        return averageDistrict3;
+    }
+
+    public static List<Float> getAverageDistrict4() {
+        return averageDistrict4;
     }
 }

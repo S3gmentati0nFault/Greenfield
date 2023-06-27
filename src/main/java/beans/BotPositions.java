@@ -29,7 +29,7 @@ public class BotPositions {
      * The city is a Singleton class thus the instance can be accessed only
      * via the instance variable.
      */
-    public synchronized static BotPositions getInstance() {
+    public static BotPositions getInstance() {
         if(instance == null){
             instance = new BotPositions();
         }
@@ -51,7 +51,7 @@ public class BotPositions {
      * @return The method will return either the position or null if the bot was already
      * present in the system.
      */
-    public synchronized Position joinBot(BotIdentity identity) {
+    public Position joinBot(BotIdentity identity) {
         Position pos = new Position(
                 CustomRandom.getInstance().rnInt(9),
                 CustomRandom.getInstance().rnInt(9)
@@ -71,7 +71,7 @@ public class BotPositions {
      * @param identity The identity of the robot.
      * @return It returns true if the deletion operation went well, false otherwise.
      */
-    public synchronized boolean deleteBot(BotIdentity identity) {
+    public boolean deleteBot(BotIdentity identity) {
         Logger.blue("deletion");
 
         if(botPositioning.containsKey(identity)){
