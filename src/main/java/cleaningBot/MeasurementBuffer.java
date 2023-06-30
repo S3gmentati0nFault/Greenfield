@@ -1,12 +1,12 @@
 package cleaningBot;
 
-import Simulators.Measurement;
+import simulators.Measurement;
 import extra.Logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeasurementBuffer implements Simulators.Buffer {
+public class MeasurementBuffer implements simulators.Buffer {
     private List<Measurement> buffer;
     private int limitSize;
 

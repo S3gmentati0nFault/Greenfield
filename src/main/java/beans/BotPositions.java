@@ -97,8 +97,13 @@ public class BotPositions {
         String json = "";
         try{
             ObjectMapper mapper = new ObjectMapper();
-            json = mapper.writeValueAsString(botPosition);
-            json = json + "-[";
+            if(botPosition != null){
+                json = mapper.writeValueAsString(botPosition);
+                json = json + "-[";
+            }
+            else{
+                json = json + "[";
+            }
             Set<BotIdentity> keys = botPositioning.keySet();
             for (BotIdentity bot: keys) {
                 json = json + mapper.writeValueAsString(bot) + ",";

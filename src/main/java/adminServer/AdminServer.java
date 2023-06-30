@@ -1,39 +1,42 @@
 package adminServer;
 
-import beans.BotIdentity;
-import beans.BotPositions;
+import com.sun.jersey.api.container.httpserver.HttpServerFactory;
+import com.sun.net.httpserver.HttpServer;
 import extra.Logger.Logger;
-import extra.Position.Position;
+import extra.Variables;
+import beans.BotIdentity;
+import beans.AverageList;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.type.TypeReference;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-import java.security.Timestamp;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+import java.util.Stack;
 
-/**
- * REST class for the Administration server. This is the REST class that
- * handles incoming connections for the administration server.
- */
-@Path("admin")
 public class AdminServer {
-    private static List<Float> averageDistrict1;
-    private static List<Float> averageDistrict2;
-    private static List<Float> averageDistrict3;
-    private static List<Float> averageDistrict4;
+    private static Stack<AverageList> averageLists;
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
+        Logger.green("adminServerJoinTest");
+        HttpServer server = null;
+        try{
+            server = HttpServerFactory.create("http://"+ Variables.HOST+":"+Variables.PORT+"/");
+        } catch (IOException e) {
+            Logger.red("There was a fatal error trying to start the server up", e);
+            return;
+        }
+        server.start();
+
+        System.out.println("Server running!");
+        System.out.println("Server started on: http://"+Variables.HOST+":"+Variables.PORT);
+
         MqttClient client;
         String broker = "tcp://localhost:1883";
         String clientId = MqttClient.generateClientId();
         String recievingTopic = "greenfield/pollution/#";
-
-        averageDistrict1 = new ArrayList<>();
-        averageDistrict2 = new ArrayList<>();
-        averageDistrict3 = new ArrayList<>();
-        averageDistrict4 = new ArrayList<>();
-
         int qos = 1;
 
         try {
@@ -45,49 +48,67 @@ public class AdminServer {
 
             System.out.println(clientId + " Connecting Broker " + broker);
             client.connect(connOpts);
-            System.out.println(clientId + " Connected - Thread PID: " + Thread.currentThread().getId());
+            System.out.println(clientId + " Connected - Thread PID: "
+                    + Thread.currentThread().getId());
 
             client.setCallback(new MqttCallback() {
-
                 public void messageArrived(String recievingTopic, MqttMessage message)
-                        throws MqttException {
+                        throws MqttException, InterruptedException {
+                    String[] messageComponents = new String(message.getPayload()).split("-");
 
-                    String[] stringAverages = (new String(message.getPayload())).split("-");
-                    int district = Integer.parseInt(String.valueOf(recievingTopic.charAt(recievingTopic.length() - 1)));
-                    System.out.println(district);
-                    for (String stringAverage : stringAverages) {
-                        if(!stringAverage.equals("")){
-                            Float average = Float.parseFloat(stringAverage);
-                            switch(district) {
-                                case 1:
-                                    averageDistrict1.add(average);
-                                    break;
-                                case 2:
-                                    averageDistrict2.add(average);
-                                    break;
-                                case 3:
-                                    averageDistrict3.add(average);
-                                    break;
-                                case 4:
-                                    averageDistrict4.add(average);
-                                    break;
-                                default:
-                                    Logger.red("There was an error while adding the data to memory");
-                            }
-                        }
+                    for (String messageComponent : messageComponents) {
+                        System.out.println(messageComponent);
                     }
 
+                    BotIdentity senderIdentity = null;
+                    try {
+                        senderIdentity = new ObjectMapper().readValue(messageComponents[0],
+                                BotIdentity.class);
+                    } catch (IOException e) {
+                        Logger.red("There was an exception while trying to read the object from string", e);
+                    }
+
+                    Long timestamp = Long.parseLong(messageComponents[1]);
+
+                    List<Float> averageList = null;
+                    try {
+                        averageList = new ObjectMapper().readValue(messageComponents[2],
+                                new TypeReference<List<Float>>() {
+                                });
+                    } catch (JsonMappingException e) {
+                        Logger.red("There was an error while handling json mapping", e);
+                    } catch (JsonParseException e) {
+                        Logger.red("There was an error while handling json parsing", e);
+                        ;
+                    } catch (IOException e) {
+                        Logger.red("There was an error while reading from stream", e);
+                    }
+
+                    AverageList al = null;
+                    if (senderIdentity != null && averageList != null) {
+                        al = new AverageList(averageList.size(), senderIdentity,
+                                timestamp, averageList);
+                    } else {
+                        Logger.red("Something went terribly wrong");
+                        return;
+                    }
+
+                    getStack().push(al);
                 }
 
                 public void connectionLost(Throwable cause) {
-                    Logger.red(clientId + " Connectionlost! cause:" + cause.getMessage()+ "-  Thread PID: " + Thread.currentThread().getId());
+                    System.out.println(clientId + " Connection lost! cause:"
+                            + cause.getMessage() + "-  Thread PID: "
+                            + Thread.currentThread().getId());
                 }
 
                 public void deliveryComplete(IMqttDeliveryToken token) {
+                    System.out.println("Delivery complete");
                 }
-
             });
+            System.out.println(clientId + " Subscribing ... - Thread PID: " + Thread.currentThread().getId());
             client.subscribe(recievingTopic,qos);
+            System.out.println(clientId + " Subscribed to topic : " + recievingTopic);
 
         } catch (MqttException me ) {
             System.out.println("reason " + me.getReasonCode());
@@ -99,76 +120,10 @@ public class AdminServer {
         }
     }
 
-    /**
-     * This function handles the addition of a new bot to the network.
-     * @param identity the identity of the bot, this is an object containing
-     *                 the bot's ID
-     *                 the bot's port
-     *                 the bot's ip address
-     * @return The return value is an HTTP response which is either 200 ok or
-     * Error
-     */
-    @Path("join")
-    @POST
-    @Consumes({"application/json"})
-    public Response joinBot(BotIdentity identity) {
-        Position botPosition = BotPositions.getInstance().joinBot(identity);
-        if(botPosition == null){
-            return Response.serverError().build();
+    public synchronized static Stack<AverageList> getStack() {
+        if(averageLists == null) {
+            averageLists = new Stack<>();
         }
-        else{
-            String jsonString = BotPositions.getInstance().jsonBuilder(botPosition);
-            return Response.ok(jsonString).build();
-        }
-    }
-
-    /**
-     * This function returns the set of bots registered within the city.
-     * @return The return value is an HTTP response which is only 200 ok.
-     */
-    @Path("bots")
-    @GET
-    public Response getBots() {
-        System.out.println(BotPositions.getInstance().getBotPositioning());
-        return Response.ok().build();
-    }
-
-    /**
-     * This function deletes a bot from the city.
-     * @return The return function is a value that can be 200 ok if the bot was actually
-     * present in the city, and it was correctly deleted from the administration server.
-     */
-    @Path("remove")
-    @DELETE
-    @Consumes({"application/json"})
-    public Response deleteBot(BotIdentity botIdentity) {
-        Logger.blue("DELETE");
-        if(!BotPositions.getInstance().deleteBot(botIdentity)) {
-            return Response.noContent().build();
-        }
-        return Response.ok().build();
-    }
-
-    @Path("measurements/{id}/{number}")
-    @GET
-    public Response getAvgMeasurement(@PathParam("id") int robotID,
-                                      @PathParam("number") int numberOfMeasurements) {
-        return Response.ok().build();
-    }
-
-    public static List<Float> getAverageDistrict1() {
-        return averageDistrict1;
-    }
-
-    public static List<Float> getAverageDistrict2() {
-        return averageDistrict2;
-    }
-
-    public static List<Float> getAverageDistrict3() {
-        return averageDistrict3;
-    }
-
-    public static List<Float> getAverageDistrict4() {
-        return averageDistrict4;
+        return averageLists;
     }
 }

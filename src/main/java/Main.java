@@ -18,5 +18,7 @@ public class Main {
 
         System.out.println("Server running!");
         System.out.println("Server started on: http://"+Variables.HOST+":"+Variables.PORT);
+
+
     }
 }

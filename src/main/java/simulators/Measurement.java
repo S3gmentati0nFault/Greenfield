@@ -1,4 +1,4 @@
-package Simulators;
+package simulators;
 
 public class Measurement implements Comparable<Measurement> {
 

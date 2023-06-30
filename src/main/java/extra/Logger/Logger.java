@@ -9,6 +9,12 @@ public class Logger {
         System.out.println(Colors.ANSI_RED + " <<!>> " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " <<!>> " + message + " <<!>> " + Colors.ANSI_RESET);
     }
 
+    public static void red(String message, Exception e){
+        now = LocalDateTime.now();
+        System.out.println(Colors.ANSI_RED + " <<!>> " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " <<!>> " + message + " <<!>> " + Colors.ANSI_RESET);
+        e.printStackTrace();
+    }
+
     public static void blue(String message){
         now = LocalDateTime.now();
         System.out.println(Colors.ANSI_BLUE + " <<?>> " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " <<?>> " + message + " <<?>> " + Colors.ANSI_RESET);

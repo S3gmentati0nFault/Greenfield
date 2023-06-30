@@ -5,7 +5,7 @@ import java.util.Objects;
 
 /**
  * The BotIdentity bean is used throughout the system to memorize the
- * fundamental informations of a bot, which are:
+ * fundamental information of a bot, which are:
  * Its id
  * Its ip address
  * Its port

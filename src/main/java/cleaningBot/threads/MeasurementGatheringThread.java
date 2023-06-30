@@ -1,7 +1,7 @@
 package cleaningBot.threads;
 
-import Simulators.Measurement;
-import Simulators.PM10Simulator;
+import simulators.Measurement;
+import simulators.PM10Simulator;
 import cleaningBot.MeasurementBuffer;
 import extra.Logger.Logger;
 
@@ -40,5 +40,9 @@ public class MeasurementGatheringThread extends Thread {
 
     public List<Float> getAverages() {
         return averages;
+    }
+
+    public synchronized void clear() {
+        averages.clear();
     }
 }

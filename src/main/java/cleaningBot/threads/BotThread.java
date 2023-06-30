@@ -71,7 +71,7 @@ public class BotThread extends Thread{
         maintenanceThread.start();
 
         Logger.yellow("Starting the pollution measurement sensor thread");
-        PollutionSensorThread pollutionSensorThread = new PollutionSensorThread(district);
+        PollutionSensorThread pollutionSensorThread = new PollutionSensorThread(district, identity);
         pollutionSensorThread.start();
     }
 
