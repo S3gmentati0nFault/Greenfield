@@ -76,10 +76,8 @@ public class PollutionSensorThread extends Thread {
             e.printStackTrace();
         } catch (JsonMappingException e) {
             Logger.red("There was an error while translating the object into json");
-        } catch (JsonGenerationException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Logger.red("There was an error while handling the json parsing", e);
         }
     }
 }

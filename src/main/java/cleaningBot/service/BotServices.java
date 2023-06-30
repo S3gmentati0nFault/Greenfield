@@ -47,7 +47,7 @@ public class BotServices extends BotServicesImplBase {
     public synchronized void processQueryGRPC(BotGRPC.Identifier request,
                                  StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("processQueryGRPC");
-
+        System.out.println("Current Thread: " + Thread.currentThread().getId());
         if(request.getTimestamp() > botThread.getTimestamp() &&
                 botThread.getTimestamp() != -1){
 
@@ -57,7 +57,7 @@ public class BotServices extends BotServicesImplBase {
                 System.out.println("Waiting");
             }
             try{
-                wait(TIMEOUT_MILLIS);
+                wait();
             }catch(Exception e){
                 Logger.red("There was an error during the wakeup process");
             }
@@ -138,6 +138,7 @@ public class BotServices extends BotServicesImplBase {
                 }
             );
         }
+        waitingInstances.clear();
     }
 
     /**

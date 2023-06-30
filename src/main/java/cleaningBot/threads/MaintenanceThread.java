@@ -47,7 +47,6 @@ public class MaintenanceThread extends Thread {
      */
     public void maintenanceCycle() {
         while(!onMaintenance) {
-            System.out.println("Rolling The Dice");
             try{
                 sleep(5000);
             } catch (Exception e) {
@@ -133,6 +132,7 @@ public class MaintenanceThread extends Thread {
                     .setTimestamp(timestamp)
                     .build();
 
+            System.out.println("Current Thread: " + Thread.currentThread().getId());
             serviceStub.processQueryGRPC(identifier, streamObserver);
         }
     }
