@@ -23,7 +23,7 @@ public class BotUtilities {
     public static boolean botRemovalFunction(BotIdentity deadRobot, BotThread bot) {
         ObjectMapper mapper = new ObjectMapper();
 
-        bot.getOtherBots().remove(deadRobot);
+        bot.removeBot(deadRobot);
 
         HttpURLConnection connection = buildConnection("DELETE", "http://" +
                     Variables.HOST+":" +

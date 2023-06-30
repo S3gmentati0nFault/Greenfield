@@ -1,12 +1,14 @@
 package cleaningBot.threads;
 
 import beans.BotIdentity;
+import cleaningBot.BotUtilities;
 import cleaningBot.service.BotServices;
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
 import extra.Variables;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import services.grpc.BotGRPC;
 import services.grpc.BotServicesGrpc;
@@ -22,6 +24,7 @@ public class MaintenanceThread extends Thread {
     private boolean onMaintenance;
     private BotThread botThread;
     private BotServices botServices;
+    private int counter;
 
     /**
      * Generic public constructor
@@ -67,57 +70,21 @@ public class MaintenanceThread extends Thread {
     public synchronized void agrawalaProcedure() {
         Logger.cyan("Starting the Agrawala procedure");
         List<BotIdentity> fleetSnapshot = botThread.getOtherBots();
-        List<ManagedChannel> channels = new ArrayList<ManagedChannel>();
-
-        fleetSnapshot.remove(
-                new BotIdentity(botThread.getIdentity().getId(),
-                        botThread.getIdentity().getPort(),
-                        botThread.getIdentity().getIp()
-                )
-        );
 
         if(fleetSnapshot.size() == 0){
             maintenanceAccess();
             return;
         }
 
-        StreamObserver<BotGRPC.Acknowledgement> streamObserver =
-                new StreamObserver<BotGRPC.Acknowledgement>() {
-            int counter = 0;
-            int total = fleetSnapshot.size();
-            @Override
-            public void onNext(BotGRPC.Acknowledgement value) {
-                counter++;
-                Logger.green("The response was positive! We ar at " + counter + " over " + total);
-            }
+        counter = fleetSnapshot.size();
 
-            @Override
-            public synchronized void onError(Throwable t) {
-                Logger.red("There was an error during the grpc");
-            }
-
-            @Override
-            public void onCompleted() {
-                if(counter == total){
-                    maintenanceAccess();
-                    Logger.yellow("Shutting down communication channels");
-                    for (ManagedChannel channel : channels) {
-                        channel.shutdown();
-                    }
-                    channels.clear();
-                }
-            }
-        };
-
+        Logger.cyan("Contacting the other bots");
         for (BotIdentity botIdentity : fleetSnapshot) {
-            Logger.cyan("Contacting the other bots");
 
             ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                     .usePlaintext()
                     .build();
-
-            channels.add(channel);
 
             BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
 
@@ -133,7 +100,32 @@ public class MaintenanceThread extends Thread {
                     .build();
 
             System.out.println("Current Thread: " + Thread.currentThread().getId());
-            serviceStub.processQueryGRPC(identifier, streamObserver);
+            serviceStub.processQueryGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
+                BotIdentity destination = botIdentity;
+                ManagedChannel openChannel = channel;
+                @Override
+                public void onNext(BotGRPC.Acknowledgement value) {
+                    counter--;
+                    Logger.green("The response was positive! Still waiting for " + counter + " answers");
+                }
+
+                @Override
+                public synchronized void onError(Throwable t) {
+                    Logger.red("There was an error during the grpc");
+                    if(t.getClass() == StatusRuntimeException.class) {
+                        counter--;
+                        BotUtilities.botRemovalFunction(destination, botThread);
+                        channel.shutdown();
+                        maintenanceAccess();
+                    }
+                }
+
+                @Override
+                public void onCompleted() {
+                    channel.shutdown();
+                    maintenanceAccess();
+                }
+            });
         }
     }
 
@@ -141,16 +133,18 @@ public class MaintenanceThread extends Thread {
      * Method that simulates access to the mechanic
      */
     public void maintenanceAccess() {
-        Logger.yellow("Starting the maintenance process");
-        try {
-            sleep(10000);
-            Logger.green("The machine has gone back to normal");
-        }catch(Exception e) {
-            Logger.red("There was an error during wakeup procedure");
+        if(counter == 0){
+            Logger.yellow("Starting the maintenance process");
+            try {
+                sleep(10000);
+                Logger.green("The machine has gone back to normal");
+            }catch(Exception e) {
+                Logger.red("There was an error during wakeup procedure");
+            }
+            onMaintenance = false;
+            botServices.clearWaitingQueue();
+            botThread.setTimestamp(-1);
+            maintenanceCycle();
         }
-        onMaintenance = false;
-        botServices.clearWaitingQueue();
-        botThread.setTimestamp(-1);
-        maintenanceCycle();
     }
 }

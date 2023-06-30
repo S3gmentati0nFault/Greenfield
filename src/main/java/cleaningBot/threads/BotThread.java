@@ -64,6 +64,12 @@ public class BotThread extends Thread{
         InputThread inputThread = new InputThread(this);
         inputThread.start();
 
+        try {
+            sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Logger.yellow("Starting maintenance thread");
         MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
         maintenanceThread.start();
@@ -304,5 +310,9 @@ public class BotThread extends Thread{
         for (BotIdentity otherBot : otherBots) {
             System.out.println(otherBot);
         }
+    }
+
+    public void removeBot(BotIdentity deadRobot) {
+        otherBots.remove(deadRobot);
     }
 }

@@ -8,12 +8,27 @@ extra/CustomRandom/CustomRandom.java
  extra.CustomRandom.CustomRandom
 extra/Timer/Timer.java
  extra.Timer.Timer
-simulators/PM10Simulator.java
- simulators.PM10Simulator
+BotGRPC.java
+ BotGRPC
+ BotGRPC$1
+ BotGRPC$Acknowledgement
+ BotGRPC$Acknowledgement$1
+ BotGRPC$Acknowledgement$Builder
+ BotGRPC$AcknowledgementOrBuilder
+ BotGRPC$BotNetworkingInformations
+ BotGRPC$BotNetworkingInformations$1
+ BotGRPC$BotNetworkingInformations$Builder
+ BotGRPC$BotNetworkingInformationsOrBuilder
+ BotGRPC$Identifier
+ BotGRPC$Identifier$1
+ BotGRPC$Identifier$Builder
+ BotGRPC$IdentifierOrBuilder
 extra/Logger/Colors.java
  extra.Logger.Colors
-cleaningBot/threads/InputThread.java
- cleaningBot.threads.InputThread
+adminServer/AdminServer.java
+ adminServer.AdminServer
+ adminServer.AdminServer$1
+ adminServer.AdminServer$1$1
 AdminServer.java
  AdminServer
  AdminServer$1
@@ -31,28 +46,14 @@ adminServer/ServerRestInterface.java
  adminServer.ServerRestInterface
 extra/Position/Position.java
  extra.Position.Position
-cleaningBot/BotUtilities.java
- cleaningBot.BotUtilities
- cleaningBot.BotUtilities$1
+simulators/PM10Simulator.java
+ simulators.PM10Simulator
 Main.java
  Main
 cleaningBot/threads/MeasurementGatheringThread.java
  cleaningBot.threads.MeasurementGatheringThread
-BotGRPC.java
- BotGRPC
- BotGRPC$1
- BotGRPC$Acknowledgement
- BotGRPC$Acknowledgement$1
- BotGRPC$Acknowledgement$Builder
- BotGRPC$AcknowledgementOrBuilder
- BotGRPC$BotNetworkingInformations
- BotGRPC$BotNetworkingInformations$1
- BotGRPC$BotNetworkingInformations$Builder
- BotGRPC$BotNetworkingInformationsOrBuilder
- BotGRPC$Identifier
- BotGRPC$Identifier$1
- BotGRPC$Identifier$Builder
- BotGRPC$IdentifierOrBuilder
+extra/Logger/Logger.java
+ extra.Logger.Logger
 adminClient/AdminClient.java
  adminClient.AdminClient
  adminClient.AdminClient$1
@@ -64,12 +65,6 @@ cleaningBot/MeasurementBuffer.java
  cleaningBot.MeasurementBuffer
 beans/AverageList.java
  beans.AverageList
-cleaningBot/CleaningBot.java
- cleaningBot.CleaningBot
-adminServer/AdminServer.java
- adminServer.AdminServer
- adminServer.AdminServer$1
- adminServer.AdminServer$1$1
 services/grpc/BotServicesGrpc.java
  services.grpc.BotServicesGrpc
  services.grpc.BotServicesGrpc$1
@@ -81,8 +76,8 @@ services/grpc/BotServicesGrpc.java
  services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
  services.grpc.BotServicesGrpc$BotServicesStub
  services.grpc.BotServicesGrpc$MethodHandlers
-extra/Logger/Logger.java
- extra.Logger.Logger
+cleaningBot/threads/PollutionSensorThread.java
+ cleaningBot.threads.PollutionSensorThread
 services/grpc/BotGRPC.java
  services.grpc.BotGRPC
  services.grpc.BotGRPC$1
@@ -98,23 +93,28 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Identifier$1
  services.grpc.BotGRPC$Identifier$Builder
  services.grpc.BotGRPC$IdentifierOrBuilder
-cleaningBot/threads/PollutionSensorThread.java
- cleaningBot.threads.PollutionSensorThread
+cleaningBot/service/BotServices.java
+ cleaningBot.service.BotServices
+cleaningBot/BotUtilities.java
+ cleaningBot.BotUtilities
+ cleaningBot.BotUtilities$1
+cleaningBot/service/ServiceComparator.java
+ cleaningBot.service.ServiceComparator
+cleaningBot/service/WaitingThread.java
+ cleaningBot.service.WaitingThread
+cleaningBot/threads/InputThread.java
+ cleaningBot.threads.InputThread
+cleaningBot/CleaningBot.java
+ cleaningBot.CleaningBot
+cleaningBot/threads/GrpcServicesThread.java
+ cleaningBot.threads.GrpcServicesThread
 cleaningBot/threads/BotThread.java
  cleaningBot.threads.BotThread
  cleaningBot.threads.BotThread$1
  cleaningBot.threads.BotThread$2
-cleaningBot/service/ServiceComparator.java
- cleaningBot.service.ServiceComparator
 cleaningBot/service/QueryResponseObserver.java
  cleaningBot.service.QueryResponseObserver
  cleaningBot.service.QueryResponseObserver$1
-cleaningBot/threads/GrpcServicesThread.java
- cleaningBot.threads.GrpcServicesThread
-cleaningBot/service/BotServices.java
- cleaningBot.service.BotServices
-cleaningBot/service/WaitingThread.java
- cleaningBot.service.WaitingThread
 cleaningBot/threads/MaintenanceThread.java
  cleaningBot.threads.MaintenanceThread
  cleaningBot.threads.MaintenanceThread$1
