@@ -92,7 +92,7 @@ public class MaintenanceThread extends Thread {
             }
 
             @Override
-            public void onError(Throwable t) {
+            public synchronized void onError(Throwable t) {
                 Logger.red("There was an error during the grpc");
             }
 

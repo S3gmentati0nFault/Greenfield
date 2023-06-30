@@ -1,5 +1,6 @@
 package cleaningBot.threads;
 
+import cleaningBot.BotUtilities;
 import cleaningBot.service.BotServices;
 import extra.Logger.Logger;
 import extra.Position.Position;
@@ -17,9 +18,6 @@ import services.grpc.BotServicesGrpc;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -84,7 +82,7 @@ public class BotThread extends Thread{
         ObjectMapper mapper = new ObjectMapper();
 
         HttpURLConnection connection =
-                buildConnection("POST", "http://" +
+                BotUtilities.buildConnection("POST", "http://" +
                         Variables.HOST+":" + Variables.PORT + "/admin/join");
 
         connection.setRequestProperty("Content-Type", "application/json");
@@ -141,7 +139,7 @@ public class BotThread extends Thread{
             return false;
         }
 
-        closeConnection(connection);
+        BotUtilities.closeConnection(connection);
         otherBots.remove(identity);
 
         if(!otherBots.isEmpty()){
@@ -225,7 +223,7 @@ public class BotThread extends Thread{
     public boolean updateOthers(BotIdentity deadRobot) {
         ObjectMapper mapper = new ObjectMapper();
 
-        HttpURLConnection connection = buildConnection("DELETE", "http://" +
+        HttpURLConnection connection = BotUtilities.buildConnection("DELETE", "http://" +
                     Variables.HOST+":" +
                     Variables.PORT +
                     "/admin/remove");
@@ -265,63 +263,9 @@ public class BotThread extends Thread{
             return false;
         }
 
-        closeConnection(connection);
+        BotUtilities.closeConnection(connection);
 
         return true;
-    }
-
-    /**
-     * Method that builds a new connection towards a certain host
-     * @param requestMethod The HTTP request method
-     * @param url destination URL
-     * @return HttpURLConnection object used to send data in the startNewBot() procedure.
-     */
-    public HttpURLConnection buildConnection(String requestMethod, String url) {
-        URL requestURL;
-
-        try{
-            requestURL = new URL(url);
-        }catch(MalformedURLException e){
-            Logger.red("The url was malformed");
-            return null;
-        }
-
-        HttpURLConnection connection = null;
-        try{
-            connection = (HttpURLConnection) requestURL.openConnection();
-        }
-        catch(IOException e){
-            Logger.red("There was an error during connection opening procedure");
-            return null;
-        }
-
-        try{
-            connection.setRequestMethod(requestMethod);
-        }catch(ProtocolException e){
-            Logger.red("There was an error during request method selection");
-            return null;
-        }
-
-        return connection;
-    }
-
-    /**
-     * Method used to close an open connection
-     */
-    public void closeConnection(HttpURLConnection connection) {
-        try{
-            if(connection.getResponseCode() == 200) {
-                Logger.green("The request " + connection.getRequestMethod() + " went fine");
-            }
-            else{
-                Logger.yellow("The response code was > " + connection.getResponseCode());
-            }
-        }catch(Exception e){
-            Logger.red("Something went wrong while retrieving the response code");
-        }
-
-        Logger.yellow("Closing the connection channel");
-        connection.disconnect();
     }
 
     /**
