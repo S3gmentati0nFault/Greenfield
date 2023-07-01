@@ -101,7 +101,7 @@ public class BotUtilities {
 
                     @Override
                     public void onCompleted() {
-                        if(Variables.MODE.equals("DEBUG")) {
+                        if(Variables.DEBUG) {
                             bot.getOtherBots().forEach(
                                     botIdentity -> {
                                         System.out.println(botIdentity);

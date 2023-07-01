@@ -11,8 +11,6 @@ import services.grpc.BotServicesGrpc.*;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import static extra.Variables.TIMEOUT_MILLIS;
-
 /**
  * This class implements the GRPC methods defined inside the proto file.
  */
@@ -53,7 +51,7 @@ public class BotServices extends BotServicesImplBase {
 
             Logger.yellow("The message has a timestamp greater than mine");
             waitingInstances.add(new WaitingThread(this, request.getTimestamp()));
-            if(Variables.MODE.equals("DEBUG")){
+            if(Variables.DEBUG){
                 System.out.println("Waiting");
             }
             try{
@@ -61,7 +59,7 @@ public class BotServices extends BotServicesImplBase {
             }catch(Exception e){
                 Logger.red("There was an error during the wakeup process");
             }
-            if(Variables.MODE.equals("DEBUG")) {
+            if(Variables.DEBUG) {
                 System.out.println("Not waiting anymore");
             }
             waitingInstances.remove(new WaitingThread(this, request.getTimestamp()));
@@ -114,7 +112,7 @@ public class BotServices extends BotServicesImplBase {
         }catch(Exception e){
             responseObserver.onError(e);
         }
-        if(Variables.MODE.equals("DEBUG")) {
+        if(Variables.DEBUG) {
             botThread.getOtherBots().forEach(botIdentity -> {
                 System.out.println(botIdentity);
             });
@@ -130,7 +128,7 @@ public class BotServices extends BotServicesImplBase {
         if(waitingInstances.size() != 0){
             waitingInstances.forEach(
                 service -> {
-                    if(Variables.MODE.equals("DEBUG")) {
+                    if(Variables.DEBUG) {
                         System.out.println(service.getBotServices().getBotThread().getIdentity());
                     }
                     Logger.yellow("Waking service " + service.getTimestamp() + " up");

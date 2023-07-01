@@ -1,5 +1,7 @@
 package cleaningBot.threads;
 
+import extra.Logger.Logger;
+
 import java.util.Scanner;
 
 /**
@@ -24,9 +26,18 @@ public class InputThread extends Thread {
             Scanner keyboard = new Scanner(System.in);
             String input = keyboard.next();
 
+            if(input.length() != 0) {
+                System.out.println(input);
+            }
+
             if (input.equals("GET")) {
                 System.out.println("-> " + botThread.getIdentity());
                 botThread.printOtherBots();
+            }
+            else if(input.equals("FIX")) {
+                Logger.yellow("Requesting immediate maintenance...");
+                FixHelperThread fixHelperThread = new FixHelperThread();
+                fixHelperThread.start();
             }
         }
     }

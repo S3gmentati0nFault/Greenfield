@@ -3,6 +3,7 @@ package cleaningBot.threads;
 import beans.BotIdentity;
 import cleaningBot.BotUtilities;
 import cleaningBot.service.BotServices;
+import exceptions.AlreadyOnMaintenanceException;
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
 import extra.Variables;
@@ -13,7 +14,6 @@ import io.grpc.stub.StreamObserver;
 import services.grpc.BotGRPC;
 import services.grpc.BotServicesGrpc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +30,11 @@ public class MaintenanceThread extends Thread {
      * Generic public constructor
      */
     public MaintenanceThread(BotThread botThread, BotServices botServices) {
-        onMaintenance = false;
+        try {
+            setOnMaintenance(false);
+        } catch (AlreadyOnMaintenanceException e) {
+            e.printStackTrace();
+        }
 
         this.botThread = botThread;
         this.botServices = botServices;
@@ -50,15 +54,27 @@ public class MaintenanceThread extends Thread {
      */
     public void maintenanceCycle() {
         while(!onMaintenance) {
+            if(CustomRandom.getInstance().probability(3)){
+                try{
+                    Logger.blue("The robot should undergo maintenance");
+                    if(Variables.AGRAWALA){
+                        Logger.blue("TRY USING THE FIX COMMAND");
+                        try {
+                            sleep(10000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    setOnMaintenance(true);
+                    agrawalaProcedure();
+                } catch (AlreadyOnMaintenanceException e) {
+                    Logger.red("The system is already undergoing maintenance");
+                }
+            }
             try{
                 sleep(5000);
             } catch (Exception e) {
                 Logger.red("There was a problem while waking up from sleep");
-            }
-            if(CustomRandom.getInstance().probability(3)){
-                Logger.yellow("The system has broken down and needs to be repaired");
-                onMaintenance = true;
-                agrawalaProcedure();
             }
         }
     }
@@ -89,7 +105,7 @@ public class MaintenanceThread extends Thread {
             BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
 
             long timestamp = System.currentTimeMillis();
-            if(Variables.MODE.equals("DEBUG")) {
+            if(Variables.DEBUG) {
                 System.out.println(timestamp);
             }
             botThread.setTimestamp(timestamp);
@@ -141,10 +157,27 @@ public class MaintenanceThread extends Thread {
             }catch(Exception e) {
                 Logger.red("There was an error during wakeup procedure");
             }
-            onMaintenance = false;
+            try {
+                setOnMaintenance(false);
+            } catch (AlreadyOnMaintenanceException e) {
+                e.printStackTrace();
+            }
             botServices.clearWaitingQueue();
             botThread.setTimestamp(-1);
             maintenanceCycle();
         }
+    }
+
+    public synchronized void setOnMaintenance(boolean onMaintenance)
+            throws AlreadyOnMaintenanceException {
+        if(this.onMaintenance && onMaintenance) {
+            throw new AlreadyOnMaintenanceException();
+        }
+        this.onMaintenance = onMaintenance;
+    }
+
+    public void requestMaintenance() throws AlreadyOnMaintenanceException {
+        setOnMaintenance(true);
+        agrawalaProcedure();
     }
 }

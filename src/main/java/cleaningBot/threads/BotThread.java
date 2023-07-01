@@ -32,6 +32,15 @@ public class BotThread extends Thread{
     private BotServices botServices;
     private long timestamp;
     private int district;
+    private MaintenanceThread maintenanceThread;
+    private static BotThread instance;
+
+    public static synchronized BotThread getInstance() {
+        if(instance == null) {
+            instance = new BotThread();
+        }
+        return instance;
+    }
 
     /**
      * Empty constructor that generates random values for both the id and the
@@ -64,14 +73,8 @@ public class BotThread extends Thread{
         InputThread inputThread = new InputThread(this);
         inputThread.start();
 
-        try {
-            sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         Logger.yellow("Starting maintenance thread");
-        MaintenanceThread maintenanceThread = new MaintenanceThread(this, botServices);
+        maintenanceThread = new MaintenanceThread(this, botServices);
         maintenanceThread.start();
 
         Logger.yellow("Starting the pollution measurement sensor thread");
@@ -188,7 +191,7 @@ public class BotThread extends Thread{
 
                     @Override
                     public void onCompleted() {
-                        if(Variables.MODE.equals("DEBUG")) {
+                        if(Variables.DEBUG) {
                             otherBots.forEach(
                                     botIdentity -> {
                                         System.out.println(botIdentity);
@@ -294,6 +297,10 @@ public class BotThread extends Thread{
      */
     public BotIdentity getIdentity() {
         return identity;
+    }
+
+    public MaintenanceThread getMaintenanceThread() {
+        return maintenanceThread;
     }
 
     /**
