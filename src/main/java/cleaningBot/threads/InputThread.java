@@ -8,7 +8,9 @@ import java.util.Scanner;
  * An input thread class used to get the input from the user
  */
 public class InputThread extends Thread {
-    BotThread botThread;
+    private BotThread botThread;
+    private QuitHelperThread quitHelperThread;
+    private boolean quitting;
 
     /**
      * Generic public constructor
@@ -39,6 +41,23 @@ public class InputThread extends Thread {
                 FixHelperThread fixHelperThread = new FixHelperThread();
                 fixHelperThread.start();
             }
+            else if(input.equals("QUIT")) {
+                if(quitting) {
+                    Logger.red("Already quitting the program, wait please...");
+                }
+                Logger.yellow("Initiating the quit procedure...");
+                quitHelperThread = new QuitHelperThread();
+                quitHelperThread.start();
+            }
+            else{
+                Logger.red("Input could not be recognized");
+            }
+        }
+    }
+
+    public void wakeUpHelper() {
+        if(quitHelperThread != null){
+            quitHelperThread.wakeup();
         }
     }
 }

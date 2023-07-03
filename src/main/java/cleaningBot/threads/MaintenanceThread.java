@@ -163,9 +163,14 @@ public class MaintenanceThread extends Thread {
                 e.printStackTrace();
             }
             botServices.clearWaitingQueue();
+            BotThread.getInstance().getInputThread().wakeUpHelper();
             botThread.setTimestamp(-1);
             maintenanceCycle();
         }
+    }
+
+    public boolean getOnMaintenance() {
+        return onMaintenance;
     }
 
     public synchronized void setOnMaintenance(boolean onMaintenance)

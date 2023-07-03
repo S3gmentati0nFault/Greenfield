@@ -33,6 +33,7 @@ public class BotThread extends Thread{
     private long timestamp;
     private int district;
     private MaintenanceThread maintenanceThread;
+    private InputThread inputThread;
     private static BotThread instance;
 
     public static synchronized BotThread getInstance() {
@@ -70,7 +71,7 @@ public class BotThread extends Thread{
         }
 
         Logger.yellow("Starting input thread");
-        InputThread inputThread = new InputThread(this);
+        inputThread = new InputThread(this);
         inputThread.start();
 
         Logger.yellow("Starting maintenance thread");
@@ -301,6 +302,10 @@ public class BotThread extends Thread{
 
     public MaintenanceThread getMaintenanceThread() {
         return maintenanceThread;
+    }
+
+    public InputThread getInputThread() {
+        return inputThread;
     }
 
     /**
