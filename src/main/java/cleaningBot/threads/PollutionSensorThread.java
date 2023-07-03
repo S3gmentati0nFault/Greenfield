@@ -2,6 +2,7 @@ package cleaningBot.threads;
 
 import beans.BotIdentity;
 import extra.Logger.Logger;
+import extra.Variables;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -47,13 +48,11 @@ public class PollutionSensorThread extends Thread {
             client.connect(connectOptions);
 
             while(true) {
-                Logger.yellow("Waiting to gather some data");
                 try{
                     wait(15000);
                 } catch (InterruptedException e) {
                     Logger.red("There was an error during the wakeup procedure");
                 }
-                Logger.yellow("Preparing to send data");
                 List<Float> averages = measurementGatheringThread.getAverages();
                 String payload = mapper.writeValueAsString(botIdentity)
                         + "-" + mapper.writeValueAsString(System.currentTimeMillis())
@@ -64,7 +63,9 @@ public class PollutionSensorThread extends Thread {
                 }
 
                 payload = payload.replaceAll(",$", "") + "]";
-                System.out.println(payload);
+                if(Variables.DEBUG) {
+                    System.out.println(payload);
+                }
 
                 MqttMessage message = new MqttMessage(payload.getBytes());
                 message.setQos(qos);

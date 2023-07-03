@@ -63,7 +63,7 @@ public class BotThread extends Thread{
     @Override
     public void run(){
         Logger.yellow("Starting grpc services");
-        GrpcServicesThread grpcThread = new GrpcServicesThread(identity, this, botServices);
+        GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
         grpcThread.start();
 
         if(!startNewBot()){
@@ -71,11 +71,11 @@ public class BotThread extends Thread{
         }
 
         Logger.yellow("Starting input thread");
-        inputThread = new InputThread(this);
+        inputThread = new InputThread();
         inputThread.start();
 
         Logger.yellow("Starting maintenance thread");
-        maintenanceThread = new MaintenanceThread(this, botServices);
+        maintenanceThread = new MaintenanceThread(botServices);
         maintenanceThread.start();
 
         Logger.yellow("Starting the pollution measurement sensor thread");

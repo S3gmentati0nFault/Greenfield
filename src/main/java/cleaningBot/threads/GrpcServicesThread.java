@@ -13,22 +13,16 @@ import java.io.IOException;
  */
 public class GrpcServicesThread extends Thread {
     private final BotServices grpcServices;
-    private int port, id;
-    private String ip;
-    private BotThread botThread;
+    private int port;
 
     /**
      * @see BotThread
      * Custom constructor that starts the communication server up.
-     * @param identity This is the bot identity received from the Bot class.
-     * @param botThread This is a reference to the bot object, it is used to keep a synchronized
-     *            copy of the Bot list around.
+     * @param port
+     * @param botServices
      */
-    public GrpcServicesThread(BotIdentity identity, BotThread botThread, BotServices botServices) {
-        port = identity.getPort();
-        id = identity.getId();
-        ip = identity.getIp();
-        this.botThread = botThread;
+    public GrpcServicesThread(int port, BotServices botServices) {
+        this.port = port;
 
         grpcServices = botServices;
     }

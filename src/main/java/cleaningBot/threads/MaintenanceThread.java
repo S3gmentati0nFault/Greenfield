@@ -1,43 +1,25 @@
 package cleaningBot.threads;
 
-import beans.BotIdentity;
-import cleaningBot.BotUtilities;
 import cleaningBot.service.BotServices;
 import exceptions.AlreadyOnMaintenanceException;
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
 import extra.Variables;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
-import io.grpc.stub.StreamObserver;
-import services.grpc.BotGRPC;
-import services.grpc.BotServicesGrpc;
-
-import java.util.List;
 
 /**
  * Maintenance class that simulates the error rate of the bots and handles the
  * Mutual-exclusion
  */
 public class MaintenanceThread extends Thread {
-    private boolean onMaintenance;
-    private BotThread botThread;
     private BotServices botServices;
-    private int counter;
+    private boolean onMaintenance;
 
     /**
      * Generic public constructor
      */
-    public MaintenanceThread(BotThread botThread, BotServices botServices) {
-        try {
-            setOnMaintenance(false);
-        } catch (AlreadyOnMaintenanceException e) {
-            e.printStackTrace();
-        }
-
-        this.botThread = botThread;
+    public MaintenanceThread(BotServices botServices) {
         this.botServices = botServices;
+        onMaintenance = false;
     }
 
     /**
@@ -53,7 +35,7 @@ public class MaintenanceThread extends Thread {
      * Method that simulates the malfunction of the robots
      */
     public void maintenanceCycle() {
-        while(!onMaintenance) {
+        while(true) {
             if(CustomRandom.getInstance().probability(3)){
                 try{
                     Logger.blue("The robot should undergo maintenance");
@@ -65,10 +47,9 @@ public class MaintenanceThread extends Thread {
                             throw new RuntimeException(e);
                         }
                     }
-                    setOnMaintenance(true);
-                    agrawalaProcedure();
+                    doMaintenance();
                 } catch (AlreadyOnMaintenanceException e) {
-                    Logger.red("The system is already undergoing maintenance");
+                    e.printStackTrace();
                 }
             }
             try{
@@ -79,94 +60,36 @@ public class MaintenanceThread extends Thread {
         }
     }
 
-    /**
-     * Method that handles the mutual-exclusion by contacting via GRPC all the bots present
-     * in the system at the moment of the malfunction
-     */
-    public synchronized void agrawalaProcedure() {
-        Logger.cyan("Starting the Agrawala procedure");
-        List<BotIdentity> fleetSnapshot = botThread.getOtherBots();
-
-        if(fleetSnapshot.size() == 0){
-            maintenanceAccess();
-            return;
-        }
-
-        counter = fleetSnapshot.size();
-
-        Logger.cyan("Contacting the other bots");
-        for (BotIdentity botIdentity : fleetSnapshot) {
-
-            ManagedChannel channel = ManagedChannelBuilder
-                    .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                    .usePlaintext()
-                    .build();
-
-            BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
-
-            long timestamp = System.currentTimeMillis();
+    public synchronized void doMaintenance()
+            throws AlreadyOnMaintenanceException {
+        if(!onMaintenance){
             if(Variables.DEBUG) {
-                System.out.println(timestamp);
+                System.out.println("MAINTENANCE PRECHECK");
             }
-            botThread.setTimestamp(timestamp);
-            BotGRPC.Identifier identifier = BotGRPC.Identifier
-                    .newBuilder()
-                    .setId(botIdentity.getId())
-                    .setTimestamp(timestamp)
-                    .build();
-
-            System.out.println("Current Thread: " + Thread.currentThread().getId());
-            serviceStub.processQueryGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
-                BotIdentity destination = botIdentity;
-                ManagedChannel openChannel = channel;
-                @Override
-                public void onNext(BotGRPC.Acknowledgement value) {
-                    counter--;
-                    Logger.green("The response was positive! Still waiting for " + counter + " answers");
-                }
-
-                @Override
-                public synchronized void onError(Throwable t) {
-                    Logger.red("There was an error during the grpc");
-                    if(t.getClass() == StatusRuntimeException.class) {
-                        counter--;
-                        BotUtilities.botRemovalFunction(destination, botThread);
-                        channel.shutdown();
-                        maintenanceAccess();
-                    }
-                }
-
-                @Override
-                public void onCompleted() {
-                    channel.shutdown();
-                    maintenanceAccess();
-                }
-            });
+            setOnMaintenance(true);
+            MutualExclusionThread mutualExclusionThread =
+                new MutualExclusionThread(this, botServices);
+            mutualExclusionThread.start();
+            if(Variables.DEBUG) {
+                System.out.println("WAITING");
+            }
+            try{
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(Variables.DEBUG) {
+                System.out.println("NOT WAITING");
+            }
+            setOnMaintenance(false);
+        }
+        else{
+            throw new AlreadyOnMaintenanceException();
         }
     }
 
-    /**
-     * Method that simulates access to the mechanic
-     */
-    public void maintenanceAccess() {
-        if(counter == 0){
-            Logger.yellow("Starting the maintenance process");
-            try {
-                sleep(10000);
-                Logger.green("The machine has gone back to normal");
-            }catch(Exception e) {
-                Logger.red("There was an error during wakeup procedure");
-            }
-            try {
-                setOnMaintenance(false);
-            } catch (AlreadyOnMaintenanceException e) {
-                e.printStackTrace();
-            }
-            botServices.clearWaitingQueue();
-            BotThread.getInstance().getInputThread().wakeUpHelper();
-            botThread.setTimestamp(-1);
-            maintenanceCycle();
-        }
+    public synchronized void wakeupMaintenanceThread() {
+        notifyAll();
     }
 
     public boolean getOnMaintenance() {
@@ -179,10 +102,5 @@ public class MaintenanceThread extends Thread {
             throw new AlreadyOnMaintenanceException();
         }
         this.onMaintenance = onMaintenance;
-    }
-
-    public void requestMaintenance() throws AlreadyOnMaintenanceException {
-        setOnMaintenance(true);
-        agrawalaProcedure();
     }
 }

@@ -15,6 +15,12 @@ public class Logger {
         e.printStackTrace();
     }
 
+    public static void red(String message, Throwable t){
+        now = LocalDateTime.now();
+        System.out.println(Colors.ANSI_RED + " <<!>> " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " <<!>> " + message + " <<!>> " + Colors.ANSI_RESET);
+        t.printStackTrace();
+    }
+
     public static void blue(String message){
         now = LocalDateTime.now();
         System.out.println(Colors.ANSI_BLUE + " <<?>> " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " <<?>> " + message + " <<?>> " + Colors.ANSI_RESET);

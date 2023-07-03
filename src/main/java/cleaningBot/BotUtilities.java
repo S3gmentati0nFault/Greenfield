@@ -18,12 +18,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
 
 public class BotUtilities {
-    public static boolean botRemovalFunction(BotIdentity deadRobot, BotThread bot) {
+    public static boolean botRemovalFunction(BotIdentity deadRobot) {
         ObjectMapper mapper = new ObjectMapper();
 
-        bot.removeBot(deadRobot);
+        BotThread.getInstance().removeBot(deadRobot);
 
         HttpURLConnection connection = buildConnection("DELETE", "http://" +
                     Variables.HOST+":" +
@@ -67,9 +68,10 @@ public class BotUtilities {
 
         closeConnection(connection);
 
-        if(!bot.getOtherBots().isEmpty()){
+        if(!BotThread.getInstance().getOtherBots().isEmpty()){
+            List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
             Logger.cyan("Contacting the other bots");
-            bot.getOtherBots().forEach(botIdentity -> {
+            fleetSnapshot.forEach(botIdentity -> {
                 ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                     .usePlaintext()
@@ -83,7 +85,6 @@ public class BotUtilities {
                         .setHost(deadRobot.getIp())
                         .build();
                 serviceStub.crashAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
-
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
                         if(!value.getAck()){
@@ -102,7 +103,7 @@ public class BotUtilities {
                     @Override
                     public void onCompleted() {
                         if(Variables.DEBUG) {
-                            bot.getOtherBots().forEach(
+                            fleetSnapshot.forEach(
                                     botIdentity -> {
                                         System.out.println(botIdentity);
                                     }

@@ -2,23 +2,23 @@ package cleaningBot.threads;
 
 import extra.Logger.Logger;
 
+import java.util.ConcurrentModificationException;
 import java.util.Scanner;
 
 /**
  * An input thread class used to get the input from the user
  */
 public class InputThread extends Thread {
-    private BotThread botThread;
     private QuitHelperThread quitHelperThread;
+    private FixHelperThread fixHelperThread;
     private boolean quitting, maintenanceRequested;
 
     /**
      * Generic public constructor
      */
-    public InputThread(BotThread botThread) {
+    public InputThread() {
         quitting = false;
         maintenanceRequested = false;
-        this.botThread = botThread;
     }
 
     /**
@@ -35,18 +35,20 @@ public class InputThread extends Thread {
             }
 
             if (input.equals("GET")) {
-                System.out.println("-> " + botThread.getIdentity());
-                botThread.printOtherBots();
+                System.out.println("-> " + BotThread.getInstance().getIdentity());
+                BotThread.getInstance().printOtherBots();
             }
             else if(input.equals("FIX")) {
-                if(maintenanceRequested) {
-                    Logger.red("Maintenance has already been requested, wait please...");
-                }
-                else{
-                    maintenanceRequested = true;
-                    Logger.yellow("Requesting immediate maintenance...");
-                    FixHelperThread fixHelperThread = new FixHelperThread();
-                    fixHelperThread.start();
+                synchronized(this) {
+                    if(maintenanceRequested) {
+                        Logger.red("Maintenance has already been requested, wait please...");
+                    }
+                    else{
+                        maintenanceRequested = true;
+                        Logger.yellow("Requesting immediate maintenance...");
+                        fixHelperThread = new FixHelperThread(this);
+                        fixHelperThread.start();
+                    }
                 }
             }
             else if(input.equals("QUIT")) {
@@ -64,8 +66,12 @@ public class InputThread extends Thread {
         }
     }
 
-    public void wakeUpHelper() {
-        if(quitHelperThread != null){
+    public synchronized void maintenanceDone() {
+        maintenanceRequested = false;
+    }
+
+    public synchronized void wakeupHelper() {
+        if(quitting){
             quitHelperThread.wakeup();
         }
     }
