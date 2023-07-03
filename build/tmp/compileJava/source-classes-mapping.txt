@@ -12,9 +12,8 @@ extra/Timer/Timer.java
  extra.Timer.Timer
 extra/Logger/Colors.java
  extra.Logger.Colors
-cleaningBot/threads/MutualExclusionThread.java
- cleaningBot.threads.MutualExclusionThread
- cleaningBot.threads.MutualExclusionThread$1
+cleaningBot/threads/InputThread.java
+ cleaningBot.threads.InputThread
 AdminServer.java
  AdminServer
  AdminServer$1
@@ -26,32 +25,41 @@ AdminServer.java
  AdminServer$BotResponse$1
  AdminServer$BotResponse$Builder
  AdminServer$BotResponseOrBuilder
-cleaningBot/threads/BotThread.java
- cleaningBot.threads.BotThread
- cleaningBot.threads.BotThread$1
- cleaningBot.threads.BotThread$2
+simulators/Measurement.java
+ simulators.Measurement
 adminServer/ServerRestInterface.java
  adminServer.ServerRestInterface
 cleaningBot/threads/FixHelperThread.java
  cleaningBot.threads.FixHelperThread
 extra/Position/Position.java
  extra.Position.Position
-cleaningBot/BotUtilities.java
- cleaningBot.BotUtilities
- cleaningBot.BotUtilities$1
+simulators/PM10Simulator.java
+ simulators.PM10Simulator
 cleaningBot/threads/MeasurementGatheringThread.java
  cleaningBot.threads.MeasurementGatheringThread
 cleaningBot/threads/MaintenanceThread.java
  cleaningBot.threads.MaintenanceThread
-adminClient/AdminClient.java
- adminClient.AdminClient
- adminClient.AdminClient$1
+BotGRPC.java
+ BotGRPC
+ BotGRPC$1
+ BotGRPC$Acknowledgement
+ BotGRPC$Acknowledgement$1
+ BotGRPC$Acknowledgement$Builder
+ BotGRPC$AcknowledgementOrBuilder
+ BotGRPC$BotNetworkingInformations
+ BotGRPC$BotNetworkingInformations$1
+ BotGRPC$BotNetworkingInformations$Builder
+ BotGRPC$BotNetworkingInformationsOrBuilder
+ BotGRPC$Identifier
+ BotGRPC$Identifier$1
+ BotGRPC$Identifier$Builder
+ BotGRPC$IdentifierOrBuilder
 extra/Variables.java
  extra.Variables
 simulators/Simulator.java
  simulators.Simulator
-simulators/Measurement.java
- simulators.Measurement
+cleaningBot/threads/GrpcServicesThread.java
+ cleaningBot.threads.GrpcServicesThread
 cleaningBot/MeasurementBuffer.java
  cleaningBot.MeasurementBuffer
 beans/AverageList.java
@@ -98,26 +106,18 @@ adminServer/AdminServer.java
  adminServer.AdminServer
  adminServer.AdminServer$1
  adminServer.AdminServer$1$1
-BotGRPC.java
- BotGRPC
- BotGRPC$1
- BotGRPC$Acknowledgement
- BotGRPC$Acknowledgement$1
- BotGRPC$Acknowledgement$Builder
- BotGRPC$AcknowledgementOrBuilder
- BotGRPC$BotNetworkingInformations
- BotGRPC$BotNetworkingInformations$1
- BotGRPC$BotNetworkingInformations$Builder
- BotGRPC$BotNetworkingInformationsOrBuilder
- BotGRPC$Identifier
- BotGRPC$Identifier$1
- BotGRPC$Identifier$Builder
- BotGRPC$IdentifierOrBuilder
-cleaningBot/threads/GrpcServicesThread.java
- cleaningBot.threads.GrpcServicesThread
-simulators/PM10Simulator.java
- simulators.PM10Simulator
+cleaningBot/threads/BotThread.java
+ cleaningBot.threads.BotThread
+ cleaningBot.threads.BotThread$1
+ cleaningBot.threads.BotThread$2
 cleaningBot/threads/QuitHelperThread.java
  cleaningBot.threads.QuitHelperThread
-cleaningBot/threads/InputThread.java
- cleaningBot.threads.InputThread
+cleaningBot/BotUtilities.java
+ cleaningBot.BotUtilities
+ cleaningBot.BotUtilities$1
+cleaningBot/threads/MutualExclusionThread.java
+ cleaningBot.threads.MutualExclusionThread
+ cleaningBot.threads.MutualExclusionThread$1
+adminClient/AdminClient.java
+ adminClient.AdminClient
+ adminClient.AdminClient$1

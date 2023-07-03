@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.List;
 
 public class BotUtilities {
+    private static int counter;
+
     public static boolean botRemovalFunction(BotIdentity deadRobot) {
         ObjectMapper mapper = new ObjectMapper();
 
@@ -69,8 +71,12 @@ public class BotUtilities {
         closeConnection(connection);
 
         if(!BotThread.getInstance().getOtherBots().isEmpty()){
+            if(Variables.DEBUG) {
+                System.out.println("UPDATING OTHER BOTS");
+            }
             List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
-            Logger.cyan("Contacting the other bots");
+            counter = fleetSnapshot.size();
+
             fleetSnapshot.forEach(botIdentity -> {
                 ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
@@ -87,6 +93,7 @@ public class BotUtilities {
                 serviceStub.crashAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
+                        counter--;
                         if(!value.getAck()){
                             Logger.yellow("The robot has already been deleted from the system");
                         }
@@ -109,13 +116,23 @@ public class BotUtilities {
                                     }
                             );
                         }
+                        checkCounter();
                         channel.shutdown();
                     }
                 });
             });
         }
+        else {
+            System.exit(0);
+        }
 
         return true;
+    }
+
+    private static void checkCounter() {
+        if(counter == 0) {
+            System.exit(0);
+        }
     }
 
     /**

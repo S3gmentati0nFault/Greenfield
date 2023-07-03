@@ -106,17 +106,19 @@ public class BotServices extends BotServicesImplBase {
         Logger.purple("crashAdvertiseGRPC");
 
         try{
-            botThread.getOtherBots().remove(
+            botThread.removeBot(
                     new BotIdentity(request.getId(), request.getPort(), request.getHost())
             );
         }catch(Exception e){
             responseObserver.onError(e);
         }
         if(Variables.DEBUG) {
+            System.out.println("BOTS STILL STANDING");
             botThread.getOtherBots().forEach(botIdentity -> {
                 System.out.println(botIdentity);
             });
         }
+        responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
         responseObserver.onCompleted();
     }
 
