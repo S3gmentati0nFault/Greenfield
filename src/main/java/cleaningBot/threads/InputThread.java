@@ -10,12 +10,14 @@ import java.util.Scanner;
 public class InputThread extends Thread {
     private BotThread botThread;
     private QuitHelperThread quitHelperThread;
-    private boolean quitting;
+    private boolean quitting, maintenanceRequested;
 
     /**
      * Generic public constructor
      */
     public InputThread(BotThread botThread) {
+        quitting = false;
+        maintenanceRequested = false;
         this.botThread = botThread;
     }
 
@@ -37,14 +39,21 @@ public class InputThread extends Thread {
                 botThread.printOtherBots();
             }
             else if(input.equals("FIX")) {
-                Logger.yellow("Requesting immediate maintenance...");
-                FixHelperThread fixHelperThread = new FixHelperThread();
-                fixHelperThread.start();
+                if(maintenanceRequested) {
+                    Logger.red("Maintenance has already been requested, wait please...");
+                }
+                else{
+                    maintenanceRequested = true;
+                    Logger.yellow("Requesting immediate maintenance...");
+                    FixHelperThread fixHelperThread = new FixHelperThread();
+                    fixHelperThread.start();
+                }
             }
             else if(input.equals("QUIT")) {
                 if(quitting) {
                     Logger.red("Already quitting the program, wait please...");
                 }
+                quitting = true;
                 Logger.yellow("Initiating the quit procedure...");
                 quitHelperThread = new QuitHelperThread();
                 quitHelperThread.start();
