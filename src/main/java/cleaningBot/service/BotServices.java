@@ -42,7 +42,7 @@ public class BotServices extends BotServicesImplBase {
      *                asking thread.
      * @param responseObserver The callback function.
      */
-    public synchronized void processQueryGRPC(BotGRPC.Identifier request,
+    public void processQueryGRPC(BotGRPC.Identifier request,
                                  StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("processQueryGRPC");
         System.out.println("Current Thread: " + Thread.currentThread().getId());
@@ -105,13 +105,14 @@ public class BotServices extends BotServicesImplBase {
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("crashAdvertiseGRPC");
 
-        try{
+        try {
             botThread.removeBot(
                     new BotIdentity(request.getId(), request.getPort(), request.getHost())
             );
-        }catch(Exception e){
+        } catch(Exception e) {
             responseObserver.onError(e);
         }
+
         if(Variables.DEBUG) {
             System.out.println("BOTS STILL STANDING");
             botThread.getOtherBots().forEach(botIdentity -> {
@@ -127,7 +128,7 @@ public class BotServices extends BotServicesImplBase {
      * Mutual-exclusion area is done.
      */
     public synchronized void clearWaitingQueue() {
-        if(waitingInstances.size() != 0){
+        if(waitingInstances.size() != 0) {
             waitingInstances.forEach(
                 service -> {
                     if(Variables.DEBUG) {

@@ -88,7 +88,7 @@ public class ServerRestInterface {
         float averageOfAverages = 0f;
         for (int i = averageLists.size() - 1; i >= 0; --i) {
             AverageList averageList = averageLists.get(i);
-            if(averageList.getBotIdentity().getId() == robotID) {
+            if(averageList.getIdentity() == robotID) {
                 int listSize = averageList.getAverages().size();
                 if(total + listSize <= numberOfMeasurements) {
                     System.out.println("total + listSize <= numberOfMeasurements");

@@ -40,7 +40,6 @@ public class MaintenanceThread extends Thread {
                 try{
                     Logger.blue("The robot should undergo maintenance");
                     if(Variables.AGRAWALA){
-                        Logger.blue("TRY USING THE FIX COMMAND");
                         try {
                             sleep(10000);
                         } catch (InterruptedException e) {
@@ -49,6 +48,7 @@ public class MaintenanceThread extends Thread {
                     }
                     doMaintenance();
                 } catch (AlreadyOnMaintenanceException e) {
+
                     e.printStackTrace();
                 }
             }

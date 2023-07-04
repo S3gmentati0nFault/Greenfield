@@ -54,7 +54,7 @@ public class PollutionSensorThread extends Thread {
                     Logger.red("There was an error during the wakeup procedure");
                 }
                 List<Float> averages = measurementGatheringThread.getAverages();
-                String payload = mapper.writeValueAsString(botIdentity)
+                String payload = botIdentity.getId()
                         + "-" + mapper.writeValueAsString(System.currentTimeMillis())
                         + "-[";
 

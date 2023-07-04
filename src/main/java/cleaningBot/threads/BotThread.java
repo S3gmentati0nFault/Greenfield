@@ -152,10 +152,19 @@ public class BotThread extends Thread{
         BotUtilities.closeConnection(connection);
         otherBots.remove(identity);
 
+        Logger.cyan("Letting my presence known");
         if(!otherBots.isEmpty()){
-            printOtherBots();
-            Logger.cyan("Contacting the other bots");
             otherBots.forEach(botIdentity -> {
+
+                if(Variables.JOIN){
+                    Logger.blue("Try starting another bot up");
+                    try{
+                        sleep(10000);
+                    } catch (InterruptedException e) {
+                        Logger.red(Variables.SLEEP_ERROR, e);
+                    }
+                }
+
                 ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                     .usePlaintext()
@@ -182,11 +191,8 @@ public class BotThread extends Thread{
                     public void onError(Throwable t) {
                         Logger.red("robot " + botIdentity + " sent error " + t.getClass());
                         if(t.getClass() == StatusRuntimeException.class) {
-                            synchronized (this) {
-                                Logger.yellow("Removing dead robot from the field");
-                                otherBots.remove(receiver);
-                                updateOthers(receiver);
-                            }
+                            Logger.yellow("Removing dead robot from the field");
+                            BotUtilities.botRemovalFunction(receiver, false);
                         }
                     }
 
@@ -220,57 +226,6 @@ public class BotThread extends Thread{
             else{
                 district = 3;
             }
-        }
-
-        return true;
-    }
-
-    /**
-     * Method used to communicate to the other services in the system that one of the nodes
-     * has stopped working.
-     * @param deadRobot the identity of the robot that has stopped working
-     */
-    public boolean updateOthers(BotIdentity deadRobot) {
-        ObjectMapper mapper = new ObjectMapper();
-
-        HttpURLConnection connection = BotUtilities.buildConnection("DELETE", "http://" +
-                    Variables.HOST+":" +
-                    Variables.PORT +
-                    "/admin/remove");
-
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setDoOutput(true);
-
-        OutputStream os;
-        try{
-            os = connection.getOutputStream();
-        }catch(IOException e){
-            Logger.red("There was an error during output stream creation");
-            return false;
-        }
-
-        String json = "";
-        try{
-            json = mapper.writeValueAsString(deadRobot);
-        } catch (IOException e) {
-            Logger.red("There was an error while generating the json string");
-            return false;
-        }
-
-        byte[] input = null;
-        try{
-            input = json.getBytes("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            Logger.red("There was a problem while turning the string into bytes");
-            return false;
-        }
-
-        try{
-            os.write(input, 0, input.length);
-        }catch(IOException e){
-            Logger.red("There was an error while writing on output stream");
-            return false;
         }
 
         BotUtilities.closeConnection(connection);
@@ -324,7 +279,7 @@ public class BotThread extends Thread{
         }
     }
 
-    public void removeBot(BotIdentity deadRobot) {
+    public synchronized void removeBot(BotIdentity deadRobot) {
         otherBots.remove(deadRobot);
     }
 }

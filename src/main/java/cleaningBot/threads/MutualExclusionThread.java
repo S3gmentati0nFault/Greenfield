@@ -65,7 +65,10 @@ public class MutualExclusionThread extends Thread {
                     .setTimestamp(timestamp)
                     .build();
 
-            System.out.println("Current Thread: " + Thread.currentThread().getId());
+            if(Variables.DEBUG) {
+                System.out.println("Current Thread: " + Thread.currentThread().getId());
+            }
+
             serviceStub.processQueryGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {
@@ -78,7 +81,7 @@ public class MutualExclusionThread extends Thread {
                     Logger.red("There was an error during the grpc");
                     if(t.getClass() == StatusRuntimeException.class) {
                         counter--;
-                        BotUtilities.botRemovalFunction(botIdentity);
+                        BotUtilities.botRemovalFunction(botIdentity, false);
                         channel.shutdown();
                         maintenanceAccess();
                     }

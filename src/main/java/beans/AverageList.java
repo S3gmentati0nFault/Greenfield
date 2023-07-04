@@ -3,22 +3,21 @@ package beans;
 import java.util.List;
 
 public class AverageList {
-    private BotIdentity botIdentity;
     private long timestamp;
     private List<Float> averages;
-    private int size;
+    private int size, identity;
 
     public AverageList() {}
 
-    public AverageList(int size, BotIdentity botIdentity, long timestamp, List<Float> averages) {
-        this.botIdentity = botIdentity;
+    public AverageList(int size, int identity, long timestamp, List<Float> averages) {
+        this.identity = identity;
         this.timestamp = timestamp;
         this.averages = averages;
         this.size = size;
     }
 
-    public BotIdentity getBotIdentity() {
-        return botIdentity;
+    public int getIdentity() {
+        return identity;
     }
 
     public long getTimestamp() {

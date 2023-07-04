@@ -23,7 +23,7 @@ import java.util.List;
 public class BotUtilities {
     private static int counter;
 
-    public static boolean botRemovalFunction(BotIdentity deadRobot) {
+    public static boolean botRemovalFunction(BotIdentity deadRobot, boolean quitting) {
         ObjectMapper mapper = new ObjectMapper();
 
         BotThread.getInstance().removeBot(deadRobot);
@@ -116,22 +116,26 @@ public class BotUtilities {
                                     }
                             );
                         }
-                        checkCounter();
+                        checkCounter(quitting);
                         channel.shutdown();
                     }
                 });
             });
         }
-        else {
+
+        if(quitting) {
             System.exit(0);
         }
 
         return true;
     }
 
-    private static void checkCounter() {
+    private static void checkCounter(boolean quitting) {
         if(counter == 0) {
-            System.exit(0);
+            if(quitting) {
+                System.exit(0);
+            }
+            return;
         }
     }
 

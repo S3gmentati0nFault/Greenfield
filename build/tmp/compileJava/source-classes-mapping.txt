@@ -25,41 +25,32 @@ AdminServer.java
  AdminServer$BotResponse$1
  AdminServer$BotResponse$Builder
  AdminServer$BotResponseOrBuilder
-simulators/Measurement.java
- simulators.Measurement
+cleaningBot/threads/BotThread.java
+ cleaningBot.threads.BotThread
+ cleaningBot.threads.BotThread$1
+ cleaningBot.threads.BotThread$2
 adminServer/ServerRestInterface.java
  adminServer.ServerRestInterface
 cleaningBot/threads/FixHelperThread.java
  cleaningBot.threads.FixHelperThread
 extra/Position/Position.java
  extra.Position.Position
-simulators/PM10Simulator.java
- simulators.PM10Simulator
+cleaningBot/BotUtilities.java
+ cleaningBot.BotUtilities
+ cleaningBot.BotUtilities$1
 cleaningBot/threads/MeasurementGatheringThread.java
  cleaningBot.threads.MeasurementGatheringThread
 cleaningBot/threads/MaintenanceThread.java
  cleaningBot.threads.MaintenanceThread
-BotGRPC.java
- BotGRPC
- BotGRPC$1
- BotGRPC$Acknowledgement
- BotGRPC$Acknowledgement$1
- BotGRPC$Acknowledgement$Builder
- BotGRPC$AcknowledgementOrBuilder
- BotGRPC$BotNetworkingInformations
- BotGRPC$BotNetworkingInformations$1
- BotGRPC$BotNetworkingInformations$Builder
- BotGRPC$BotNetworkingInformationsOrBuilder
- BotGRPC$Identifier
- BotGRPC$Identifier$1
- BotGRPC$Identifier$Builder
- BotGRPC$IdentifierOrBuilder
+adminClient/AdminClient.java
+ adminClient.AdminClient
+ adminClient.AdminClient$1
 extra/Variables.java
  extra.Variables
 simulators/Simulator.java
  simulators.Simulator
-cleaningBot/threads/GrpcServicesThread.java
- cleaningBot.threads.GrpcServicesThread
+cleaningBot/threads/QuitHelperThread.java
+ cleaningBot.threads.QuitHelperThread
 cleaningBot/MeasurementBuffer.java
  cleaningBot.MeasurementBuffer
 beans/AverageList.java
@@ -106,18 +97,27 @@ adminServer/AdminServer.java
  adminServer.AdminServer
  adminServer.AdminServer$1
  adminServer.AdminServer$1$1
-cleaningBot/threads/BotThread.java
- cleaningBot.threads.BotThread
- cleaningBot.threads.BotThread$1
- cleaningBot.threads.BotThread$2
-cleaningBot/threads/QuitHelperThread.java
- cleaningBot.threads.QuitHelperThread
-cleaningBot/BotUtilities.java
- cleaningBot.BotUtilities
- cleaningBot.BotUtilities$1
+BotGRPC.java
+ BotGRPC
+ BotGRPC$1
+ BotGRPC$Acknowledgement
+ BotGRPC$Acknowledgement$1
+ BotGRPC$Acknowledgement$Builder
+ BotGRPC$AcknowledgementOrBuilder
+ BotGRPC$BotNetworkingInformations
+ BotGRPC$BotNetworkingInformations$1
+ BotGRPC$BotNetworkingInformations$Builder
+ BotGRPC$BotNetworkingInformationsOrBuilder
+ BotGRPC$Identifier
+ BotGRPC$Identifier$1
+ BotGRPC$Identifier$Builder
+ BotGRPC$IdentifierOrBuilder
+cleaningBot/threads/GrpcServicesThread.java
+ cleaningBot.threads.GrpcServicesThread
+simulators/PM10Simulator.java
+ simulators.PM10Simulator
 cleaningBot/threads/MutualExclusionThread.java
  cleaningBot.threads.MutualExclusionThread
  cleaningBot.threads.MutualExclusionThread$1
-adminClient/AdminClient.java
- adminClient.AdminClient
- adminClient.AdminClient$1
+simulators/Measurement.java
+ simulators.Measurement

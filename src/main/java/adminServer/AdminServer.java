@@ -60,13 +60,8 @@ public class AdminServer {
                         System.out.println(messageComponent);
                     }
 
-                    BotIdentity senderIdentity = null;
-                    try {
-                        senderIdentity = new ObjectMapper().readValue(messageComponents[0],
-                                BotIdentity.class);
-                    } catch (IOException e) {
-                        Logger.red("There was an exception while trying to read the object from string", e);
-                    }
+                    int senderIdentity = -1;
+                    senderIdentity = Integer.parseInt(messageComponents[0]);
 
                     Long timestamp = Long.parseLong(messageComponents[1]);
 
@@ -85,7 +80,7 @@ public class AdminServer {
                     }
 
                     AverageList al = null;
-                    if (senderIdentity != null && averageList != null) {
+                    if (senderIdentity != -1 && averageList != null) {
                         al = new AverageList(averageList.size(), senderIdentity,
                                 timestamp, averageList);
                     } else {

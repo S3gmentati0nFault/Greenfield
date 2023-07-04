@@ -15,7 +15,7 @@ public class QuitHelperThread extends Thread {
             }
         }
         Logger.yellow("Removing the robot from the city");
-        BotUtilities.botRemovalFunction(BotThread.getInstance().getIdentity());
+        BotUtilities.botRemovalFunction(BotThread.getInstance().getIdentity(), true);
     }
 
     public synchronized void wakeup() {

@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="74e9861b-8265-4162-b2c1-bd79790d677b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/testProgetto.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/beans/AverageList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beans/AverageList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/QuitHelperThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/QuitHelperThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/extra/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/Variables.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="testProgetto" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2PEN7RHek56nT5RJqOCsl6rrG7B" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/heartofgold/Projects/Greenfield&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="cleaningBot.threads" />
+      <recent name="adminServer" />
+      <recent name="extra.Position" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/cleaningBot/service" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.CleaningBot">
+    <configuration name="AdminClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="adminClient.AdminClient" />
+      <module name="testProgetto.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="adminClient.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AdminServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="adminServer.AdminServer" />
+      <module name="testProgetto.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="adminServer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Ciao" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Ciao" />
+      <module name="testProgetto.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CleaningBot" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="cleaningBot.CleaningBot" />
+      <module name="testProgetto.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cleaningBot.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="cleaningBot.service.Ciao" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="cleaningBot.service.Ciao" />
+      <module name="testProgetto.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cleaningBot.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Ciao" />
+      <item itemvalue="Application.cleaningBot.service.Ciao" />
+      <item itemvalue="Application.AdminClient" />
+      <item itemvalue="Application.AdminServer" />
+      <item itemvalue="Application.CleaningBot" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.CleaningBot" />
+        <item itemvalue="Application.AdminServer" />
+        <item itemvalue="Application.AdminClient" />
+        <item itemvalue="Application.cleaningBot.service.Ciao" />
+        <item itemvalue="Application.Ciao" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="74e9861b-8265-4162-b2c1-bd79790d677b" name="Changes" comment="" />
+      <created>1683018113380</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683018113380</updated>
+      <workItem from="1683018116769" duration="92000" />
+      <workItem from="1683018315966" duration="28000" />
+      <workItem from="1685718685824" duration="6703000" />
+      <workItem from="1685725625034" duration="780000" />
+      <workItem from="1685978804571" duration="2506000" />
+      <workItem from="1685981416414" duration="6188000" />
+      <workItem from="1686161478466" duration="6811000" />
+      <workItem from="1686236091176" duration="5180000" />
+      <workItem from="1686301919764" duration="3721000" />
+      <workItem from="1686501200937" duration="1807000" />
+      <workItem from="1686504311168" duration="3552000" />
+      <workItem from="1686556736728" duration="7699000" />
+      <workItem from="1686669823754" duration="1476000" />
+      <workItem from="1686684667304" duration="4254000" />
+      <workItem from="1686822985277" duration="32000" />
+      <workItem from="1686921853431" duration="4284000" />
+      <workItem from="1686995093668" duration="2547000" />
+      <workItem from="1686998751863" duration="27000" />
+      <workItem from="1687266591548" duration="6877000" />
+      <workItem from="1687338591842" duration="5405000" />
+      <workItem from="1687351743788" duration="5604000" />
+      <workItem from="1687363053841" duration="710000" />
+      <workItem from="1687420261088" duration="7000000" />
+      <workItem from="1687438872230" duration="5891000" />
+      <workItem from="1687510400865" duration="8069000" />
+      <workItem from="1687596297054" duration="5207000" />
+      <workItem from="1687616315724" duration="8675000" />
+      <workItem from="1687768045588" duration="6998000" />
+      <workItem from="1687787657828" duration="167000" />
+      <workItem from="1687787904310" duration="4518000" />
+      <workItem from="1687854992552" duration="7621000" />
+      <workItem from="1687870569260" duration="6832000" />
+      <workItem from="1687882552524" duration="1580000" />
+      <workItem from="1687939328680" duration="5365000" />
+      <workItem from="1687956998585" duration="7946000" />
+      <workItem from="1687982666925" duration="90000" />
+      <workItem from="1687982823049" duration="1008000" />
+      <workItem from="1688049804350" duration="6884000" />
+      <workItem from="1688110528430" duration="5584000" />
+      <workItem from="1688116571292" duration="173000" />
+      <workItem from="1688116858708" duration="1807000" />
+      <workItem from="1688133110965" duration="5752000" />
+      <workItem from="1688216568563" duration="5264000" />
+      <workItem from="1688371679759" duration="9231000" />
+      <workItem from="1688389156831" duration="6572000" />
+      <workItem from="1688460982856" duration="158000" />
+      <workItem from="1688461168742" duration="284000" />
+      <workItem from="1688461651795" duration="376000" />
+      <workItem from="1688462050859" duration="177000" />
+      <workItem from="1688462250802" duration="6531000" />
+      <workItem from="1688475727378" duration="371000" />
+      <workItem from="1688476311670" duration="475000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>90</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>91</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>92</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>94</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>96</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>101</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java</url>
+          <line>111</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="sun.net.www.protocol.http.HttpURLConnection" memberName="currentProxyCredentials" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
