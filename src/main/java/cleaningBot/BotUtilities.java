@@ -1,9 +1,9 @@
 package cleaningBot;
 
+import utilities.Variables;
 import beans.BotIdentity;
 import cleaningBot.threads.BotThread;
 import extra.Logger.Logger;
-import extra.Variables;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -71,9 +71,6 @@ public class BotUtilities {
         closeConnection(connection);
 
         if(!BotThread.getInstance().getOtherBots().isEmpty()){
-            if(Variables.DEBUG) {
-                System.out.println("UPDATING OTHER BOTS");
-            }
             List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
             counter = fleetSnapshot.size();
 
@@ -109,13 +106,6 @@ public class BotUtilities {
 
                     @Override
                     public void onCompleted() {
-                        if(Variables.DEBUG) {
-                            fleetSnapshot.forEach(
-                                    botIdentity -> {
-                                        System.out.println(botIdentity);
-                                    }
-                            );
-                        }
                         checkCounter(quitting);
                         channel.shutdown();
                     }

@@ -1,11 +1,12 @@
 package cleaningBot.threads;
 
+import extra.ThreadSafeStructures.ThreadSafeArrayList;
+import utilities.Variables;
 import cleaningBot.BotUtilities;
 import cleaningBot.service.BotServices;
 import extra.Logger.Logger;
-import extra.Position.Position;
+import cleaningBot.Position;
 import extra.CustomRandom.CustomRandom;
-import extra.Variables;
 import beans.BotIdentity;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -28,6 +29,7 @@ import java.util.List;
 public class BotThread extends Thread{
     private Position position;
     private List<BotIdentity> otherBots;
+    private ThreadSafeArrayList<BotIdentity> bots;
     private BotIdentity identity;
     private BotServices botServices;
     private long timestamp;
@@ -53,6 +55,7 @@ public class BotThread extends Thread{
                 "localhost");
         timestamp = -1;
 
+        bots = new ThreadSafeArrayList<>();
         botServices = new BotServices(this);
     }
 
@@ -74,13 +77,13 @@ public class BotThread extends Thread{
         inputThread = new InputThread();
         inputThread.start();
 
-        Logger.yellow("Starting maintenance thread");
-        maintenanceThread = new MaintenanceThread(botServices);
-        maintenanceThread.start();
-
-        Logger.yellow("Starting the pollution measurement sensor thread");
-        PollutionSensorThread pollutionSensorThread = new PollutionSensorThread(district, identity);
-        pollutionSensorThread.start();
+//        Logger.yellow("Starting maintenance thread");
+//        maintenanceThread = new MaintenanceThread(botServices);
+//        maintenanceThread.start();
+//
+//        Logger.yellow("Starting the pollution measurement sensor thread");
+//        PollutionSensorThread pollutionSensorThread = new PollutionSensorThread(district, identity);
+//        pollutionSensorThread.start();
     }
 
     /**
@@ -142,8 +145,9 @@ public class BotThread extends Thread{
         try{
             String[] responseLine = br.readLine().toString().split("-");
             position = new ObjectMapper().readValue(responseLine[0], Position.class);
-            otherBots = new ObjectMapper().readValue(responseLine[1],
+            List<BotIdentity> robots = new ObjectMapper().readValue(responseLine[1],
                     new TypeReference<List<BotIdentity>>(){});
+            bots.getArrayList().addAll(robots);
         } catch (IOException e) {
             Logger.red("It was not possible to retrieve the response from the server");
             return false;
@@ -151,19 +155,13 @@ public class BotThread extends Thread{
 
         BotUtilities.closeConnection(connection);
         otherBots.remove(identity);
+        bots.removeElement(identity);
 
         Logger.cyan("Letting my presence known");
-        if(!otherBots.isEmpty()){
-            otherBots.forEach(botIdentity -> {
-
-                if(Variables.JOIN){
-                    Logger.blue("Try starting another bot up");
-                    try{
-                        sleep(10000);
-                    } catch (InterruptedException e) {
-                        Logger.red(Variables.SLEEP_ERROR, e);
-                    }
-                }
+//        if(!otherBots.isEmpty()){
+        if(!bots.isEmpty()) {
+//            otherBots.forEach(botIdentity -> {
+            bots.getArrayList().forEach(botIdentity -> {
 
                 ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
@@ -198,13 +196,6 @@ public class BotThread extends Thread{
 
                     @Override
                     public void onCompleted() {
-                        if(Variables.DEBUG) {
-                            otherBots.forEach(
-                                    botIdentity -> {
-                                        System.out.println(botIdentity);
-                                    }
-                            );
-                        }
                         channel.shutdown();
                     }
                 });
@@ -237,7 +228,7 @@ public class BotThread extends Thread{
      * Getter for the bots in the system.
      */
     public List<BotIdentity> getOtherBots() {
-        return otherBots;
+        return bots.getArrayList();
     }
 
     /**
@@ -274,12 +265,12 @@ public class BotThread extends Thread{
      * Method that prints the bots present in the system
      */
     public void printOtherBots() {
-        for (BotIdentity otherBot : otherBots) {
-            System.out.println(otherBot);
+        for (BotIdentity botIdentity : bots.getArrayList()) {
+            System.out.println(botIdentity);
         }
     }
 
     public synchronized void removeBot(BotIdentity deadRobot) {
-        otherBots.remove(deadRobot);
+        bots.removeElement(deadRobot);
     }
 }

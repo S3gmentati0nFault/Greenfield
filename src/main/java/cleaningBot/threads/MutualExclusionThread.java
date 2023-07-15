@@ -4,7 +4,6 @@ import beans.BotIdentity;
 import cleaningBot.BotUtilities;
 import cleaningBot.service.BotServices;
 import extra.Logger.Logger;
-import extra.Variables;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -55,19 +54,12 @@ public class MutualExclusionThread extends Thread {
             BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
 
             long timestamp = System.currentTimeMillis();
-            if(Variables.DEBUG) {
-                System.out.println(timestamp);
-            }
             BotThread.getInstance().setTimestamp(timestamp);
             BotGRPC.Identifier identifier = BotGRPC.Identifier
                     .newBuilder()
                     .setId(botIdentity.getId())
                     .setTimestamp(timestamp)
                     .build();
-
-            if(Variables.DEBUG) {
-                System.out.println("Current Thread: " + Thread.currentThread().getId());
-            }
 
             serviceStub.processQueryGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
@@ -110,9 +102,6 @@ public class MutualExclusionThread extends Thread {
             }
             botServices.clearWaitingQueue();
             BotThread.getInstance().setTimestamp(-1);
-            if(Variables.DEBUG) {
-                System.out.println("WAKING UP THE HELPERS");
-            }
             BotThread.getInstance().getInputThread().wakeupHelper();
             maintenanceThread.wakeupMaintenanceThread();
         }

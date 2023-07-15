@@ -34,7 +34,7 @@ public class Logger {
     public static void purple(String message){
         now = LocalDateTime.now();
         System.out.println(Colors.ANSI_PURPLE + " <<~>> " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " <<~>> " + message + " <<~>> " + Colors.ANSI_RESET);
-    }
+   }
 
     public static void green(String message) {
         now = LocalDateTime.now();
@@ -46,3 +46,4 @@ public class Logger {
         System.out.println(Colors.ANSI_CYAN + " <<ß>> " + message + " <<ß>> " + Colors.ANSI_RESET);
     }
 }
+

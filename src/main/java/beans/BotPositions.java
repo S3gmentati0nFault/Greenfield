@@ -2,7 +2,7 @@ package beans;
 
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
-import extra.Position.Position;
+import cleaningBot.Position;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.xml.bind.annotation.XmlRootElement;

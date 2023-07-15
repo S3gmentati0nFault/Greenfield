@@ -4,7 +4,6 @@ import cleaningBot.service.BotServices;
 import exceptions.AlreadyOnMaintenanceException;
 import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
-import extra.Variables;
 
 /**
  * Maintenance class that simulates the error rate of the bots and handles the
@@ -39,13 +38,6 @@ public class MaintenanceThread extends Thread {
             if(CustomRandom.getInstance().probability(3)){
                 try{
                     Logger.blue("The robot should undergo maintenance");
-                    if(Variables.AGRAWALA){
-                        try {
-                            sleep(10000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
                     doMaintenance();
                 } catch (AlreadyOnMaintenanceException e) {
 
@@ -63,23 +55,14 @@ public class MaintenanceThread extends Thread {
     public synchronized void doMaintenance()
             throws AlreadyOnMaintenanceException {
         if(!onMaintenance){
-            if(Variables.DEBUG) {
-                System.out.println("MAINTENANCE PRECHECK");
-            }
             setOnMaintenance(true);
             MutualExclusionThread mutualExclusionThread =
                 new MutualExclusionThread(this, botServices);
             mutualExclusionThread.start();
-            if(Variables.DEBUG) {
-                System.out.println("WAITING");
-            }
             try{
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-            if(Variables.DEBUG) {
-                System.out.println("NOT WAITING");
             }
             setOnMaintenance(false);
         }

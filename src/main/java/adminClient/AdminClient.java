@@ -2,7 +2,7 @@ package adminClient;
 
 import beans.BotIdentity;
 import extra.Logger.Logger;
-import extra.Variables;
+import utilities.Variables;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 

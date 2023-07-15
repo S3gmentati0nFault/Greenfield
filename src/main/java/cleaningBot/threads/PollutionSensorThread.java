@@ -2,7 +2,6 @@ package cleaningBot.threads;
 
 import beans.BotIdentity;
 import extra.Logger.Logger;
-import extra.Variables;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -63,9 +62,6 @@ public class PollutionSensorThread extends Thread {
                 }
 
                 payload = payload.replaceAll(",$", "") + "]";
-                if(Variables.DEBUG) {
-                    System.out.println(payload);
-                }
 
                 MqttMessage message = new MqttMessage(payload.getBytes());
                 message.setQos(qos);

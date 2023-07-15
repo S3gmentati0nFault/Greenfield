@@ -3,7 +3,6 @@ package cleaningBot.service;
 import beans.BotIdentity;
 import cleaningBot.threads.BotThread;
 import extra.Logger.Logger;
-import extra.Variables;
 import io.grpc.stub.StreamObserver;
 import services.grpc.*;
 import services.grpc.BotServicesGrpc.*;
@@ -51,16 +50,10 @@ public class BotServices extends BotServicesImplBase {
 
             Logger.yellow("The message has a timestamp greater than mine");
             waitingInstances.add(new WaitingThread(this, request.getTimestamp()));
-            if(Variables.DEBUG){
-                System.out.println("Waiting");
-            }
             try{
                 wait();
             }catch(Exception e){
                 Logger.red("There was an error during the wakeup process");
-            }
-            if(Variables.DEBUG) {
-                System.out.println("Not waiting anymore");
             }
             waitingInstances.remove(new WaitingThread(this, request.getTimestamp()));
         }
@@ -113,12 +106,6 @@ public class BotServices extends BotServicesImplBase {
             responseObserver.onError(e);
         }
 
-        if(Variables.DEBUG) {
-            System.out.println("BOTS STILL STANDING");
-            botThread.getOtherBots().forEach(botIdentity -> {
-                System.out.println(botIdentity);
-            });
-        }
         responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
         responseObserver.onCompleted();
     }
@@ -131,9 +118,6 @@ public class BotServices extends BotServicesImplBase {
         if(waitingInstances.size() != 0) {
             waitingInstances.forEach(
                 service -> {
-                    if(Variables.DEBUG) {
-                        System.out.println(service.getBotServices().getBotThread().getIdentity());
-                    }
                     Logger.yellow("Waking service " + service.getTimestamp() + " up");
                     service.getBotServices().notify();
                 }

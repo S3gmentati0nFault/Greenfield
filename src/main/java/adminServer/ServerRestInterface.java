@@ -1,10 +1,10 @@
 package adminServer;
 
+import cleaningBot.Position;
 import beans.BotIdentity;
 import beans.BotPositions;
 import beans.AverageList;
 import extra.Logger.Logger;
-import extra.Position.Position;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;

@@ -22,12 +22,11 @@ public class CustomRandom{
       return randomValue;
    }
 
-   public int rnInt(int upBound){
-      return (int) rnDouble(0, upBound);
+   public boolean probability(int i) {
+      return true;
    }
 
-   public boolean probability(float bound){
-      double randomNumber = random.nextDouble();
-      return randomNumber < 0.1 * bound;
+   public int rnInt(int upBound) {
+      return (int)rnDouble(0, upBound);
    }
 }
