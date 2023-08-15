@@ -2,8 +2,9 @@ package cleaningBot.threads;
 
 import cleaningBot.service.BotServices;
 import exceptions.AlreadyOnMaintenanceException;
-import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
+
+import java.util.Random;
 
 /**
  * Maintenance class that simulates the error rate of the bots and handles the
@@ -34,8 +35,9 @@ public class MaintenanceThread extends Thread {
      * Method that simulates the malfunction of the robots
      */
     public void maintenanceCycle() {
+        Random random = new Random();
         while(true) {
-            if(CustomRandom.getInstance().probability(3)){
+            if(random.nextInt(9) < 3){
                 try{
                     Logger.blue("The robot should undergo maintenance");
                     doMaintenance();

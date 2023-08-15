@@ -1,68 +1,32 @@
 beans/BotIdentity.java
  beans.BotIdentity
-Simulators/Measurement.java
- simulators.Measurement
+simulators/PM10Simulator.java
+ simulators.PM10Simulator
 exceptions/AlreadyOnMaintenanceException.java
  exceptions.AlreadyOnMaintenanceException
-services/grpc/BotServicesGrpc.java
- services.grpc.BotServicesGrpc
- services.grpc.BotServicesGrpc$1
- services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesBlockingStub
- services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesFutureStub
- services.grpc.BotServicesGrpc$BotServicesImplBase
- services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesStub
- services.grpc.BotServicesGrpc$MethodHandlers
+simulators/Buffer.java
+ simulators.Buffer
+beans/BotPositions.java
+ beans.BotPositions
 extra/Timer/Timer.java
  extra.Timer.Timer
 extra/Logger/Colors.java
  extra.Logger.Colors
-beans/AverageList.java
- beans.AverageList
-AdminServer.java
- AdminServer
- AdminServer$1
- AdminServer$BotRequest
- AdminServer$BotRequest$1
- AdminServer$BotRequest$Builder
- AdminServer$BotRequestOrBuilder
- AdminServer$BotResponse
- AdminServer$BotResponse$1
- AdminServer$BotResponse$Builder
- AdminServer$BotResponseOrBuilder
-adminServer/AdminServer.java
- adminServer.AdminServer
- adminServer.AdminServer$1
- adminServer.AdminServer$1$1
-Simulators/Simulator.java
- simulators.Simulator
-utilities/Variables.java
- utilities.Variables
-BotGRPC.java
- BotGRPC
- BotGRPC$1
- BotGRPC$Acknowledgement
- BotGRPC$Acknowledgement$1
- BotGRPC$Acknowledgement$Builder
- BotGRPC$AcknowledgementOrBuilder
- BotGRPC$BotNetworkingInformations
- BotGRPC$BotNetworkingInformations$1
- BotGRPC$BotNetworkingInformations$Builder
- BotGRPC$BotNetworkingInformationsOrBuilder
- BotGRPC$Identifier
- BotGRPC$Identifier$1
- BotGRPC$Identifier$Builder
- BotGRPC$IdentifierOrBuilder
 adminServer/ServerRestInterface.java
  adminServer.ServerRestInterface
-Simulators/Buffer.java
- simulators.Buffer
+extra/AtomicCounter/AtomicCounter.java
+ extra.AtomicCounter.AtomicCounter
+adminClient/AdminClient.java
+ adminClient.AdminClient
+ adminClient.AdminClient$1
+utilities/Variables.java
+ utilities.Variables
 extra/Logger/Logger.java
  extra.Logger.Logger
-cleaningBot/threads/MeasurementGatheringThread.java
- cleaningBot.threads.MeasurementGatheringThread
+adminServer/AdminServer.java
+ adminServer.AdminServer
+cleaningBot/threads/PollutionSensorThread.java
+ cleaningBot.threads.PollutionSensorThread
 services/grpc/BotGRPC.java
  services.grpc.BotGRPC
  services.grpc.BotGRPC$1
@@ -78,30 +42,37 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Identifier$1
  services.grpc.BotGRPC$Identifier$Builder
  services.grpc.BotGRPC$IdentifierOrBuilder
-Simulators/PM10Simulator.java
- simulators.PM10Simulator
-adminClient/AdminClient.java
- adminClient.AdminClient
- adminClient.AdminClient$1
+cleaningBot/threads/MeasurementGatheringThread.java
+ cleaningBot.threads.MeasurementGatheringThread
+services/grpc/BotServicesGrpc.java
+ services.grpc.BotServicesGrpc
+ services.grpc.BotServicesGrpc$1
+ services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesBlockingStub
+ services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesFutureStub
+ services.grpc.BotServicesGrpc$BotServicesImplBase
+ services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesStub
+ services.grpc.BotServicesGrpc$MethodHandlers
+simulators/Measurement.java
+ simulators.Measurement
 cleaningBot/Position.java
  cleaningBot.Position
-cleaningBot/threads/PollutionSensorThread.java
- cleaningBot.threads.PollutionSensorThread
-cleaningBot/MeasurementBuffer.java
- cleaningBot.MeasurementBuffer
-beans/BotPositions.java
- beans.BotPositions
-Test.java
- Test
- Test$TestThread
-extra/CustomRandom/CustomRandom.java
- extra.CustomRandom.CustomRandom
-extra/AtomicCounter/AtomicCounter.java
- extra.AtomicCounter.AtomicCounter
-extra/ThreadSafeStructures/ThreadSafeHashMap.java
- extra.ThreadSafeStructures.ThreadSafeHashMap
+simulators/Simulator.java
+ simulators.Simulator
 extra/ThreadSafeStructures/ThreadSafeArrayList.java
  extra.ThreadSafeStructures.ThreadSafeArrayList
+beans/AverageList.java
+ beans.AverageList
+cleaningBot/MeasurementBuffer.java
+ cleaningBot.MeasurementBuffer
+cleaningBot/CommPair.java
+ cleaningBot.CommPair
+extra/ThreadSafeStructures/ThreadSafeHashMap.java
+ extra.ThreadSafeStructures.ThreadSafeHashMap
+extra/AtomicFlag/AtomicFlag.java
+ extra.AtomicFlag.AtomicFlag
 cleaningBot/threads/BotThread.java
  cleaningBot.threads.BotThread
  cleaningBot.threads.BotThread$1

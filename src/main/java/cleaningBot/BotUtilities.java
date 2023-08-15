@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BotUtilities {
     private static int counter;
@@ -75,18 +76,29 @@ public class BotUtilities {
             counter = fleetSnapshot.size();
 
             fleetSnapshot.forEach(botIdentity -> {
-                ManagedChannel channel = ManagedChannelBuilder
-                    .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                    .usePlaintext()
-                    .build();
-
+                CommPair openComm = BotThread.getInstance().getOpenComms().getValue(botIdentity);
+                ManagedChannel channel;
+                System.out.println(openComm);
+                if(openComm != null) {
+                    channel = openComm.getManagedChannel();
+                }
+                else {
+                    channel = ManagedChannelBuilder
+                            .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
+                            .usePlaintext()
+                            .build();
+                }
                 BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
+                BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
+
+
                 BotGRPC.BotNetworkingInformations identikit = BotGRPC.BotNetworkingInformations
                         .newBuilder()
                         .setId(deadRobot.getId())
                         .setPort(deadRobot.getPort())
                         .setHost(deadRobot.getIp())
                         .build();
+
                 serviceStub.crashAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
@@ -107,7 +119,6 @@ public class BotUtilities {
                     @Override
                     public void onCompleted() {
                         checkCounter(quitting);
-                        channel.shutdown();
                     }
                 });
             });

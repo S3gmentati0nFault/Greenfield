@@ -1,12 +1,13 @@
 package cleaningBot.threads;
 
+import cleaningBot.CommPair;
 import extra.ThreadSafeStructures.ThreadSafeArrayList;
+import extra.ThreadSafeStructures.ThreadSafeHashMap;
 import utilities.Variables;
 import cleaningBot.BotUtilities;
 import cleaningBot.service.BotServices;
 import extra.Logger.Logger;
 import cleaningBot.Position;
-import extra.CustomRandom.CustomRandom;
 import beans.BotIdentity;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -20,6 +21,9 @@ import services.grpc.BotServicesGrpc;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @see cleaningBot.CleaningBot
@@ -27,9 +31,8 @@ import java.util.List;
  * administration server
  */
 public class BotThread extends Thread{
-    private Position position;
-    private List<BotIdentity> otherBots;
-    private ThreadSafeArrayList<BotIdentity> bots;
+    private ThreadSafeArrayList<BotIdentity> otherBots;
+    private ThreadSafeHashMap<BotIdentity, CommPair> openComms;
     private BotIdentity identity;
     private BotServices botServices;
     private long timestamp;
@@ -50,12 +53,16 @@ public class BotThread extends Thread{
      * port.
      */
     public BotThread(){
-        identity = new BotIdentity(CustomRandom.getInstance().rnInt(100),
-                CustomRandom.getInstance().rnInt(65534),
+        Random random = new Random();
+
+        identity = new BotIdentity(
+                random.nextInt(100),
+                random.nextInt(65534),
                 "localhost");
         timestamp = -1;
 
-        bots = new ThreadSafeArrayList<>();
+        otherBots = new ThreadSafeArrayList<>();
+        openComms = new ThreadSafeHashMap<>();
         botServices = new BotServices(this);
     }
 
@@ -91,7 +98,7 @@ public class BotThread extends Thread{
      * presence known to both the server and the other bots in the network.
      * @return It returns true if the operation went well, false otherwise.
      */
-    private boolean startNewBot() {
+    private synchronized boolean startNewBot() {
         ObjectMapper mapper = new ObjectMapper();
 
         HttpURLConnection connection =
@@ -143,38 +150,44 @@ public class BotThread extends Thread{
         }
 
         try{
-            String[] responseLine = br.readLine().toString().split("-");
-            position = new ObjectMapper().readValue(responseLine[0], Position.class);
-            List<BotIdentity> robots = new ObjectMapper().readValue(responseLine[1],
-                    new TypeReference<List<BotIdentity>>(){});
-            bots.getArrayList().addAll(robots);
+            String[] responseLine = br.readLine().split("-");
+            identity.setPosition(new ObjectMapper().readValue(responseLine[0], Position.class));
+            List<BotIdentity> robots = new ObjectMapper().readValue(responseLine[1], new TypeReference<List<BotIdentity>>(){});
+            otherBots.getArrayList().addAll(robots);
         } catch (IOException e) {
             Logger.red("It was not possible to retrieve the response from the server");
             return false;
         }
 
         BotUtilities.closeConnection(connection);
-        otherBots.remove(identity);
-        bots.removeElement(identity);
+        otherBots.removeElement(identity);
 
         Logger.cyan("Letting my presence known");
-//        if(!otherBots.isEmpty()){
-        if(!bots.isEmpty()) {
-//            otherBots.forEach(botIdentity -> {
-            bots.getArrayList().forEach(botIdentity -> {
+        if(!otherBots.isEmpty()) {
+            otherBots.getArrayList().forEach(botIdentity -> {
+
+                try {
+                    Logger.blue("ADD");
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
                 ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                     .usePlaintext()
                     .build();
-
                 BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
+
+                openComms.addPair(botIdentity, new CommPair(channel, serviceStub));
+
                 BotGRPC.BotNetworkingInformations identikit = BotGRPC.BotNetworkingInformations
                         .newBuilder()
                         .setId(identity.getId())
                         .setPort(identity.getPort())
                         .setHost(identity.getIp())
                         .build();
+
                 serviceStub.joinAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
                     BotIdentity receiver = botIdentity;
 
@@ -195,15 +208,13 @@ public class BotThread extends Thread{
                     }
 
                     @Override
-                    public void onCompleted() {
-                        channel.shutdown();
-                    }
+                    public void onCompleted() {}
                 });
             });
         }
 
-        if(position.getY() < 5) {
-            if(position.getX() < 5) {
+        if(identity.getPosition().getY() < 5) {
+            if(identity.getPosition().getX() < 5) {
                 district = 1;
             }
             else{
@@ -211,7 +222,7 @@ public class BotThread extends Thread{
             }
         }
         else{
-            if(position.getX() < 5){
+            if(identity.getPosition().getX() < 5){
                 district = 4;
             }
             else{
@@ -228,7 +239,7 @@ public class BotThread extends Thread{
      * Getter for the bots in the system.
      */
     public List<BotIdentity> getOtherBots() {
-        return bots.getArrayList();
+        return otherBots.getArrayList();
     }
 
     /**
@@ -254,6 +265,10 @@ public class BotThread extends Thread{
         return inputThread;
     }
 
+    public ThreadSafeHashMap<BotIdentity, CommPair> getOpenComms() {
+        return openComms;
+    }
+
     /**
      * Setter for the timestamp of the latest request
      */
@@ -265,12 +280,37 @@ public class BotThread extends Thread{
      * Method that prints the bots present in the system
      */
     public void printOtherBots() {
-        for (BotIdentity botIdentity : bots.getArrayList()) {
+        for (BotIdentity botIdentity : otherBots.getArrayList()) {
             System.out.println(botIdentity);
         }
     }
 
+    public void printOpenComms() {
+        Set<BotIdentity> set = openComms.getKeySet();
+
+        for (BotIdentity botIdentity : set) {
+            System.out.println(botIdentity + " -> " + openComms.getValue(botIdentity));
+        }
+    }
+
     public synchronized void removeBot(BotIdentity deadRobot) {
-        bots.removeElement(deadRobot);
+        CommPair communicationPair = openComms.removePair(deadRobot);
+        System.out.println(deadRobot);
+        otherBots.removeElement(deadRobot);
+        if(communicationPair != null) {
+            try{
+            Logger.yellow("Closing the communication channel...");
+            communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
+            Logger.green("Communication channel closed!");
+            } catch (InterruptedException e) {
+                Logger.red("Unable to close the channel the right way, forcing it closed now");
+                communicationPair.getManagedChannel().shutdownNow();
+            }
+        }
+    }
+
+    public void newCommunicationChannel(BotIdentity destination, ManagedChannel channel, BotServicesGrpc.BotServicesStub stub) {
+        CommPair commPair = new CommPair(channel, stub);
+        openComms.addPair(destination, commPair);
     }
 }

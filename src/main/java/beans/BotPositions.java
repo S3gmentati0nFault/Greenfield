@@ -1,6 +1,5 @@
 package beans;
 
-import extra.CustomRandom.CustomRandom;
 import extra.Logger.Logger;
 import cleaningBot.Position;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -15,14 +14,14 @@ import java.util.*;
  */
 @XmlRootElement(name = "city-map")
 public class BotPositions {
-    private Map<BotIdentity, Position> botPositioning;
+    private List<BotIdentity> city;
     private static BotPositions instance;
 
     /**
      * Public default constructor which builds the HashMap.
      */
     public BotPositions() {
-        botPositioning = new HashMap<>();
+        city = new ArrayList<>();
     }
 
     /**
@@ -41,8 +40,8 @@ public class BotPositions {
      * is not a problem in a concurrent system the operation is not
      * synchronized.
      */
-    public Map<BotIdentity, Position> getBotPositioning() {
-        return botPositioning;
+    public List<BotIdentity> getBotPositioning() {
+        return city;
     }
 
     /**
@@ -52,15 +51,21 @@ public class BotPositions {
      * present in the system.
      */
     public Position joinBot(BotIdentity identity) {
+        Random random = new Random();
+
         Position pos = new Position(
-                CustomRandom.getInstance().rnInt(9),
-                CustomRandom.getInstance().rnInt(9)
+            random.nextInt(9),
+                random.nextInt(9)
         );
 
-        if(botPositioning.putIfAbsent(identity, pos) == null){
-            return pos;
+        System.out.println(pos);
+        identity.setPosition(pos);
+
+        if(city.contains(identity)) {
+            return null;
         }
-        return null;
+        city.add(identity);
+        return pos;
     }
 
     /**
@@ -74,8 +79,8 @@ public class BotPositions {
     public boolean deleteBot(BotIdentity identity) {
         Logger.blue("deletion");
 
-        if(botPositioning.containsKey(identity)){
-            botPositioning.remove(identity);
+        if(city.contains(identity)){
+            city.remove(identity);
             return true;
         }
         else {
@@ -104,8 +109,7 @@ public class BotPositions {
             else{
                 json = json + "[";
             }
-            Set<BotIdentity> keys = botPositioning.keySet();
-            for (BotIdentity bot: keys) {
+            for (BotIdentity bot: city) {
                 json = json + mapper.writeValueAsString(bot) + ",";
             }
             json = json.replaceAll(",$", "") + "]";
@@ -114,6 +118,7 @@ public class BotPositions {
         catch(IOException e){
             Logger.red("There was an error while constructing the response");
         }
+        System.out.println(json);
         return json;
     }
 }

@@ -5,35 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e9861b-8265-4162-b2c1-bd79790d677b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Greenfield.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Greenfield.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/generated/source/proto/main/java/AdminServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/generated/source/proto/main/java/BotGRPC.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paho11041652694869-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/paho11262785178001-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Test.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/beans/BotIdentity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beans/BotIdentity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/Position.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/CustomRandom/CustomRandom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/CustomRandom/CustomRandom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/Logger/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/Logger/Logger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/Position/Position.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/Variables.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/extra/CustomRandom/CustomRandom.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeHashMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeHashMap.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +82,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: -1
+}</component>
   <component name="ProjectId" id="2PEN7RHek56nT5RJqOCsl6rrG7B" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -89,7 +100,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;test&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/heartofgold/Projects/Greenfield&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/heartofgold/Projects/Greenfield&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -99,7 +110,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -208,6 +219,15 @@
       <item itemvalue="Application.AdminServer" />
       <item itemvalue="Application.CleaningBot" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.cleaningBot.service.Ciao" />
+        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.CleaningBot" />
+        <item itemvalue="Application.AdminServer" />
+        <item itemvalue="Application.AdminClient" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -270,6 +290,13 @@
       <workItem from="1688475727378" duration="371000" />
       <workItem from="1688476311670" duration="475000" />
       <workItem from="1689330096898" duration="270000" />
+      <workItem from="1689416936054" duration="843000" />
+      <workItem from="1689417789478" duration="4684000" />
+      <workItem from="1689840180615" duration="29000" />
+      <workItem from="1692003591650" duration="1687000" />
+      <workItem from="1692005326449" duration="622000" />
+      <workItem from="1692006011291" duration="4383000" />
+      <workItem from="1692083216044" duration="8690000" />
     </task>
     <servers />
   </component>

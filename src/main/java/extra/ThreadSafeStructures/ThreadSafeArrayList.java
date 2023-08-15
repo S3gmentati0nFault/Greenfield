@@ -45,4 +45,8 @@ public class ThreadSafeArrayList<ELEMENT> {
     public synchronized List<ELEMENT> getArrayList() {
         return arrayList;
     }
+
+    public synchronized int size() {
+        return arrayList.size();
+    }
 }

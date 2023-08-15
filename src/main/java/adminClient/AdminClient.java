@@ -204,18 +204,18 @@ public class AdminClient {
 
         List<BotIdentity> bots = null;
         try{
-            String responseLine = br.readLine().toString();
+            String responseLine = br.readLine();
             bots = new ObjectMapper().readValue(responseLine, new TypeReference<List<BotIdentity>>(){});
         } catch (IOException e) {
             Logger.red("There was an error while parsing information sent from the server");
             return;
         }
 
-        if(bots.size() != 0) {
-            Logger.green("In the city there are " + bots.size() + " bots!");
+        if(!bots.isEmpty()) {
+            Logger.green(bots.size() + " are roaming the city!");
             for (BotIdentity bot : bots) {
                 Logger.yellow("< " + String.valueOf(bot.getId()) + " >> << "
-                        + String.valueOf(bot.getPort()) + " >> << " + bot.getIp() + " >");
+                        + String.valueOf(bot.getPort()) + " >> << " + bot.getIp() + " >> << " + bot.getPosition() + " >");
             }
         }
         else{

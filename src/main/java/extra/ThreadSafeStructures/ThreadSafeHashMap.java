@@ -15,7 +15,12 @@ public class ThreadSafeHashMap<KEY, VALUE> {
 
     public synchronized VALUE addPair(KEY key, VALUE value) {
         try {
-            return hashMap.put(key, value);
+            if(hashMap.containsKey(key)) {
+                return hashMap.get(key);
+            }
+            else{
+                return hashMap.put(key, value);
+            }
         } catch(UnsupportedOperationException e) {
             Logger.red("The operation is not supported", e);
         } catch(ClassCastException e) {
@@ -56,5 +61,9 @@ public class ThreadSafeHashMap<KEY, VALUE> {
 
     public synchronized Map<KEY, VALUE> getHashMap() {
         return hashMap;
+    }
+
+    public synchronized int size() {
+        return getKeySet().size();
     }
 }

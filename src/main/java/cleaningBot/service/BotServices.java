@@ -92,6 +92,9 @@ public class BotServices extends BotServicesImplBase {
             responseObserver.onError(e);
         }
         responseObserver.onCompleted();
+
+        System.out.println(BotThread.getInstance().getOtherBots().size());
+        System.out.println(BotThread.getInstance().getOpenComms().size());
     }
 
     public void crashAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,

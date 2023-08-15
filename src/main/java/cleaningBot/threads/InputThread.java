@@ -30,13 +30,12 @@ public class InputThread extends Thread {
             Scanner keyboard = new Scanner(System.in);
             String input = keyboard.next();
 
-            if(input.length() != 0) {
-                System.out.println(input);
-            }
-
             if (input.equals("GET")) {
                 System.out.println("-> " + BotThread.getInstance().getIdentity());
                 BotThread.getInstance().printOtherBots();
+            }
+            else if (input.equals("OPEN")) {
+                BotThread.getInstance().printOpenComms();
             }
             else if(input.equals("FIX")) {
                 synchronized(this) {

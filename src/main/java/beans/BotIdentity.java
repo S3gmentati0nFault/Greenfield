@@ -1,5 +1,7 @@
 package beans;
 
+import cleaningBot.Position;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 
@@ -14,6 +16,7 @@ import java.util.Objects;
 public class BotIdentity {
     private int id, port;
     private String ip;
+    private Position position;
 
     /**
      * Necessary dummy constructor to process the JSON mapping.
@@ -52,6 +55,14 @@ public class BotIdentity {
      */
     public String getIp() {
         return ip;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     /**
