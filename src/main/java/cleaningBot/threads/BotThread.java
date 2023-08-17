@@ -1,6 +1,7 @@
 package cleaningBot.threads;
 
 import cleaningBot.CommPair;
+import extra.AtomicCounter.AtomicCounter;
 import extra.ThreadSafeStructures.ThreadSafeArrayList;
 import extra.ThreadSafeStructures.ThreadSafeHashMap;
 import utilities.Variables;
@@ -40,6 +41,7 @@ public class BotThread extends Thread{
     private MaintenanceThread maintenanceThread;
     private InputThread inputThread;
     private static BotThread instance;
+    private AtomicCounter counter;
 
     public static synchronized BotThread getInstance() {
         if(instance == null) {
@@ -76,17 +78,28 @@ public class BotThread extends Thread{
         GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
         grpcThread.start();
 
+        // TODO
+        // CAPIRE PERCHÉ IN FASE DI SPIN-UP DEL PROGRAMMA, CI SONO ALCUNI NODI CHE COMINCIANO SUBITO IL PROCESSO DI
+        // MANUTENZIONE
         if(!startNewBot()){
             Logger.red("There was an error during Thread instantiation");
+        }
+
+        synchronized (this) {
+            try {
+                wait(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         Logger.yellow("Starting input thread");
         inputThread = new InputThread();
         inputThread.start();
 
-//        Logger.yellow("Starting maintenance thread");
-//        maintenanceThread = new MaintenanceThread(botServices);
-//        maintenanceThread.start();
+        Logger.yellow("Starting maintenance thread");
+        maintenanceThread = new MaintenanceThread(botServices);
+        maintenanceThread.start();
 //
 //        Logger.yellow("Starting the pollution measurement sensor thread");
 //        PollutionSensorThread pollutionSensorThread = new PollutionSensorThread(district, identity);
@@ -162,16 +175,20 @@ public class BotThread extends Thread{
         BotUtilities.closeConnection(connection);
         otherBots.removeElement(identity);
 
+//      TODO
+//      CAPIRE PERCHÉ MI RESTITUISCE ERRORE DI CONCURRENT MODIFICATION QUANDO AGGIUNGO UN TIMER QUI SOTTO E RIVEDERE
+//      COME FUNZIONA IL TUTTO
         Logger.cyan("Letting my presence known");
         if(!otherBots.isEmpty()) {
+            counter = new AtomicCounter(otherBots.size());
             otherBots.getArrayList().forEach(botIdentity -> {
 
-                try {
-                    Logger.blue("ADD");
-                    sleep(10000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+//                try {
+//                    Logger.blue("ADD");
+//                    sleep(2000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
 
                 ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
@@ -193,6 +210,7 @@ public class BotThread extends Thread{
 
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
+                        counter.decrement();
                         if(!value.getAck()){
                             Logger.purple("robot " + botIdentity + " didn't add me to its network");
                         }
@@ -201,14 +219,18 @@ public class BotThread extends Thread{
                     @Override
                     public void onError(Throwable t) {
                         Logger.red("robot " + botIdentity + " sent error " + t.getClass());
+                        counter.decrement();
                         if(t.getClass() == StatusRuntimeException.class) {
                             Logger.yellow("Removing dead robot from the field");
                             BotUtilities.botRemovalFunction(receiver, false);
                         }
+                        checkCounter();
                     }
 
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                        checkCounter();
+                    }
                 });
             });
         }
@@ -233,6 +255,13 @@ public class BotThread extends Thread{
         BotUtilities.closeConnection(connection);
 
         return true;
+    }
+
+    public synchronized void checkCounter() {
+        if(counter.getCounter() == 0) {
+            Logger.green("Hello procedure completed");
+            notify();
+        }
     }
 
     /**
@@ -267,6 +296,10 @@ public class BotThread extends Thread{
 
     public ThreadSafeHashMap<BotIdentity, CommPair> getOpenComms() {
         return openComms;
+    }
+
+    public BotServices getBotServices() {
+        return botServices;
     }
 
     /**

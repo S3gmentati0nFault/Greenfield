@@ -11,36 +11,16 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Greenfield.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/source/proto/main/java/AdminServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/source/proto/main/java/BotGRPC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paho11041652694869-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/paho11262785178001-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/beans/BotIdentity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beans/BotIdentity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/Position.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/CustomRandom/CustomRandom.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeHashMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeHashMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

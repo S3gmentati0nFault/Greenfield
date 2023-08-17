@@ -1,5 +1,6 @@
 package cleaningBot;
 
+import extra.AtomicCounter.AtomicCounter;
 import utilities.Variables;
 import beans.BotIdentity;
 import cleaningBot.threads.BotThread;
@@ -19,10 +20,9 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class BotUtilities {
-    private static int counter;
+    private static AtomicCounter counter;
 
     public static boolean botRemovalFunction(BotIdentity deadRobot, boolean quitting) {
         ObjectMapper mapper = new ObjectMapper();
@@ -73,7 +73,7 @@ public class BotUtilities {
 
         if(!BotThread.getInstance().getOtherBots().isEmpty()){
             List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
-            counter = fleetSnapshot.size();
+            counter = new AtomicCounter(fleetSnapshot.size());
 
             fleetSnapshot.forEach(botIdentity -> {
                 CommPair openComm = BotThread.getInstance().getOpenComms().getValue(botIdentity);
@@ -102,7 +102,7 @@ public class BotUtilities {
                 serviceStub.crashAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
-                        counter--;
+                        counter.decrement();
                         if(!value.getAck()){
                             Logger.yellow("The robot has already been deleted from the system");
                         }
@@ -132,11 +132,10 @@ public class BotUtilities {
     }
 
     private static void checkCounter(boolean quitting) {
-        if(counter == 0) {
+        if(counter.getCounter() == 0) {
             if(quitting) {
                 System.exit(0);
             }
-            return;
         }
     }
 

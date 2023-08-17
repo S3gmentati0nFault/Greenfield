@@ -6,9 +6,12 @@ import extra.Logger.Logger;
 import io.grpc.stub.StreamObserver;
 import services.grpc.*;
 import services.grpc.BotServicesGrpc.*;
+import utilities.Variables;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
+
+import static java.lang.Thread.sleep;
 
 /**
  * This class implements the GRPC methods defined inside the proto file.
@@ -41,7 +44,7 @@ public class BotServices extends BotServicesImplBase {
      *                asking thread.
      * @param responseObserver The callback function.
      */
-    public void processQueryGRPC(BotGRPC.Identifier request,
+    public synchronized void processQueryGRPC(BotGRPC.Identifier request,
                                  StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("processQueryGRPC");
         System.out.println("Current Thread: " + Thread.currentThread().getId());
@@ -53,7 +56,8 @@ public class BotServices extends BotServicesImplBase {
             try{
                 wait();
             }catch(Exception e){
-                Logger.red("There was an error during the wakeup process");
+                Logger.red(Variables.WAKEUP_ERROR);
+                e.printStackTrace();
             }
             waitingInstances.remove(new WaitingThread(this, request.getTimestamp()));
         }
@@ -121,6 +125,13 @@ public class BotServices extends BotServicesImplBase {
         if(waitingInstances.size() != 0) {
             waitingInstances.forEach(
                 service -> {
+                    try {
+                        System.out.println("%%% DORMO %%%");
+                        sleep(5000);
+                        System.out.println("%%% BASTA DORMIRE %%%");
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     Logger.yellow("Waking service " + service.getTimestamp() + " up");
                     service.getBotServices().notify();
                 }

@@ -2,21 +2,26 @@ package cleaningBot.threads;
 
 import beans.BotIdentity;
 import cleaningBot.BotUtilities;
+import cleaningBot.CommPair;
 import cleaningBot.service.BotServices;
+import com.google.errorprone.annotations.Var;
+import extra.AtomicCounter.AtomicCounter;
 import extra.Logger.Logger;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import jdk.jfr.internal.tool.Main;
 import services.grpc.BotGRPC;
 import services.grpc.BotServicesGrpc;
+import utilities.Variables;
 
 import java.util.List;
 
 public class MutualExclusionThread extends Thread {
 
     private BotServices botServices;
-    private int counter;
+    private AtomicCounter counter;
     private MaintenanceThread maintenanceThread;
 
     @Override
@@ -29,6 +34,10 @@ public class MutualExclusionThread extends Thread {
         this.botServices = botServices;
     }
 
+    public MutualExclusionThread(MaintenanceThread maintenanceThread) {
+        this.maintenanceThread = maintenanceThread;
+    }
+
     /**
      * Method that handles the mutual-exclusion by contacting via GRPC all the bots present
      * in the system at the moment of the malfunction
@@ -37,21 +46,31 @@ public class MutualExclusionThread extends Thread {
         Logger.cyan("Starting the Agrawala procedure");
         List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
 
-        if(fleetSnapshot.size() == 0){
+        if(fleetSnapshot.isEmpty()){
             maintenanceAccess();
             return;
         }
 
-        counter = fleetSnapshot.size();
+        counter = new AtomicCounter(fleetSnapshot.size());
 
         for (BotIdentity botIdentity : fleetSnapshot) {
+            ManagedChannel channel;
+            BotServicesGrpc.BotServicesStub serviceStub;
 
-            ManagedChannel channel = ManagedChannelBuilder
+            CommPair communicationPair = BotThread.getInstance().getOpenComms().getValue(botIdentity);
+            if(communicationPair == null) {
+                channel = ManagedChannelBuilder
                     .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                     .usePlaintext()
                     .build();
 
-            BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
+                serviceStub = BotServicesGrpc.newStub(channel);
+                BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
+            }
+            else {
+                channel = communicationPair.getManagedChannel();
+                serviceStub = communicationPair.getCommunicationStub();
+            }
 
             long timestamp = System.currentTimeMillis();
             BotThread.getInstance().setTimestamp(timestamp);
@@ -64,24 +83,22 @@ public class MutualExclusionThread extends Thread {
             serviceStub.processQueryGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {
-                    counter--;
-                    Logger.green("The response was positive! Still waiting for " + counter + " answers");
+                    counter.decrement();
+                    Logger.green("The response was positive! Still waiting for " + counter.getCounter() + " answers");
                 }
 
                 @Override
                 public synchronized void onError(Throwable t) {
                     Logger.red("There was an error during the grpc");
                     if(t.getClass() == StatusRuntimeException.class) {
-                        counter--;
+                        counter.decrement();
                         BotUtilities.botRemovalFunction(botIdentity, false);
-                        channel.shutdown();
                         maintenanceAccess();
                     }
                 }
 
                 @Override
                 public void onCompleted() {
-                    channel.shutdown();
                     maintenanceAccess();
                 }
             });
@@ -92,15 +109,16 @@ public class MutualExclusionThread extends Thread {
      * Method that simulates access to the mechanic
      */
     public void maintenanceAccess() {
-        if(counter == 0){
+        if(counter.getCounter() == 0){
             Logger.yellow("Starting the maintenance process");
             try {
                 sleep(10000);
                 Logger.green("The machine has gone back to normal");
             }catch(Exception e) {
-                Logger.red("There was an error during wakeup procedure");
+                Logger.red(Variables.WAKEUP_ERROR, e.getCause());
             }
-            botServices.clearWaitingQueue();
+//            botServices.clearWaitingQueue();
+            BotThread.getInstance().getBotServices().clearWaitingQueue();
             BotThread.getInstance().setTimestamp(-1);
             BotThread.getInstance().getInputThread().wakeupHelper();
             maintenanceThread.wakeupMaintenanceThread();

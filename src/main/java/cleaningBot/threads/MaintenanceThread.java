@@ -1,8 +1,10 @@
 package cleaningBot.threads;
 
 import cleaningBot.service.BotServices;
+import com.google.errorprone.annotations.Var;
 import exceptions.AlreadyOnMaintenanceException;
 import extra.Logger.Logger;
+import utilities.Variables;
 
 import java.util.Random;
 
@@ -37,19 +39,18 @@ public class MaintenanceThread extends Thread {
     public void maintenanceCycle() {
         Random random = new Random();
         while(true) {
-            if(random.nextInt(9) < 3){
+            if(random.nextInt(9) < 5){
                 try{
                     Logger.blue("The robot should undergo maintenance");
                     doMaintenance();
                 } catch (AlreadyOnMaintenanceException e) {
-
                     e.printStackTrace();
                 }
             }
             try{
                 sleep(5000);
             } catch (Exception e) {
-                Logger.red("There was a problem while waking up from sleep");
+                Logger.red(Variables.WAKEUP_ERROR, e.getCause());
             }
         }
     }
@@ -59,12 +60,13 @@ public class MaintenanceThread extends Thread {
         if(!onMaintenance){
             setOnMaintenance(true);
             MutualExclusionThread mutualExclusionThread =
-                new MutualExclusionThread(this, botServices);
+//                new MutualExclusionThread(this, botServices);
+                new MutualExclusionThread(this);
             mutualExclusionThread.start();
             try{
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Logger.red(Variables.WAKEUP_ERROR, e.getCause());
             }
             setOnMaintenance(false);
         }
