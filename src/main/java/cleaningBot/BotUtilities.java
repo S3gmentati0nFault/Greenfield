@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BotUtilities {
@@ -71,18 +72,18 @@ public class BotUtilities {
 
         closeConnection(connection);
 
-        if(!BotThread.getInstance().getOtherBots().isEmpty()){
-            List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
-            counter = new AtomicCounter(fleetSnapshot.size());
+        List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
+        int currentSize = fleetSnapshot.size();
+        if(!fleetSnapshot.isEmpty()) {
+            counter = new AtomicCounter(currentSize);
 
             fleetSnapshot.forEach(botIdentity -> {
                 CommPair openComm = BotThread.getInstance().getOpenComms().getValue(botIdentity);
                 ManagedChannel channel;
                 System.out.println(openComm);
-                if(openComm != null) {
+                if (openComm != null) {
                     channel = openComm.getManagedChannel();
-                }
-                else {
+                } else {
                     channel = ManagedChannelBuilder
                             .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                             .usePlaintext()
@@ -99,15 +100,14 @@ public class BotUtilities {
                         .setHost(deadRobot.getIp())
                         .build();
 
-                serviceStub.crashAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
+                serviceStub.crashNotificationGRPC(identikit, new StreamObserver<BotGRPC.IntegerValue>() {
                     @Override
-                    public void onNext(BotGRPC.Acknowledgement value) {
+                    public void onNext(BotGRPC.IntegerValue returnMessage) {
                         counter.decrement();
-                        if(!value.getAck()){
-                            Logger.yellow("The robot has already been deleted from the system");
-                        }
-                        else{
-                            Logger.yellow("Deletion went fine");
+                        if (returnMessage.getValue() == -1) {
+                            Logger.yellow("The robot has already been removed from the system");
+                        } else {
+                            Logger.green("The robot has been correctly removed!");
                         }
                     }
 
@@ -126,6 +126,24 @@ public class BotUtilities {
 
         if(quitting) {
             System.exit(0);
+        }
+        else {
+            if(currentSize < 4) {
+                return true;
+            }
+            int[] deltas = new int[4];
+            List<List<BotIdentity>> distributionList = new ArrayList<>();
+            int objectiveDistribution = currentSize / 4;
+            System.out.println("OBJECTIVE DISTRIBUTION: " + objectiveDistribution);
+//            for (BotIdentity botIdentity : fleetSnapshot) {
+//                switch(districtCalculator(botIdentity.getPosition())) {
+//
+//                }
+//            }
+//            for(int i = 0; i < 4; i++) {
+//                deltas[i] = distribution[i] - objectiveDistribution;
+//            }
+
         }
 
         return true;
@@ -191,5 +209,24 @@ public class BotUtilities {
 
         Logger.yellow("Closing the connection channel");
         connection.disconnect();
+    }
+
+    public static int districtCalculator(Position position) {
+        if(position.getY() < 5) {
+            if(position.getX() < 5) {
+                return 1;
+            }
+            else{
+                return 2;
+            }
+        }
+        else{
+            if(position.getX() < 5){
+                return 4;
+            }
+            else{
+                return 3;
+            }
+        }
     }
 }

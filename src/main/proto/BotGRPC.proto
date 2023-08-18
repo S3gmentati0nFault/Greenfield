@@ -2,9 +2,10 @@ syntax = "proto3";
 package services.grpc;
 
 service BotServices {
-  rpc processQueryGRPC(Identifier) returns (Acknowledgement) {}
-  rpc joinAdvertiseGRPC(BotNetworkingInformations) returns (Acknowledgement) {}
-  rpc crashAdvertiseGRPC(BotNetworkingInformations) returns (Acknowledgement) {}
+  rpc maintenanceRequestGRPC(Identifier) returns (Acknowledgement) {}
+  rpc joinRequestGRPC(BotNetworkingInformations) returns (Acknowledgement) {}
+  rpc crashNotificationGRPC(BotNetworkingInformations) returns (IntegerValue) {}
+  rpc moveRequestGRPC(Position) returns (Acknowledgement) {}
 }
 
 message Identifier {
@@ -16,8 +17,17 @@ message Acknowledgement {
   bool ack = 1;
 }
 
+message IntegerValue {
+  int32 value = 1;
+}
+
 message BotNetworkingInformations {
   int32 id = 1;
   int32 port = 2;
   string host = 3;
+}
+
+message Position {
+  int32 x = 1;
+  int32 y = 2;
 }

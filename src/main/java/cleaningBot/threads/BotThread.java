@@ -205,7 +205,7 @@ public class BotThread extends Thread{
                         .setHost(identity.getIp())
                         .build();
 
-                serviceStub.joinAdvertiseGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
+                serviceStub.joinRequestGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
                     BotIdentity receiver = botIdentity;
 
                     @Override
@@ -235,22 +235,7 @@ public class BotThread extends Thread{
             });
         }
 
-        if(identity.getPosition().getY() < 5) {
-            if(identity.getPosition().getX() < 5) {
-                district = 1;
-            }
-            else{
-                district = 2;
-            }
-        }
-        else{
-            if(identity.getPosition().getX() < 5){
-                district = 4;
-            }
-            else{
-                district = 3;
-            }
-        }
+        district = BotUtilities.districtCalculator(identity.getPosition());
 
         BotUtilities.closeConnection(connection);
 
@@ -326,10 +311,10 @@ public class BotThread extends Thread{
         }
     }
 
-    public synchronized void removeBot(BotIdentity deadRobot) {
-        CommPair communicationPair = openComms.removePair(deadRobot);
+    public synchronized boolean removeBot(BotIdentity deadRobot) {
         System.out.println(deadRobot);
-        otherBots.removeElement(deadRobot);
+        boolean removalOperation = otherBots.removeElement(deadRobot);
+        CommPair communicationPair = openComms.removePair(deadRobot);
         if(communicationPair != null) {
             try{
             Logger.yellow("Closing the communication channel...");
@@ -340,6 +325,7 @@ public class BotThread extends Thread{
                 communicationPair.getManagedChannel().shutdownNow();
             }
         }
+        return removalOperation;
     }
 
     public void newCommunicationChannel(BotIdentity destination, ManagedChannel channel, BotServicesGrpc.BotServicesStub stub) {

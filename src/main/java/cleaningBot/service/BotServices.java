@@ -44,7 +44,7 @@ public class BotServices extends BotServicesImplBase {
      *                asking thread.
      * @param responseObserver The callback function.
      */
-    public synchronized void processQueryGRPC(BotGRPC.Identifier request,
+    public synchronized void maintenanceRequestGRPC(BotGRPC.Identifier request,
                                  StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("processQueryGRPC");
         System.out.println("Current Thread: " + Thread.currentThread().getId());
@@ -73,7 +73,7 @@ public class BotServices extends BotServicesImplBase {
      * @param request The request contains all the useful information about the new robot.
      * @param responseObserver The callback function.
      */
-    public void joinAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
+    public void joinRequestGRPC(BotGRPC.BotNetworkingInformations request,
         StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("joinAdvertiseGRPC");
 
@@ -101,19 +101,21 @@ public class BotServices extends BotServicesImplBase {
         System.out.println(BotThread.getInstance().getOpenComms().size());
     }
 
-    public void crashAdvertiseGRPC(BotGRPC.BotNetworkingInformations request,
-        StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
+    public void crashNotificationGRPC(BotGRPC.BotNetworkingInformations request,
+        StreamObserver<BotGRPC.IntegerValue> responseObserver) {
         Logger.purple("crashAdvertiseGRPC");
 
         try {
-            botThread.removeBot(
-                    new BotIdentity(request.getId(), request.getPort(), request.getHost())
-            );
+            if(botThread.removeBot(
+                    new BotIdentity(request.getId(), request.getPort(), request.getHost()))) {
+                responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(1).build());
+                responseObserver.onCompleted();
+            }
         } catch(Exception e) {
             responseObserver.onError(e);
         }
 
-        responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
+        responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(-1).build());
         responseObserver.onCompleted();
     }
 

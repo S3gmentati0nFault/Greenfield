@@ -71,6 +71,14 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Identifier$1
  services.grpc.BotGRPC$Identifier$Builder
  services.grpc.BotGRPC$IdentifierOrBuilder
+ services.grpc.BotGRPC$IntegerValue
+ services.grpc.BotGRPC$IntegerValue$1
+ services.grpc.BotGRPC$IntegerValue$Builder
+ services.grpc.BotGRPC$IntegerValueOrBuilder
+ services.grpc.BotGRPC$Position
+ services.grpc.BotGRPC$Position$1
+ services.grpc.BotGRPC$Position$Builder
+ services.grpc.BotGRPC$PositionOrBuilder
 cleaningBot/threads/PollutionSensorThread.java
  cleaningBot.threads.PollutionSensorThread
 extra/ThreadSafeStructures/ThreadSafeHashMap.java

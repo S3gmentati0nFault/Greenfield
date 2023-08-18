@@ -80,7 +80,7 @@ public class MutualExclusionThread extends Thread {
                     .setTimestamp(timestamp)
                     .build();
 
-            serviceStub.processQueryGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
+            serviceStub.maintenanceRequestGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {
                     counter.decrement();
