@@ -46,12 +46,12 @@ public class MutualExclusionThread extends Thread {
         Logger.cyan("Starting the Agrawala procedure");
         List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
 
+        counter = new AtomicCounter(fleetSnapshot.size());
+
         if(fleetSnapshot.isEmpty()){
             maintenanceAccess();
             return;
         }
-
-        counter = new AtomicCounter(fleetSnapshot.size());
 
         for (BotIdentity botIdentity : fleetSnapshot) {
             ManagedChannel channel;

@@ -12,15 +12,12 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +87,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -277,6 +274,9 @@
       <workItem from="1692005326449" duration="622000" />
       <workItem from="1692006011291" duration="4383000" />
       <workItem from="1692083216044" duration="8690000" />
+      <workItem from="1692300944836" duration="281000" />
+      <workItem from="1692301235137" duration="66000" />
+      <workItem from="1692365342327" duration="671000" />
     </task>
     <servers />
   </component>
