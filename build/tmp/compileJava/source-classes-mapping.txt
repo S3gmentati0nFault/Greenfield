@@ -20,12 +20,12 @@ cleaningBot/CommPair.java
  cleaningBot.CommPair
 utilities/Variables.java
  utilities.Variables
-adminServer/ServerRestInterface.java
- adminServer.ServerRestInterface
 cleaningBot/threads/BotThread.java
  cleaningBot.threads.BotThread
  cleaningBot.threads.BotThread$1
  cleaningBot.threads.BotThread$2
+adminServer/ServerRestInterface.java
+ adminServer.ServerRestInterface
 cleaningBot/threads/FixHelperThread.java
  cleaningBot.threads.FixHelperThread
 cleaningBot/BotUtilities.java
@@ -44,16 +44,16 @@ simulators/Simulator.java
  simulators.Simulator
 cleaningBot/threads/QuitHelperThread.java
  cleaningBot.threads.QuitHelperThread
-beans/AverageList.java
- beans.AverageList
 cleaningBot/MeasurementBuffer.java
  cleaningBot.MeasurementBuffer
+beans/AverageList.java
+ beans.AverageList
 cleaningBot/CleaningBot.java
  cleaningBot.CleaningBot
-cleaningBot/service/BotServices.java
- cleaningBot.service.BotServices
 cleaningBot/service/WaitingThread.java
  cleaningBot.service.WaitingThread
+cleaningBot/service/BotServices.java
+ cleaningBot.service.BotServices
 extra/Logger/Logger.java
  extra.Logger.Logger
 services/grpc/BotGRPC.java
@@ -83,8 +83,6 @@ cleaningBot/threads/PollutionSensorThread.java
  cleaningBot.threads.PollutionSensorThread
 extra/ThreadSafeStructures/ThreadSafeHashMap.java
  extra.ThreadSafeStructures.ThreadSafeHashMap
-adminServer/AdminServer.java
- adminServer.AdminServer
 services/grpc/BotServicesGrpc.java
  services.grpc.BotServicesGrpc
  services.grpc.BotServicesGrpc$1
@@ -96,6 +94,8 @@ services/grpc/BotServicesGrpc.java
  services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
  services.grpc.BotServicesGrpc$BotServicesStub
  services.grpc.BotServicesGrpc$MethodHandlers
+adminServer/AdminServer.java
+ adminServer.AdminServer
 cleaningBot/threads/GrpcServicesThread.java
  cleaningBot.threads.GrpcServicesThread
 simulators/PM10Simulator.java
