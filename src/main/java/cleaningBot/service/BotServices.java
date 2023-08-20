@@ -45,7 +45,7 @@ public class BotServices extends BotServicesImplBase {
      * @param responseObserver The callback function.
      */
     public synchronized void maintenanceRequestGRPC(BotGRPC.Identifier request,
-                                 StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
+                                                    StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("processQueryGRPC");
         System.out.println("Current Thread: " + Thread.currentThread().getId());
         if(request.getTimestamp() > botThread.getTimestamp() &&
@@ -74,7 +74,7 @@ public class BotServices extends BotServicesImplBase {
      * @param responseObserver The callback function.
      */
     public void joinRequestGRPC(BotGRPC.BotNetworkingInformations request,
-        StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
+                                StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("joinAdvertiseGRPC");
 
         try{
@@ -84,7 +84,7 @@ public class BotServices extends BotServicesImplBase {
             }
             else{
                 botThread.getOtherBots().add(
-                    new BotIdentity(request.getId(), request.getPort(), request.getHost())
+                        new BotIdentity(request.getId(), request.getPort(), request.getHost())
                 );
                 responseObserver.onNext(BotGRPC.Acknowledgement
                         .newBuilder()
@@ -102,7 +102,7 @@ public class BotServices extends BotServicesImplBase {
     }
 
     public void crashNotificationGRPC(BotGRPC.BotNetworkingInformations request,
-        StreamObserver<BotGRPC.IntegerValue> responseObserver) {
+                                      StreamObserver<BotGRPC.IntegerValue> responseObserver) {
         Logger.purple("crashAdvertiseGRPC");
 
         try {
@@ -126,17 +126,18 @@ public class BotServices extends BotServicesImplBase {
     public synchronized void clearWaitingQueue() {
         if(waitingInstances.size() != 0) {
             waitingInstances.forEach(
-                service -> {
-                    try {
-                        System.out.println("%%% DORMO %%%");
-                        sleep(5000);
-                        System.out.println("%%% BASTA DORMIRE %%%");
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                    service -> {
+//                    TEST PER MOSTRARE L'ATTESA
+//                    try {
+//                        System.out.println("%%% DORMO %%%");
+//                        sleep(5000);
+//                        System.out.println("%%% BASTA DORMIRE %%%");
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+                        Logger.yellow("Waking service " + service.getTimestamp() + " up");
+                        service.getBotServices().notify();
                     }
-                    Logger.yellow("Waking service " + service.getTimestamp() + " up");
-                    service.getBotServices().notify();
-                }
             );
         }
         waitingInstances.clear();

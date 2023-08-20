@@ -41,7 +41,11 @@ public class BotThread extends Thread{
     private MaintenanceThread maintenanceThread;
     private InputThread inputThread;
     private static BotThread instance;
-    private AtomicCounter counter;
+//    TODO
+//    >> FLAVOUR :: MODIFICA GIALLA <<
+//    FARE ALTRO TESTING E, SE SI DOVESSE DIMOSTRARE INUTILE, RIMUOVERE LA MENZIONE ALLA VARIABILE COUNTER DAL FILE. PER
+//    I TEST CONDOTTI FINO AD ORA SEMBRA CHE PROCEDA TUTTO LISCIO
+//    private AtomicCounter counter;
 
     public static synchronized BotThread getInstance() {
         if(instance == null) {
@@ -78,20 +82,17 @@ public class BotThread extends Thread{
         GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
         grpcThread.start();
 
-        // TODO
-        // CAPIRE PERCHÉ IN FASE DI SPIN-UP DEL PROGRAMMA, CI SONO ALCUNI NODI CHE COMINCIANO SUBITO IL PROCESSO DI
-        // MANUTENZIONE
         if(!startNewBot()){
             Logger.red("There was an error during Thread instantiation");
         }
 
-        synchronized (this) {
-            try {
-                wait(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        synchronized (this) {
+//            try {
+//                wait(10000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
         Logger.yellow("Starting input thread");
         inputThread = new InputThread();
@@ -156,7 +157,7 @@ public class BotThread extends Thread{
         BufferedReader br = null;
         try{
             br = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), "utf-8"));
+                    new InputStreamReader(connection.getInputStream(), "utf-8"));
         }catch(IOException e){
             Logger.red("It was not possible to initialize the BufferedReader");
             return false;
@@ -176,11 +177,12 @@ public class BotThread extends Thread{
         otherBots.removeElement(identity);
 
 //      TODO
+//      >> FLAVOUR :: DEBUGGING ARANCIONE <<
 //      CAPIRE PERCHÉ MI RESTITUISCE ERRORE DI CONCURRENT MODIFICATION QUANDO AGGIUNGO UN TIMER QUI SOTTO E RIVEDERE
 //      COME FUNZIONA IL TUTTO
         Logger.cyan("Letting my presence known");
         if(!otherBots.isEmpty()) {
-            counter = new AtomicCounter(otherBots.size());
+//            counter = new AtomicCounter(otherBots.size());
             otherBots.getArrayList().forEach(botIdentity -> {
 
 //                try {
@@ -191,9 +193,9 @@ public class BotThread extends Thread{
 //                }
 
                 ManagedChannel channel = ManagedChannelBuilder
-                    .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                    .usePlaintext()
-                    .build();
+                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
+                        .usePlaintext()
+                        .build();
                 BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
 
                 openComms.addPair(botIdentity, new CommPair(channel, serviceStub));
@@ -210,7 +212,7 @@ public class BotThread extends Thread{
 
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
-                        counter.decrement();
+//                        counter.decrement();
                         if(!value.getAck()){
                             Logger.purple("robot " + botIdentity + " didn't add me to its network");
                         }
@@ -219,17 +221,17 @@ public class BotThread extends Thread{
                     @Override
                     public void onError(Throwable t) {
                         Logger.red("robot " + botIdentity + " sent error " + t.getClass());
-                        counter.decrement();
+//                        counter.decrement();
                         if(t.getClass() == StatusRuntimeException.class) {
                             Logger.yellow("Removing dead robot from the field");
                             BotUtilities.botRemovalFunction(receiver, false);
                         }
-                        checkCounter();
+//                        checkCounter();
                     }
 
                     @Override
                     public void onCompleted() {
-                        checkCounter();
+//                        checkCounter();
                     }
                 });
             });
@@ -242,12 +244,12 @@ public class BotThread extends Thread{
         return true;
     }
 
-    public synchronized void checkCounter() {
-        if(counter.getCounter() == 0) {
-            Logger.green("Hello procedure completed");
-            notify();
-        }
-    }
+//    public synchronized void checkCounter() {
+//        if(counter.getCounter() == 0) {
+//            Logger.green("Hello procedure completed");
+//            notify();
+//        }
+//    }
 
     /**
      * Getter for the bots in the system.
@@ -317,9 +319,9 @@ public class BotThread extends Thread{
         CommPair communicationPair = openComms.removePair(deadRobot);
         if(communicationPair != null) {
             try{
-            Logger.yellow("Closing the communication channel...");
-            communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
-            Logger.green("Communication channel closed!");
+                Logger.yellow("Closing the communication channel...");
+                communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
+                Logger.green("Communication channel closed!");
             } catch (InterruptedException e) {
                 Logger.red("Unable to close the channel the right way, forcing it closed now");
                 communicationPair.getManagedChannel().shutdownNow();

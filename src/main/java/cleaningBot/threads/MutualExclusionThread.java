@@ -60,9 +60,9 @@ public class MutualExclusionThread extends Thread {
             CommPair communicationPair = BotThread.getInstance().getOpenComms().getValue(botIdentity);
             if(communicationPair == null) {
                 channel = ManagedChannelBuilder
-                    .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                    .usePlaintext()
-                    .build();
+                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
+                        .usePlaintext()
+                        .build();
 
                 serviceStub = BotServicesGrpc.newStub(channel);
                 BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
@@ -83,8 +83,12 @@ public class MutualExclusionThread extends Thread {
             serviceStub.maintenanceRequestGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {
-                    counter.decrement();
-                    Logger.green("The response was positive! Still waiting for " + counter.getCounter() + " answers");
+                    System.out.println("FUORI -> " + Thread.currentThread().getId());
+                    synchronized (this) {
+                        System.out.println("DENTRO -> " + Thread.currentThread().getId());
+                        counter.decrement();
+                        Logger.green("The response was positive! Still waiting for " + counter.getCounter() + " answers");
+                    }
                 }
 
                 @Override
