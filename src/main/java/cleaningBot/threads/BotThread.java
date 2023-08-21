@@ -84,6 +84,7 @@ public class BotThread extends Thread{
 
         if(!startNewBot()){
             Logger.red("There was an error during Thread instantiation");
+            System.exit(-1);
         }
 
 //        synchronized (this) {

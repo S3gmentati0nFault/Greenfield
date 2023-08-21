@@ -91,6 +91,10 @@ public class MutualExclusionThread extends Thread {
                     }
                 }
 
+//                TODO
+//                QUANDO SI PRESENTA L'ERRORE, ANZICHÈ CHIAMARE SUBITO LA FUNZIONE DI RIMOZIONE AGGIUNGERE IL ROBOT DA
+//                ELIMINARE A UNA STRUTTURA LOCALE, SE ARRIVANO DEI MESSAGGI PER LA SUA ELIMINAZIONE SARÀ ELIMINATO DALLA
+//                STRUTTURA OPPURE TUTTE LE RICHIESTE VERRANNO IGNORATE SUCCESSIVAMENTE
                 @Override
                 public synchronized void onError(Throwable t) {
                     Logger.red("There was an error during the grpc");

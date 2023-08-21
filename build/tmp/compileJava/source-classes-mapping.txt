@@ -76,36 +76,36 @@ beans/AverageList.java
  beans.AverageList
 cleaningBot/threads/PollutionSensorThread.java
  cleaningBot.threads.PollutionSensorThread
-cleaningBot/threads/MaintenanceThread.java
- cleaningBot.threads.MaintenanceThread
+cleaningBot/BotIdentityComparator.java
+ cleaningBot.BotIdentityComparator
+adminClient/AdminClient.java
+ adminClient.AdminClient
+ adminClient.AdminClient$1
+cleaningBot/threads/BotThread.java
+ cleaningBot.threads.BotThread
+ cleaningBot.threads.BotThread$1
+ cleaningBot.threads.BotThread$2
+cleaningBot/threads/FixHelperThread.java
+ cleaningBot.threads.FixHelperThread
+cleaningBot/threads/QuitHelperThread.java
+ cleaningBot.threads.QuitHelperThread
+cleaningBot/BotUtilities.java
+ cleaningBot.BotUtilities
+ cleaningBot.BotUtilities$1
 cleaningBot/service/ServiceComparator.java
  cleaningBot.service.ServiceComparator
 cleaningBot/threads/InputThread.java
  cleaningBot.threads.InputThread
 cleaningBot/CleaningBot.java
  cleaningBot.CleaningBot
+cleaningBot/threads/GrpcServicesThread.java
+ cleaningBot.threads.GrpcServicesThread
 cleaningBot/service/WaitingThread.java
  cleaningBot.service.WaitingThread
 cleaningBot/service/BotServices.java
  cleaningBot.service.BotServices
-cleaningBot/BotIdentityComparator.java
- cleaningBot.BotIdentityComparator
-cleaningBot/threads/FixHelperThread.java
- cleaningBot.threads.FixHelperThread
-cleaningBot/threads/GrpcServicesThread.java
- cleaningBot.threads.GrpcServicesThread
-cleaningBot/threads/BotThread.java
- cleaningBot.threads.BotThread
- cleaningBot.threads.BotThread$1
- cleaningBot.threads.BotThread$2
-cleaningBot/BotUtilities.java
- cleaningBot.BotUtilities
- cleaningBot.BotUtilities$1
-cleaningBot/threads/QuitHelperThread.java
- cleaningBot.threads.QuitHelperThread
+cleaningBot/threads/MaintenanceThread.java
+ cleaningBot.threads.MaintenanceThread
 cleaningBot/threads/MutualExclusionThread.java
  cleaningBot.threads.MutualExclusionThread
  cleaningBot.threads.MutualExclusionThread$1
-adminClient/AdminClient.java
- adminClient.AdminClient
- adminClient.AdminClient$1
