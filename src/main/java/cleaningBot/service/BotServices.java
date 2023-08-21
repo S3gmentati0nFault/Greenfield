@@ -1,6 +1,7 @@
 package cleaningBot.service;
 
 import beans.BotIdentity;
+import cleaningBot.Position;
 import cleaningBot.threads.BotThread;
 import extra.Logger.Logger;
 import io.grpc.stub.StreamObserver;
@@ -73,19 +74,19 @@ public class BotServices extends BotServicesImplBase {
      * @param request The request contains all the useful information about the new robot.
      * @param responseObserver The callback function.
      */
-    public void joinRequestGRPC(BotGRPC.BotNetworkingInformations request,
+    public void joinRequestGRPC(BotGRPC.BotInformation request,
                                 StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("joinAdvertiseGRPC");
 
+        BotIdentity newBot = new BotIdentity(request.getId(), request.getPort(), request.getHost(),
+                            new Position(request.getPosition().getX(), request.getPosition().getY()));
+
         try{
-            if(botThread.getOtherBots().contains(
-                    new BotIdentity(request.getId(), request.getPort(), request.getHost()))) {
+            if(botThread.getOtherBots().contains(newBot)) {
                 responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
             }
             else{
-                botThread.getOtherBots().add(
-                        new BotIdentity(request.getId(), request.getPort(), request.getHost())
-                );
+                botThread.getOtherBots().add(newBot);
                 responseObserver.onNext(BotGRPC.Acknowledgement
                         .newBuilder()
                         .setAck(true)
@@ -101,13 +102,15 @@ public class BotServices extends BotServicesImplBase {
         System.out.println(BotThread.getInstance().getOpenComms().size());
     }
 
-    public void crashNotificationGRPC(BotGRPC.BotNetworkingInformations request,
+    public void crashNotificationGRPC(BotGRPC.BotInformation request,
                                       StreamObserver<BotGRPC.IntegerValue> responseObserver) {
         Logger.purple("crashAdvertiseGRPC");
 
+        BotIdentity deadBot = new BotIdentity(request.getId(), request.getPort(), request.getHost(),
+                            new Position(request.getPosition().getX(), request.getPosition().getY()));
+
         try {
-            if(botThread.removeBot(
-                    new BotIdentity(request.getId(), request.getPort(), request.getHost()))) {
+            if(botThread.removeBot(deadBot)) {
                 responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(1).build());
                 responseObserver.onCompleted();
             }
@@ -115,6 +118,10 @@ public class BotServices extends BotServicesImplBase {
             responseObserver.onError(e);
         }
 
+//        TODO
+//        >> FLAVOUR :: DEBUGGING-RED <<
+//        CAPITA A VOLTE CHE IL MESSAGGIO DI ON.NEXT E ON.COMPLETED PARTANO (FORSE) DOPO CHE IL CANALE È STATO CHIUSO,
+//        CONTROLLARE COME FUNZIONA IL FLUSSO DEI MESSAGGI E TROVARE UN MODO ADEGUATO DI CHIUDERE I CANALI GRPC
         responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(-1).build());
         responseObserver.onCompleted();
     }

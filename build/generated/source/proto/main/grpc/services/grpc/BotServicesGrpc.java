@@ -58,27 +58,27 @@ public final class BotServicesGrpc {
     return getMaintenanceRequestGRPCMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotNetworkingInformations,
+  private static volatile io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation,
       services.grpc.BotGRPC.Acknowledgement> getJoinRequestGRPCMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "joinRequestGRPC",
-      requestType = services.grpc.BotGRPC.BotNetworkingInformations.class,
+      requestType = services.grpc.BotGRPC.BotInformation.class,
       responseType = services.grpc.BotGRPC.Acknowledgement.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotNetworkingInformations,
+  public static io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation,
       services.grpc.BotGRPC.Acknowledgement> getJoinRequestGRPCMethod() {
-    io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotNetworkingInformations, services.grpc.BotGRPC.Acknowledgement> getJoinRequestGRPCMethod;
+    io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.Acknowledgement> getJoinRequestGRPCMethod;
     if ((getJoinRequestGRPCMethod = BotServicesGrpc.getJoinRequestGRPCMethod) == null) {
       synchronized (BotServicesGrpc.class) {
         if ((getJoinRequestGRPCMethod = BotServicesGrpc.getJoinRequestGRPCMethod) == null) {
           BotServicesGrpc.getJoinRequestGRPCMethod = getJoinRequestGRPCMethod =
-              io.grpc.MethodDescriptor.<services.grpc.BotGRPC.BotNetworkingInformations, services.grpc.BotGRPC.Acknowledgement>newBuilder()
+              io.grpc.MethodDescriptor.<services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.Acknowledgement>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "joinRequestGRPC"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  services.grpc.BotGRPC.BotNetworkingInformations.getDefaultInstance()))
+                  services.grpc.BotGRPC.BotInformation.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   services.grpc.BotGRPC.Acknowledgement.getDefaultInstance()))
               .setSchemaDescriptor(new BotServicesMethodDescriptorSupplier("joinRequestGRPC"))
@@ -89,27 +89,27 @@ public final class BotServicesGrpc {
     return getJoinRequestGRPCMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotNetworkingInformations,
+  private static volatile io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation,
       services.grpc.BotGRPC.IntegerValue> getCrashNotificationGRPCMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "crashNotificationGRPC",
-      requestType = services.grpc.BotGRPC.BotNetworkingInformations.class,
+      requestType = services.grpc.BotGRPC.BotInformation.class,
       responseType = services.grpc.BotGRPC.IntegerValue.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotNetworkingInformations,
+  public static io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation,
       services.grpc.BotGRPC.IntegerValue> getCrashNotificationGRPCMethod() {
-    io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotNetworkingInformations, services.grpc.BotGRPC.IntegerValue> getCrashNotificationGRPCMethod;
+    io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.IntegerValue> getCrashNotificationGRPCMethod;
     if ((getCrashNotificationGRPCMethod = BotServicesGrpc.getCrashNotificationGRPCMethod) == null) {
       synchronized (BotServicesGrpc.class) {
         if ((getCrashNotificationGRPCMethod = BotServicesGrpc.getCrashNotificationGRPCMethod) == null) {
           BotServicesGrpc.getCrashNotificationGRPCMethod = getCrashNotificationGRPCMethod =
-              io.grpc.MethodDescriptor.<services.grpc.BotGRPC.BotNetworkingInformations, services.grpc.BotGRPC.IntegerValue>newBuilder()
+              io.grpc.MethodDescriptor.<services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.IntegerValue>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "crashNotificationGRPC"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  services.grpc.BotGRPC.BotNetworkingInformations.getDefaultInstance()))
+                  services.grpc.BotGRPC.BotInformation.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   services.grpc.BotGRPC.IntegerValue.getDefaultInstance()))
               .setSchemaDescriptor(new BotServicesMethodDescriptorSupplier("crashNotificationGRPC"))
@@ -187,14 +187,14 @@ public final class BotServicesGrpc {
 
     /**
      */
-    public void joinRequestGRPC(services.grpc.BotGRPC.BotNetworkingInformations request,
+    public void joinRequestGRPC(services.grpc.BotGRPC.BotInformation request,
         io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement> responseObserver) {
       asyncUnimplementedUnaryCall(getJoinRequestGRPCMethod(), responseObserver);
     }
 
     /**
      */
-    public void crashNotificationGRPC(services.grpc.BotGRPC.BotNetworkingInformations request,
+    public void crashNotificationGRPC(services.grpc.BotGRPC.BotInformation request,
         io.grpc.stub.StreamObserver<services.grpc.BotGRPC.IntegerValue> responseObserver) {
       asyncUnimplementedUnaryCall(getCrashNotificationGRPCMethod(), responseObserver);
     }
@@ -219,14 +219,14 @@ public final class BotServicesGrpc {
             getJoinRequestGRPCMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                services.grpc.BotGRPC.BotNetworkingInformations,
+                services.grpc.BotGRPC.BotInformation,
                 services.grpc.BotGRPC.Acknowledgement>(
                   this, METHODID_JOIN_REQUEST_GRPC)))
           .addMethod(
             getCrashNotificationGRPCMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                services.grpc.BotGRPC.BotNetworkingInformations,
+                services.grpc.BotGRPC.BotInformation,
                 services.grpc.BotGRPC.IntegerValue>(
                   this, METHODID_CRASH_NOTIFICATION_GRPC)))
           .addMethod(
@@ -268,7 +268,7 @@ public final class BotServicesGrpc {
 
     /**
      */
-    public void joinRequestGRPC(services.grpc.BotGRPC.BotNetworkingInformations request,
+    public void joinRequestGRPC(services.grpc.BotGRPC.BotInformation request,
         io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getJoinRequestGRPCMethod(), getCallOptions()), request, responseObserver);
@@ -276,7 +276,7 @@ public final class BotServicesGrpc {
 
     /**
      */
-    public void crashNotificationGRPC(services.grpc.BotGRPC.BotNetworkingInformations request,
+    public void crashNotificationGRPC(services.grpc.BotGRPC.BotInformation request,
         io.grpc.stub.StreamObserver<services.grpc.BotGRPC.IntegerValue> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getCrashNotificationGRPCMethod(), getCallOptions()), request, responseObserver);
@@ -318,14 +318,14 @@ public final class BotServicesGrpc {
 
     /**
      */
-    public services.grpc.BotGRPC.Acknowledgement joinRequestGRPC(services.grpc.BotGRPC.BotNetworkingInformations request) {
+    public services.grpc.BotGRPC.Acknowledgement joinRequestGRPC(services.grpc.BotGRPC.BotInformation request) {
       return blockingUnaryCall(
           getChannel(), getJoinRequestGRPCMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public services.grpc.BotGRPC.IntegerValue crashNotificationGRPC(services.grpc.BotGRPC.BotNetworkingInformations request) {
+    public services.grpc.BotGRPC.IntegerValue crashNotificationGRPC(services.grpc.BotGRPC.BotInformation request) {
       return blockingUnaryCall(
           getChannel(), getCrashNotificationGRPCMethod(), getCallOptions(), request);
     }
@@ -367,7 +367,7 @@ public final class BotServicesGrpc {
     /**
      */
     public com.google.common.util.concurrent.ListenableFuture<services.grpc.BotGRPC.Acknowledgement> joinRequestGRPC(
-        services.grpc.BotGRPC.BotNetworkingInformations request) {
+        services.grpc.BotGRPC.BotInformation request) {
       return futureUnaryCall(
           getChannel().newCall(getJoinRequestGRPCMethod(), getCallOptions()), request);
     }
@@ -375,7 +375,7 @@ public final class BotServicesGrpc {
     /**
      */
     public com.google.common.util.concurrent.ListenableFuture<services.grpc.BotGRPC.IntegerValue> crashNotificationGRPC(
-        services.grpc.BotGRPC.BotNetworkingInformations request) {
+        services.grpc.BotGRPC.BotInformation request) {
       return futureUnaryCall(
           getChannel().newCall(getCrashNotificationGRPCMethod(), getCallOptions()), request);
     }
@@ -416,11 +416,11 @@ public final class BotServicesGrpc {
               (io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement>) responseObserver);
           break;
         case METHODID_JOIN_REQUEST_GRPC:
-          serviceImpl.joinRequestGRPC((services.grpc.BotGRPC.BotNetworkingInformations) request,
+          serviceImpl.joinRequestGRPC((services.grpc.BotGRPC.BotInformation) request,
               (io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement>) responseObserver);
           break;
         case METHODID_CRASH_NOTIFICATION_GRPC:
-          serviceImpl.crashNotificationGRPC((services.grpc.BotGRPC.BotNetworkingInformations) request,
+          serviceImpl.crashNotificationGRPC((services.grpc.BotGRPC.BotInformation) request,
               (io.grpc.stub.StreamObserver<services.grpc.BotGRPC.IntegerValue>) responseObserver);
           break;
         case METHODID_MOVE_REQUEST_GRPC:

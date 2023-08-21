@@ -19,8 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BotUtilities {
     private static AtomicCounter counter;
@@ -93,11 +92,16 @@ public class BotUtilities {
                 BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
 
 
-                BotGRPC.BotNetworkingInformations identikit = BotGRPC.BotNetworkingInformations
+                BotGRPC.BotInformation identikit = BotGRPC.BotInformation
                         .newBuilder()
                         .setId(deadRobot.getId())
                         .setPort(deadRobot.getPort())
                         .setHost(deadRobot.getIp())
+                        .setPosition(BotGRPC.Position.newBuilder()
+                                .setX(deadRobot.getPosition().getX())
+                                .setY(deadRobot.getPosition().getY())
+                                .build()
+                        )
                         .build();
 
                 serviceStub.crashNotificationGRPC(identikit, new StreamObserver<BotGRPC.IntegerValue>() {
@@ -128,25 +132,186 @@ public class BotUtilities {
             System.exit(0);
         }
         else {
-            if(currentSize < 4) {
-                return true;
-            }
-            int[] deltas = new int[4];
-            List<List<BotIdentity>> distributionList = new ArrayList<>();
-            int objectiveDistribution = currentSize / 4;
-            System.out.println("OBJECTIVE DISTRIBUTION: " + objectiveDistribution);
-//            for (BotIdentity botIdentity : fleetSnapshot) {
-//                switch(districtCalculator(botIdentity.getPosition())) {
-//
-//                }
-//            }
-//            for(int i = 0; i < 4; i++) {
-//                deltas[i] = distribution[i] - objectiveDistribution;
-//            }
+            fleetSnapshot.add(BotThread.getInstance().getIdentity());
+            currentSize++;
 
+
+//            TODO
+//            >> FLAVOUR :: STILE-ROSSO <<
+//            CAPIRE COME FUNZIONANO LE LISTE DI LISTE E CAMBIARE QUESTO SCHIFO
+            int[] distributions = new int[4];
+            BotIdentityComparator comparator = new BotIdentityComparator();
+            Queue<BotIdentity> district1 = new PriorityQueue<>(comparator);
+            Queue<BotIdentity> district2 = new PriorityQueue<>(comparator);
+            Queue<BotIdentity> district3 = new PriorityQueue<>(comparator);
+            Queue<BotIdentity> district4 = new PriorityQueue<>(comparator);
+
+
+            for (BotIdentity botIdentity : fleetSnapshot) {
+                switch(districtCalculator(botIdentity.getPosition())) {
+                    case 1:
+                        district1.add(botIdentity);
+                        distributions[0]++;
+                        break;
+                    case 2:
+                        district2.add(botIdentity);
+                        distributions[1]++;
+                        break;
+                    case 3:
+                        district3.add(botIdentity);
+                        distributions[2]++;
+                        break;
+                    case 4:
+                        district4.add(botIdentity);
+                        distributions[3]++;
+                        break;
+                }
+            }
+
+
+            System.out.println("SITUAZIONE INIZIALE");
+            for(int i = 0; i < 4; i++) {
+                System.out.println("District " + (i + 1) + " -> " + distributions[i]);
+            }
+
+            System.out.println("DISTRICT 1");
+            district1.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
+
+            System.out.println("DISTRICT 2");
+            district2.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
+
+            System.out.println("DISTRICT 3");
+            district3.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
+
+            System.out.println("DISTRICT 4");
+            district4.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
+
+            int limit = (currentSize / 4) + (currentSize % 4);
+            int reducedLimit = (currentSize / 4);
+
+            System.out.println("LIMIT -> " + limit);
+
+//            TODO
+//            >> FLAVOUR :: DEBUGGING-ROSSO <<
+//            CAPIRE L'ORIGINE DEL CICLO INFINITO CHE SI VERIFICA QUANDO AL FOR VIENE SOSTITUITO UN PIÙ SEMPLICE WHILE E
+//            RISOLVERE IL PROBLEMA
+            for(int i = 0; i < 4; i++) {
+                for(int j = 0; j < 5 && distributions[i] > limit; j++) {
+                    moveBotsAround(district1, district2, district3, district4, distributions, limit, i, reducedLimit);
+                    System.out.println(j);
+                }
+            }
+
+            System.out.println("TERMINE DEL PROCESSO");
+
+            for(int i = 0; i < 4; i++) {
+                System.out.println("District " + (i + 1) + " -> " + distributions[i]);
+            }
+
+            System.out.println("DISTRICT 1");
+            district1.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
+
+            System.out.println("DISTRICT 2");
+            district2.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
+
+            System.out.println("DISTRICT 3");
+            district3.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
+
+            System.out.println("DISTRICT 4");
+            district4.forEach(botIdentity -> {
+                System.out.println(botIdentity);
+            });
         }
 
         return true;
+    }
+
+    private static void moveBotsAround(Queue<BotIdentity> district1, Queue<BotIdentity> district2,
+                                       Queue<BotIdentity> district3, Queue<BotIdentity> district4,
+                                       int[] distributions, int limit, int overpopulatedDistrict, int reducedLimit) {
+
+        System.out.println("MOVING SOME ROBOTS AWAY FROM " + (overpopulatedDistrict + 1));
+
+        int receivingDistrict = -1;
+        int min = distributions[0];
+        for(int i = 0; i < 4; i++) {
+            System.out.println("Possible district -> "  + i + " its distribution: " + distributions[i]);
+            if(distributions[i] < min && distributions[i] < limit) {
+                receivingDistrict = i;
+                min = distributions[i];
+            }
+        }
+
+        if(receivingDistrict == -1) {
+            return;
+        }
+
+        System.out.println("RECEIVING DISTRICT -> " + (receivingDistrict + 1));
+
+        while(distributions[receivingDistrict] < reducedLimit && distributions[overpopulatedDistrict] > limit) {
+
+            BotIdentity botToBeMoved = null;
+
+            switch(overpopulatedDistrict) {
+                case 0:
+                    botToBeMoved = district1.poll();
+                    System.out.println("Moving " + botToBeMoved + " to " + (receivingDistrict + 1));
+                    break;
+                case 1:
+                    botToBeMoved = district2.poll();
+                    System.out.println("Moving " + botToBeMoved + " to " + receivingDistrict);
+                    break;
+                case 2:
+                    botToBeMoved = district3.poll();
+                    System.out.println("Moving " + botToBeMoved + " to " + receivingDistrict);
+                    break;
+                case 3:
+                    botToBeMoved = district4.poll();
+                    System.out.println("Moving " + botToBeMoved + " to " + receivingDistrict);
+                    break;
+            }
+
+            Random random = new Random();
+
+            switch(receivingDistrict) {
+                case -1:
+                    Logger.red("Something has gone terribly wrong...");
+                    break;
+                case 0:
+                    botToBeMoved.setPosition(new Position(random.nextInt(5), random.nextInt(5)));
+                    district1.add(botToBeMoved);
+                    break;
+                case 1:
+                    botToBeMoved.setPosition(new Position(random.nextInt(5) + 5, random.nextInt(5)));
+                    district2.add(botToBeMoved);
+                    break;
+                case 2:
+                    botToBeMoved.setPosition(new Position(random.nextInt(5) + 5, random.nextInt(5) + 5));
+                    district3.add(botToBeMoved);
+                    break;
+                case 3:
+                    botToBeMoved.setPosition(new Position(random.nextInt(5), random.nextInt(5) + 5));
+                    district4.add(botToBeMoved);
+                    break;
+            }
+
+            distributions[overpopulatedDistrict]--;
+            distributions[receivingDistrict]++;
+        }
     }
 
     private static void checkCounter(boolean quitting) {
@@ -211,6 +376,8 @@ public class BotUtilities {
         connection.disconnect();
     }
 
+//    TODO
+//    CAPIRE PERCHÈ A VOLTE QUANDO ARRIVANO LE RICHIESTE PER IL CALCOLO DEL DISTRETTO LA POSIZIONE STESSA È NULL
     public static int districtCalculator(Position position) {
         if(position.getY() < 5) {
             if(position.getX() < 5) {

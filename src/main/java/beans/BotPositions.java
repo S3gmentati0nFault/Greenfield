@@ -53,9 +53,16 @@ public class BotPositions {
     public Position joinBot(BotIdentity identity) {
         Random random = new Random();
 
+//        Position pos = new Position(
+//            random.nextInt(9),
+//                random.nextInt(9)
+//        );
+//        TODO
+//        >> FLAVOUR :: PULIZIA-ROSSO <<
+//        RIMUOVERE QUESTA DEFINIZIONE INSTABILE PER LA POSIZIONE
         Position pos = new Position(
-            random.nextInt(9),
-                random.nextInt(9)
+            random.nextInt(5),
+                random.nextInt(5)
         );
 
         System.out.println(pos);

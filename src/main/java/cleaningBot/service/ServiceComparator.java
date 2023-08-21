@@ -25,8 +25,6 @@ public class ServiceComparator implements Comparator<WaitingThread> {
      */
     @Override
     public int compare(WaitingThread o1, WaitingThread o2) {
-
-
             if(o1.getTimestamp() > o2.getTimestamp()){
                 return 1;
             }

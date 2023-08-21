@@ -1542,8 +1542,8 @@ public final class BotGRPC {
 
   }
 
-  public interface BotNetworkingInformationsOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:services.grpc.BotNetworkingInformations)
+  public interface BotInformationOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:services.grpc.BotInformation)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1569,20 +1569,35 @@ public final class BotGRPC {
      */
     com.google.protobuf.ByteString
         getHostBytes();
+
+    /**
+     * <code>.services.grpc.Position position = 4;</code>
+     * @return Whether the position field is set.
+     */
+    boolean hasPosition();
+    /**
+     * <code>.services.grpc.Position position = 4;</code>
+     * @return The position.
+     */
+    services.grpc.BotGRPC.Position getPosition();
+    /**
+     * <code>.services.grpc.Position position = 4;</code>
+     */
+    services.grpc.BotGRPC.PositionOrBuilder getPositionOrBuilder();
   }
   /**
-   * Protobuf type {@code services.grpc.BotNetworkingInformations}
+   * Protobuf type {@code services.grpc.BotInformation}
    */
-  public  static final class BotNetworkingInformations extends
+  public  static final class BotInformation extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:services.grpc.BotNetworkingInformations)
-      BotNetworkingInformationsOrBuilder {
+      // @@protoc_insertion_point(message_implements:services.grpc.BotInformation)
+      BotInformationOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use BotNetworkingInformations.newBuilder() to construct.
-    private BotNetworkingInformations(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use BotInformation.newBuilder() to construct.
+    private BotInformation(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private BotNetworkingInformations() {
+    private BotInformation() {
       host_ = "";
     }
 
@@ -1590,7 +1605,7 @@ public final class BotGRPC {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new BotNetworkingInformations();
+      return new BotInformation();
     }
 
     @java.lang.Override
@@ -1598,7 +1613,7 @@ public final class BotGRPC {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private BotNetworkingInformations(
+    private BotInformation(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1632,6 +1647,19 @@ public final class BotGRPC {
               host_ = s;
               break;
             }
+            case 34: {
+              services.grpc.BotGRPC.Position.Builder subBuilder = null;
+              if (position_ != null) {
+                subBuilder = position_.toBuilder();
+              }
+              position_ = input.readMessage(services.grpc.BotGRPC.Position.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(position_);
+                position_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -1653,15 +1681,15 @@ public final class BotGRPC {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return services.grpc.BotGRPC.internal_static_services_grpc_BotNetworkingInformations_descriptor;
+      return services.grpc.BotGRPC.internal_static_services_grpc_BotInformation_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return services.grpc.BotGRPC.internal_static_services_grpc_BotNetworkingInformations_fieldAccessorTable
+      return services.grpc.BotGRPC.internal_static_services_grpc_BotInformation_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              services.grpc.BotGRPC.BotNetworkingInformations.class, services.grpc.BotGRPC.BotNetworkingInformations.Builder.class);
+              services.grpc.BotGRPC.BotInformation.class, services.grpc.BotGRPC.BotInformation.Builder.class);
     }
 
     public static final int ID_FIELD_NUMBER = 1;
@@ -1720,6 +1748,29 @@ public final class BotGRPC {
       }
     }
 
+    public static final int POSITION_FIELD_NUMBER = 4;
+    private services.grpc.BotGRPC.Position position_;
+    /**
+     * <code>.services.grpc.Position position = 4;</code>
+     * @return Whether the position field is set.
+     */
+    public boolean hasPosition() {
+      return position_ != null;
+    }
+    /**
+     * <code>.services.grpc.Position position = 4;</code>
+     * @return The position.
+     */
+    public services.grpc.BotGRPC.Position getPosition() {
+      return position_ == null ? services.grpc.BotGRPC.Position.getDefaultInstance() : position_;
+    }
+    /**
+     * <code>.services.grpc.Position position = 4;</code>
+     */
+    public services.grpc.BotGRPC.PositionOrBuilder getPositionOrBuilder() {
+      return getPosition();
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -1743,6 +1794,9 @@ public final class BotGRPC {
       if (!getHostBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, host_);
       }
+      if (position_ != null) {
+        output.writeMessage(4, getPosition());
+      }
       unknownFields.writeTo(output);
     }
 
@@ -1763,6 +1817,10 @@ public final class BotGRPC {
       if (!getHostBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, host_);
       }
+      if (position_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, getPosition());
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -1773,10 +1831,10 @@ public final class BotGRPC {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof services.grpc.BotGRPC.BotNetworkingInformations)) {
+      if (!(obj instanceof services.grpc.BotGRPC.BotInformation)) {
         return super.equals(obj);
       }
-      services.grpc.BotGRPC.BotNetworkingInformations other = (services.grpc.BotGRPC.BotNetworkingInformations) obj;
+      services.grpc.BotGRPC.BotInformation other = (services.grpc.BotGRPC.BotInformation) obj;
 
       if (getId()
           != other.getId()) return false;
@@ -1784,6 +1842,11 @@ public final class BotGRPC {
           != other.getPort()) return false;
       if (!getHost()
           .equals(other.getHost())) return false;
+      if (hasPosition() != other.hasPosition()) return false;
+      if (hasPosition()) {
+        if (!getPosition()
+            .equals(other.getPosition())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -1801,74 +1864,78 @@ public final class BotGRPC {
       hash = (53 * hash) + getPort();
       hash = (37 * hash) + HOST_FIELD_NUMBER;
       hash = (53 * hash) + getHost().hashCode();
+      if (hasPosition()) {
+        hash = (37 * hash) + POSITION_FIELD_NUMBER;
+        hash = (53 * hash) + getPosition().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(byte[] data)
+    public static services.grpc.BotGRPC.BotInformation parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(java.io.InputStream input)
+    public static services.grpc.BotGRPC.BotInformation parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseDelimitedFrom(java.io.InputStream input)
+    public static services.grpc.BotGRPC.BotInformation parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseDelimitedFrom(
+    public static services.grpc.BotGRPC.BotInformation parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static services.grpc.BotGRPC.BotNetworkingInformations parseFrom(
+    public static services.grpc.BotGRPC.BotInformation parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1881,7 +1948,7 @@ public final class BotGRPC {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(services.grpc.BotGRPC.BotNetworkingInformations prototype) {
+    public static Builder newBuilder(services.grpc.BotGRPC.BotInformation prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -1897,26 +1964,26 @@ public final class BotGRPC {
       return builder;
     }
     /**
-     * Protobuf type {@code services.grpc.BotNetworkingInformations}
+     * Protobuf type {@code services.grpc.BotInformation}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:services.grpc.BotNetworkingInformations)
-        services.grpc.BotGRPC.BotNetworkingInformationsOrBuilder {
+        // @@protoc_insertion_point(builder_implements:services.grpc.BotInformation)
+        services.grpc.BotGRPC.BotInformationOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return services.grpc.BotGRPC.internal_static_services_grpc_BotNetworkingInformations_descriptor;
+        return services.grpc.BotGRPC.internal_static_services_grpc_BotInformation_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return services.grpc.BotGRPC.internal_static_services_grpc_BotNetworkingInformations_fieldAccessorTable
+        return services.grpc.BotGRPC.internal_static_services_grpc_BotInformation_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                services.grpc.BotGRPC.BotNetworkingInformations.class, services.grpc.BotGRPC.BotNetworkingInformations.Builder.class);
+                services.grpc.BotGRPC.BotInformation.class, services.grpc.BotGRPC.BotInformation.Builder.class);
       }
 
-      // Construct using services.grpc.BotGRPC.BotNetworkingInformations.newBuilder()
+      // Construct using services.grpc.BotGRPC.BotInformation.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1940,23 +2007,29 @@ public final class BotGRPC {
 
         host_ = "";
 
+        if (positionBuilder_ == null) {
+          position_ = null;
+        } else {
+          position_ = null;
+          positionBuilder_ = null;
+        }
         return this;
       }
 
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return services.grpc.BotGRPC.internal_static_services_grpc_BotNetworkingInformations_descriptor;
+        return services.grpc.BotGRPC.internal_static_services_grpc_BotInformation_descriptor;
       }
 
       @java.lang.Override
-      public services.grpc.BotGRPC.BotNetworkingInformations getDefaultInstanceForType() {
-        return services.grpc.BotGRPC.BotNetworkingInformations.getDefaultInstance();
+      public services.grpc.BotGRPC.BotInformation getDefaultInstanceForType() {
+        return services.grpc.BotGRPC.BotInformation.getDefaultInstance();
       }
 
       @java.lang.Override
-      public services.grpc.BotGRPC.BotNetworkingInformations build() {
-        services.grpc.BotGRPC.BotNetworkingInformations result = buildPartial();
+      public services.grpc.BotGRPC.BotInformation build() {
+        services.grpc.BotGRPC.BotInformation result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1964,11 +2037,16 @@ public final class BotGRPC {
       }
 
       @java.lang.Override
-      public services.grpc.BotGRPC.BotNetworkingInformations buildPartial() {
-        services.grpc.BotGRPC.BotNetworkingInformations result = new services.grpc.BotGRPC.BotNetworkingInformations(this);
+      public services.grpc.BotGRPC.BotInformation buildPartial() {
+        services.grpc.BotGRPC.BotInformation result = new services.grpc.BotGRPC.BotInformation(this);
         result.id_ = id_;
         result.port_ = port_;
         result.host_ = host_;
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
+        }
         onBuilt();
         return result;
       }
@@ -2007,16 +2085,16 @@ public final class BotGRPC {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof services.grpc.BotGRPC.BotNetworkingInformations) {
-          return mergeFrom((services.grpc.BotGRPC.BotNetworkingInformations)other);
+        if (other instanceof services.grpc.BotGRPC.BotInformation) {
+          return mergeFrom((services.grpc.BotGRPC.BotInformation)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(services.grpc.BotGRPC.BotNetworkingInformations other) {
-        if (other == services.grpc.BotGRPC.BotNetworkingInformations.getDefaultInstance()) return this;
+      public Builder mergeFrom(services.grpc.BotGRPC.BotInformation other) {
+        if (other == services.grpc.BotGRPC.BotInformation.getDefaultInstance()) return this;
         if (other.getId() != 0) {
           setId(other.getId());
         }
@@ -2026,6 +2104,9 @@ public final class BotGRPC {
         if (!other.getHost().isEmpty()) {
           host_ = other.host_;
           onChanged();
+        }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2042,11 +2123,11 @@ public final class BotGRPC {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        services.grpc.BotGRPC.BotNetworkingInformations parsedMessage = null;
+        services.grpc.BotGRPC.BotInformation parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (services.grpc.BotGRPC.BotNetworkingInformations) e.getUnfinishedMessage();
+          parsedMessage = (services.grpc.BotGRPC.BotInformation) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -2191,6 +2272,125 @@ public final class BotGRPC {
         onChanged();
         return this;
       }
+
+      private services.grpc.BotGRPC.Position position_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          services.grpc.BotGRPC.Position, services.grpc.BotGRPC.Position.Builder, services.grpc.BotGRPC.PositionOrBuilder> positionBuilder_;
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       * @return Whether the position field is set.
+       */
+      public boolean hasPosition() {
+        return positionBuilder_ != null || position_ != null;
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       * @return The position.
+       */
+      public services.grpc.BotGRPC.Position getPosition() {
+        if (positionBuilder_ == null) {
+          return position_ == null ? services.grpc.BotGRPC.Position.getDefaultInstance() : position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       */
+      public Builder setPosition(services.grpc.BotGRPC.Position value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       */
+      public Builder setPosition(
+          services.grpc.BotGRPC.Position.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       */
+      public Builder mergePosition(services.grpc.BotGRPC.Position value) {
+        if (positionBuilder_ == null) {
+          if (position_ != null) {
+            position_ =
+              services.grpc.BotGRPC.Position.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       */
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = null;
+          onChanged();
+        } else {
+          position_ = null;
+          positionBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       */
+      public services.grpc.BotGRPC.Position.Builder getPositionBuilder() {
+        
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       */
+      public services.grpc.BotGRPC.PositionOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_ == null ?
+              services.grpc.BotGRPC.Position.getDefaultInstance() : position_;
+        }
+      }
+      /**
+       * <code>.services.grpc.Position position = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          services.grpc.BotGRPC.Position, services.grpc.BotGRPC.Position.Builder, services.grpc.BotGRPC.PositionOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              services.grpc.BotGRPC.Position, services.grpc.BotGRPC.Position.Builder, services.grpc.BotGRPC.PositionOrBuilder>(
+                  getPosition(),
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2204,41 +2404,41 @@ public final class BotGRPC {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:services.grpc.BotNetworkingInformations)
+      // @@protoc_insertion_point(builder_scope:services.grpc.BotInformation)
     }
 
-    // @@protoc_insertion_point(class_scope:services.grpc.BotNetworkingInformations)
-    private static final services.grpc.BotGRPC.BotNetworkingInformations DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:services.grpc.BotInformation)
+    private static final services.grpc.BotGRPC.BotInformation DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new services.grpc.BotGRPC.BotNetworkingInformations();
+      DEFAULT_INSTANCE = new services.grpc.BotGRPC.BotInformation();
     }
 
-    public static services.grpc.BotGRPC.BotNetworkingInformations getDefaultInstance() {
+    public static services.grpc.BotGRPC.BotInformation getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<BotNetworkingInformations>
-        PARSER = new com.google.protobuf.AbstractParser<BotNetworkingInformations>() {
+    private static final com.google.protobuf.Parser<BotInformation>
+        PARSER = new com.google.protobuf.AbstractParser<BotInformation>() {
       @java.lang.Override
-      public BotNetworkingInformations parsePartialFrom(
+      public BotInformation parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new BotNetworkingInformations(input, extensionRegistry);
+        return new BotInformation(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<BotNetworkingInformations> parser() {
+    public static com.google.protobuf.Parser<BotInformation> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<BotNetworkingInformations> getParserForType() {
+    public com.google.protobuf.Parser<BotInformation> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public services.grpc.BotGRPC.BotNetworkingInformations getDefaultInstanceForType() {
+    public services.grpc.BotGRPC.BotInformation getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2814,10 +3014,10 @@ public final class BotGRPC {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_services_grpc_IntegerValue_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_services_grpc_BotNetworkingInformations_descriptor;
+    internal_static_services_grpc_BotInformation_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_services_grpc_BotNetworkingInformations_fieldAccessorTable;
+      internal_static_services_grpc_BotInformation_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_services_grpc_Position_descriptor;
   private static final 
@@ -2835,19 +3035,19 @@ public final class BotGRPC {
       "\n\rBotGRPC.proto\022\rservices.grpc\"+\n\nIdenti" +
       "fier\022\021\n\ttimestamp\030\001 \001(\003\022\n\n\002id\030\002 \001(\005\"\036\n\017A" +
       "cknowledgement\022\013\n\003ack\030\001 \001(\010\"\035\n\014IntegerVa" +
-      "lue\022\r\n\005value\030\001 \001(\005\"C\n\031BotNetworkingInfor" +
-      "mations\022\n\n\002id\030\001 \001(\005\022\014\n\004port\030\002 \001(\005\022\014\n\004hos" +
-      "t\030\003 \001(\t\" \n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(" +
-      "\0052\363\002\n\013BotServices\022U\n\026maintenanceRequestG" +
-      "RPC\022\031.services.grpc.Identifier\032\036.service" +
-      "s.grpc.Acknowledgement\"\000\022]\n\017joinRequestG" +
-      "RPC\022(.services.grpc.BotNetworkingInforma" +
-      "tions\032\036.services.grpc.Acknowledgement\"\000\022" +
-      "`\n\025crashNotificationGRPC\022(.services.grpc" +
-      ".BotNetworkingInformations\032\033.services.gr" +
-      "pc.IntegerValue\"\000\022L\n\017moveRequestGRPC\022\027.s" +
-      "ervices.grpc.Position\032\036.services.grpc.Ac" +
-      "knowledgement\"\000b\006proto3"
+      "lue\022\r\n\005value\030\001 \001(\005\"c\n\016BotInformation\022\n\n\002" +
+      "id\030\001 \001(\005\022\014\n\004port\030\002 \001(\005\022\014\n\004host\030\003 \001(\t\022)\n\010" +
+      "position\030\004 \001(\0132\027.services.grpc.Position\"" +
+      " \n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\0052\335\002\n\013Bo" +
+      "tServices\022U\n\026maintenanceRequestGRPC\022\031.se" +
+      "rvices.grpc.Identifier\032\036.services.grpc.A" +
+      "cknowledgement\"\000\022R\n\017joinRequestGRPC\022\035.se" +
+      "rvices.grpc.BotInformation\032\036.services.gr" +
+      "pc.Acknowledgement\"\000\022U\n\025crashNotificatio" +
+      "nGRPC\022\035.services.grpc.BotInformation\032\033.s" +
+      "ervices.grpc.IntegerValue\"\000\022L\n\017moveReque" +
+      "stGRPC\022\027.services.grpc.Position\032\036.servic" +
+      "es.grpc.Acknowledgement\"\000b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2871,12 +3071,12 @@ public final class BotGRPC {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_services_grpc_IntegerValue_descriptor,
         new java.lang.String[] { "Value", });
-    internal_static_services_grpc_BotNetworkingInformations_descriptor =
+    internal_static_services_grpc_BotInformation_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_services_grpc_BotNetworkingInformations_fieldAccessorTable = new
+    internal_static_services_grpc_BotInformation_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_services_grpc_BotNetworkingInformations_descriptor,
-        new java.lang.String[] { "Id", "Port", "Host", });
+        internal_static_services_grpc_BotInformation_descriptor,
+        new java.lang.String[] { "Id", "Port", "Host", "Position", });
     internal_static_services_grpc_Position_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_services_grpc_Position_fieldAccessorTable = new

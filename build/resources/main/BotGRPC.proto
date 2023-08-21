@@ -3,8 +3,8 @@ package services.grpc;
 
 service BotServices {
   rpc maintenanceRequestGRPC(Identifier) returns (Acknowledgement) {}
-  rpc joinRequestGRPC(BotNetworkingInformations) returns (Acknowledgement) {}
-  rpc crashNotificationGRPC(BotNetworkingInformations) returns (IntegerValue) {}
+  rpc joinRequestGRPC(BotInformation) returns (Acknowledgement) {}
+  rpc crashNotificationGRPC(BotInformation) returns (IntegerValue) {}
   rpc moveRequestGRPC(Position) returns (Acknowledgement) {}
 }
 
@@ -21,10 +21,11 @@ message IntegerValue {
   int32 value = 1;
 }
 
-message BotNetworkingInformations {
+message BotInformation {
   int32 id = 1;
   int32 port = 2;
   string host = 3;
+  Position position = 4;
 }
 
 message Position {

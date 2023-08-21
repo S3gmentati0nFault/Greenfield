@@ -36,6 +36,13 @@ public class BotIdentity {
         this.ip = ip;
     }
 
+    public BotIdentity(int id, int port, String ip, Position position) {
+        this.id = id;
+        this.port = port;
+        this.ip = ip;
+        this.position = position;
+    }
+
     /**
      * Id getter.
      */
@@ -100,6 +107,7 @@ public class BotIdentity {
                 "id=" + id +
                 ", port=" + port +
                 ", ip='" + ip + '\'' +
+                ", position=" + position +
                 '}';
     }
 }

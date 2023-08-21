@@ -42,7 +42,7 @@ public class BotThread extends Thread{
     private InputThread inputThread;
     private static BotThread instance;
 //    TODO
-//    >> FLAVOUR :: MODIFICA GIALLA <<
+//    >> FLAVOUR :: MODIFICA-GIALLO <<
 //    FARE ALTRO TESTING E, SE SI DOVESSE DIMOSTRARE INUTILE, RIMUOVERE LA MENZIONE ALLA VARIABILE COUNTER DAL FILE. PER
 //    I TEST CONDOTTI FINO AD ORA SEMBRA CHE PROCEDA TUTTO LISCIO
 //    private AtomicCounter counter;
@@ -115,6 +115,14 @@ public class BotThread extends Thread{
     private synchronized boolean startNewBot() {
         ObjectMapper mapper = new ObjectMapper();
 
+//        TODO
+//        >> FLAVOUR :: FUNZIONALITÀ-VERDE <<
+//        SE IL ROBOT NON È STATO IN GRADO DI AVVIARSI, PROVARE UN'ALTRA VOLTA, SE IL PROCESSO FALLISCE CHIUDERE IL
+//        PROGRAMMA
+
+//        TODO
+//        >> FLAVOUR :: FUNZIONALITÀ-VERDE <<
+//        SE IL ROBOT HA LO STESSO ID DI UN ALTRO ROBOT NEL SISTEMA, CAMBIARLO UNA VOLTA CHE ARRIVA LA RISPOSTA DAL MASTER
         HttpURLConnection connection =
                 BotUtilities.buildConnection("POST", "http://" +
                         Variables.HOST+":" + Variables.PORT + "/admin/join");
@@ -177,7 +185,7 @@ public class BotThread extends Thread{
         otherBots.removeElement(identity);
 
 //      TODO
-//      >> FLAVOUR :: DEBUGGING ARANCIONE <<
+//      >> FLAVOUR :: DEBUGGING-ARANCIONE <<
 //      CAPIRE PERCHÉ MI RESTITUISCE ERRORE DI CONCURRENT MODIFICATION QUANDO AGGIUNGO UN TIMER QUI SOTTO E RIVEDERE
 //      COME FUNZIONA IL TUTTO
         Logger.cyan("Letting my presence known");
@@ -200,11 +208,16 @@ public class BotThread extends Thread{
 
                 openComms.addPair(botIdentity, new CommPair(channel, serviceStub));
 
-                BotGRPC.BotNetworkingInformations identikit = BotGRPC.BotNetworkingInformations
+                BotGRPC.BotInformation identikit = BotGRPC.BotInformation
                         .newBuilder()
                         .setId(identity.getId())
                         .setPort(identity.getPort())
                         .setHost(identity.getIp())
+                        .setPosition(BotGRPC.Position.newBuilder()
+                                .setX(identity.getPosition().getX())
+                                .setY(identity.getPosition().getY())
+                                .build()
+                        )
                         .build();
 
                 serviceStub.joinRequestGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
