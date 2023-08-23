@@ -5,7 +5,8 @@ service BotServices {
   rpc maintenanceRequestGRPC(Identifier) returns (Acknowledgement) {}
   rpc joinRequestGRPC(BotInformation) returns (Acknowledgement) {}
   rpc crashNotificationGRPC(BotInformation) returns (IntegerValue) {}
-  rpc moveRequestGRPC(Position) returns (Acknowledgement) {}
+  rpc moveRequestGRPC(IntegerValue) returns (Acknowledgement) {}
+  rpc positionModificationRequestGRPC(BotInformation) returns (Acknowledgement) {}
 }
 
 message Identifier {

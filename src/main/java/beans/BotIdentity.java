@@ -23,6 +23,10 @@ public class BotIdentity {
      */
     public BotIdentity() {}
 
+    public BotIdentity(int id) {
+        this.id = id;
+    }
+
     /**
      * The bot identity constructor.
      * @param id An integer value, there are no equal ids in the system.
@@ -48,6 +52,10 @@ public class BotIdentity {
      */
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

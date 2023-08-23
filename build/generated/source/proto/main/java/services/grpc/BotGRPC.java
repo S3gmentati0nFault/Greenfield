@@ -3038,16 +3038,19 @@ public final class BotGRPC {
       "lue\022\r\n\005value\030\001 \001(\005\"c\n\016BotInformation\022\n\n\002" +
       "id\030\001 \001(\005\022\014\n\004port\030\002 \001(\005\022\014\n\004host\030\003 \001(\t\022)\n\010" +
       "position\030\004 \001(\0132\027.services.grpc.Position\"" +
-      " \n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\0052\335\002\n\013Bo" +
+      " \n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\0052\305\003\n\013Bo" +
       "tServices\022U\n\026maintenanceRequestGRPC\022\031.se" +
       "rvices.grpc.Identifier\032\036.services.grpc.A" +
       "cknowledgement\"\000\022R\n\017joinRequestGRPC\022\035.se" +
       "rvices.grpc.BotInformation\032\036.services.gr" +
       "pc.Acknowledgement\"\000\022U\n\025crashNotificatio" +
       "nGRPC\022\035.services.grpc.BotInformation\032\033.s" +
-      "ervices.grpc.IntegerValue\"\000\022L\n\017moveReque" +
-      "stGRPC\022\027.services.grpc.Position\032\036.servic" +
-      "es.grpc.Acknowledgement\"\000b\006proto3"
+      "ervices.grpc.IntegerValue\"\000\022P\n\017moveReque" +
+      "stGRPC\022\033.services.grpc.IntegerValue\032\036.se" +
+      "rvices.grpc.Acknowledgement\"\000\022b\n\037positio" +
+      "nModificationRequestGRPC\022\035.services.grpc" +
+      ".BotInformation\032\036.services.grpc.Acknowle" +
+      "dgement\"\000b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

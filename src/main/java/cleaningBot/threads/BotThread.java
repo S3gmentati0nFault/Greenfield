@@ -1,7 +1,6 @@
 package cleaningBot.threads;
 
 import cleaningBot.CommPair;
-import extra.AtomicCounter.AtomicCounter;
 import extra.ThreadSafeStructures.ThreadSafeArrayList;
 import extra.ThreadSafeStructures.ThreadSafeHashMap;
 import utilities.Variables;
@@ -118,11 +117,6 @@ public class BotThread extends Thread{
 
 //        TODO
 //        >> FLAVOUR :: FUNZIONALITÀ-VERDE <<
-//        SE IL ROBOT NON È STATO IN GRADO DI AVVIARSI, PROVARE UN'ALTRA VOLTA, SE IL PROCESSO FALLISCE CHIUDERE IL
-//        PROGRAMMA
-
-//        TODO
-//        >> FLAVOUR :: FUNZIONALITÀ-VERDE <<
 //        SE IL ROBOT HA LO STESSO ID DI UN ALTRO ROBOT NEL SISTEMA, CAMBIARLO UNA VOLTA CHE ARRIVA LA RISPOSTA DAL MASTER
         HttpURLConnection connection =
                 BotUtilities.buildConnection("POST", "http://" +
@@ -167,7 +161,7 @@ public class BotThread extends Thread{
         try{
             br = new BufferedReader(
                     new InputStreamReader(connection.getInputStream(), "utf-8"));
-        }catch(IOException e){
+        } catch(IOException e) {
             Logger.red("It was not possible to initialize the BufferedReader");
             return false;
         }
@@ -176,7 +170,7 @@ public class BotThread extends Thread{
             String[] responseLine = br.readLine().split("-");
             identity.setPosition(new ObjectMapper().readValue(responseLine[0], Position.class));
             List<BotIdentity> robots = new ObjectMapper().readValue(responseLine[1], new TypeReference<List<BotIdentity>>(){});
-            otherBots.getArrayList().addAll(robots);
+            otherBots.addAll(robots);
         } catch (IOException e) {
             Logger.red("It was not possible to retrieve the response from the server");
             return false;
@@ -265,6 +259,10 @@ public class BotThread extends Thread{
 //        }
 //    }
 
+//    TODO
+//    >> FLAVOUR :: DEBUGGING-ROSSO <<
+//    FIXARE L'ACCESSO ALLA STRUTTURA DATI DI MODO DA CONSENTIRE LE MODIFICHE NECESSARIE E RESTITUIRE UNA COPIA DELLA STRUTTURA
+//    E NON UN REFERENCE ALLA STRUTTURA STESSA
     /**
      * Getter for the bots in the system.
      */
@@ -303,6 +301,14 @@ public class BotThread extends Thread{
         return botServices;
     }
 
+    public int getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(int district) {
+        this.district = district;
+    }
+
     /**
      * Setter for the timestamp of the latest request
      */
@@ -317,6 +323,10 @@ public class BotThread extends Thread{
         for (BotIdentity botIdentity : otherBots.getArrayList()) {
             System.out.println(botIdentity);
         }
+    }
+
+    public void updatePosition(BotIdentity movedBot) {
+        otherBots.swap(new BotIdentity(movedBot.getId()), movedBot);
     }
 
     public void printOpenComms() {
@@ -347,5 +357,64 @@ public class BotThread extends Thread{
     public void newCommunicationChannel(BotIdentity destination, ManagedChannel channel, BotServicesGrpc.BotServicesStub stub) {
         CommPair commPair = new CommPair(channel, stub);
         openComms.addPair(destination, commPair);
+    }
+
+    public void changeMyPosition(int district) {
+        Position newPosition = BotUtilities.positionCalculator(district);
+        identity.setPosition(newPosition);
+        setDistrict(district);
+        System.out.println("I'VE BEEN MOVED TO " + district + " MY NEW POSITION IS " + newPosition);
+
+        List<BotIdentity> fleetSnapshot = otherBots.getArrayList();
+
+        for (BotIdentity botIdentity : fleetSnapshot) {
+            System.out.println(botIdentity);
+        }
+
+        for (BotIdentity botIdentity : fleetSnapshot) {
+
+            ManagedChannel channel;
+            BotServicesGrpc.BotServicesStub serviceStub;
+
+            CommPair communicationPair = openComms.getValue(botIdentity);
+            if(communicationPair == null) {
+                channel = ManagedChannelBuilder
+                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
+                        .usePlaintext()
+                        .build();
+
+                serviceStub = BotServicesGrpc.newStub(channel);
+                newCommunicationChannel(botIdentity, channel, serviceStub);
+            }
+            else {
+                channel = communicationPair.getManagedChannel();
+                serviceStub = communicationPair.getCommunicationStub();
+            }
+            BotGRPC.BotInformation botInfo = BotGRPC.BotInformation.newBuilder()
+                    .setId(identity.getId())
+                    .setHost(identity.getIp())
+                    .setPort(identity.getPort())
+                    .setPosition(BotGRPC.Position.newBuilder()
+                            .setX(newPosition.getX())
+                            .setY(newPosition.getY())
+                            .build())
+                    .build();
+            serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
+                @Override
+                public void onNext(BotGRPC.Acknowledgement value) {
+
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Logger.red("Something has gone wrong during the update process");
+                }
+
+                @Override
+                public void onCompleted() {
+
+                }
+            });
+        }
     }
 }

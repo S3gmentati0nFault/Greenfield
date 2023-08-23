@@ -1,6 +1,7 @@
 package cleaningBot.service;
 
 import beans.BotIdentity;
+import cleaningBot.BotUtilities;
 import cleaningBot.Position;
 import cleaningBot.threads.BotThread;
 import extra.Logger.Logger;
@@ -11,6 +12,7 @@ import utilities.Variables;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
@@ -126,6 +128,32 @@ public class BotServices extends BotServicesImplBase {
         responseObserver.onCompleted();
     }
 
+    public synchronized void moveRequestGRPC(BotGRPC.IntegerValue request,
+                                             StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
+        Logger.purple("moveRequestGRPC");
+
+        if(botThread.getDistrict() == request.getValue()) {
+            System.out.println("I'm already in that district");
+            responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
+            responseObserver.onCompleted();
+        }
+        else {
+            botThread.changeMyPosition(request.getValue());
+            responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
+            responseObserver.onCompleted();
+        }
+    }
+
+    public synchronized void positionModificationRequestGRPC(BotGRPC.BotInformation request,
+                                                             StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
+        Logger.purple("positionModificationRequestGRPC");
+
+        botThread.updatePosition(new BotIdentity(request.getId(), request.getPort(), "localhost",
+                new Position(request.getPosition().getX(), request.getPosition().getY())));
+        responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
+        responseObserver.onCompleted();
+    }
+
     /**
      * Method that allows the local thread to clean up the waiting queue once access to the
      * Mutual-exclusion area is done.
@@ -150,10 +178,4 @@ public class BotServices extends BotServicesImplBase {
         waitingInstances.clear();
     }
 
-    /**
-     * Getter for the botThread variable.
-     */
-    public BotThread getBotThread() {
-        return botThread;
-    }
 }

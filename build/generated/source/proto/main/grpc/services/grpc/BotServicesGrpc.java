@@ -120,27 +120,27 @@ public final class BotServicesGrpc {
     return getCrashNotificationGRPCMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<services.grpc.BotGRPC.Position,
+  private static volatile io.grpc.MethodDescriptor<services.grpc.BotGRPC.IntegerValue,
       services.grpc.BotGRPC.Acknowledgement> getMoveRequestGRPCMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "moveRequestGRPC",
-      requestType = services.grpc.BotGRPC.Position.class,
+      requestType = services.grpc.BotGRPC.IntegerValue.class,
       responseType = services.grpc.BotGRPC.Acknowledgement.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<services.grpc.BotGRPC.Position,
+  public static io.grpc.MethodDescriptor<services.grpc.BotGRPC.IntegerValue,
       services.grpc.BotGRPC.Acknowledgement> getMoveRequestGRPCMethod() {
-    io.grpc.MethodDescriptor<services.grpc.BotGRPC.Position, services.grpc.BotGRPC.Acknowledgement> getMoveRequestGRPCMethod;
+    io.grpc.MethodDescriptor<services.grpc.BotGRPC.IntegerValue, services.grpc.BotGRPC.Acknowledgement> getMoveRequestGRPCMethod;
     if ((getMoveRequestGRPCMethod = BotServicesGrpc.getMoveRequestGRPCMethod) == null) {
       synchronized (BotServicesGrpc.class) {
         if ((getMoveRequestGRPCMethod = BotServicesGrpc.getMoveRequestGRPCMethod) == null) {
           BotServicesGrpc.getMoveRequestGRPCMethod = getMoveRequestGRPCMethod =
-              io.grpc.MethodDescriptor.<services.grpc.BotGRPC.Position, services.grpc.BotGRPC.Acknowledgement>newBuilder()
+              io.grpc.MethodDescriptor.<services.grpc.BotGRPC.IntegerValue, services.grpc.BotGRPC.Acknowledgement>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "moveRequestGRPC"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  services.grpc.BotGRPC.Position.getDefaultInstance()))
+                  services.grpc.BotGRPC.IntegerValue.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   services.grpc.BotGRPC.Acknowledgement.getDefaultInstance()))
               .setSchemaDescriptor(new BotServicesMethodDescriptorSupplier("moveRequestGRPC"))
@@ -149,6 +149,37 @@ public final class BotServicesGrpc {
       }
     }
     return getMoveRequestGRPCMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation,
+      services.grpc.BotGRPC.Acknowledgement> getPositionModificationRequestGRPCMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "positionModificationRequestGRPC",
+      requestType = services.grpc.BotGRPC.BotInformation.class,
+      responseType = services.grpc.BotGRPC.Acknowledgement.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation,
+      services.grpc.BotGRPC.Acknowledgement> getPositionModificationRequestGRPCMethod() {
+    io.grpc.MethodDescriptor<services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.Acknowledgement> getPositionModificationRequestGRPCMethod;
+    if ((getPositionModificationRequestGRPCMethod = BotServicesGrpc.getPositionModificationRequestGRPCMethod) == null) {
+      synchronized (BotServicesGrpc.class) {
+        if ((getPositionModificationRequestGRPCMethod = BotServicesGrpc.getPositionModificationRequestGRPCMethod) == null) {
+          BotServicesGrpc.getPositionModificationRequestGRPCMethod = getPositionModificationRequestGRPCMethod =
+              io.grpc.MethodDescriptor.<services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.Acknowledgement>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "positionModificationRequestGRPC"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  services.grpc.BotGRPC.BotInformation.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  services.grpc.BotGRPC.Acknowledgement.getDefaultInstance()))
+              .setSchemaDescriptor(new BotServicesMethodDescriptorSupplier("positionModificationRequestGRPC"))
+              .build();
+        }
+      }
+    }
+    return getPositionModificationRequestGRPCMethod;
   }
 
   /**
@@ -201,9 +232,16 @@ public final class BotServicesGrpc {
 
     /**
      */
-    public void moveRequestGRPC(services.grpc.BotGRPC.Position request,
+    public void moveRequestGRPC(services.grpc.BotGRPC.IntegerValue request,
         io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement> responseObserver) {
       asyncUnimplementedUnaryCall(getMoveRequestGRPCMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void positionModificationRequestGRPC(services.grpc.BotGRPC.BotInformation request,
+        io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement> responseObserver) {
+      asyncUnimplementedUnaryCall(getPositionModificationRequestGRPCMethod(), responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
@@ -233,9 +271,16 @@ public final class BotServicesGrpc {
             getMoveRequestGRPCMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                services.grpc.BotGRPC.Position,
+                services.grpc.BotGRPC.IntegerValue,
                 services.grpc.BotGRPC.Acknowledgement>(
                   this, METHODID_MOVE_REQUEST_GRPC)))
+          .addMethod(
+            getPositionModificationRequestGRPCMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                services.grpc.BotGRPC.BotInformation,
+                services.grpc.BotGRPC.Acknowledgement>(
+                  this, METHODID_POSITION_MODIFICATION_REQUEST_GRPC)))
           .build();
     }
   }
@@ -284,10 +329,18 @@ public final class BotServicesGrpc {
 
     /**
      */
-    public void moveRequestGRPC(services.grpc.BotGRPC.Position request,
+    public void moveRequestGRPC(services.grpc.BotGRPC.IntegerValue request,
         io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getMoveRequestGRPCMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void positionModificationRequestGRPC(services.grpc.BotGRPC.BotInformation request,
+        io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getPositionModificationRequestGRPCMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -332,9 +385,16 @@ public final class BotServicesGrpc {
 
     /**
      */
-    public services.grpc.BotGRPC.Acknowledgement moveRequestGRPC(services.grpc.BotGRPC.Position request) {
+    public services.grpc.BotGRPC.Acknowledgement moveRequestGRPC(services.grpc.BotGRPC.IntegerValue request) {
       return blockingUnaryCall(
           getChannel(), getMoveRequestGRPCMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public services.grpc.BotGRPC.Acknowledgement positionModificationRequestGRPC(services.grpc.BotGRPC.BotInformation request) {
+      return blockingUnaryCall(
+          getChannel(), getPositionModificationRequestGRPCMethod(), getCallOptions(), request);
     }
   }
 
@@ -383,9 +443,17 @@ public final class BotServicesGrpc {
     /**
      */
     public com.google.common.util.concurrent.ListenableFuture<services.grpc.BotGRPC.Acknowledgement> moveRequestGRPC(
-        services.grpc.BotGRPC.Position request) {
+        services.grpc.BotGRPC.IntegerValue request) {
       return futureUnaryCall(
           getChannel().newCall(getMoveRequestGRPCMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<services.grpc.BotGRPC.Acknowledgement> positionModificationRequestGRPC(
+        services.grpc.BotGRPC.BotInformation request) {
+      return futureUnaryCall(
+          getChannel().newCall(getPositionModificationRequestGRPCMethod(), getCallOptions()), request);
     }
   }
 
@@ -393,6 +461,7 @@ public final class BotServicesGrpc {
   private static final int METHODID_JOIN_REQUEST_GRPC = 1;
   private static final int METHODID_CRASH_NOTIFICATION_GRPC = 2;
   private static final int METHODID_MOVE_REQUEST_GRPC = 3;
+  private static final int METHODID_POSITION_MODIFICATION_REQUEST_GRPC = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -424,7 +493,11 @@ public final class BotServicesGrpc {
               (io.grpc.stub.StreamObserver<services.grpc.BotGRPC.IntegerValue>) responseObserver);
           break;
         case METHODID_MOVE_REQUEST_GRPC:
-          serviceImpl.moveRequestGRPC((services.grpc.BotGRPC.Position) request,
+          serviceImpl.moveRequestGRPC((services.grpc.BotGRPC.IntegerValue) request,
+              (io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement>) responseObserver);
+          break;
+        case METHODID_POSITION_MODIFICATION_REQUEST_GRPC:
+          serviceImpl.positionModificationRequestGRPC((services.grpc.BotGRPC.BotInformation) request,
               (io.grpc.stub.StreamObserver<services.grpc.BotGRPC.Acknowledgement>) responseObserver);
           break;
         default:
@@ -492,6 +565,7 @@ public final class BotServicesGrpc {
               .addMethod(getJoinRequestGRPCMethod())
               .addMethod(getCrashNotificationGRPCMethod())
               .addMethod(getMoveRequestGRPCMethod())
+              .addMethod(getPositionModificationRequestGRPCMethod())
               .build();
         }
       }

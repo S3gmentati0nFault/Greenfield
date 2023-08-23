@@ -7,6 +7,7 @@ import java.util.List;
 
 public class ThreadSafeArrayList<ELEMENT> {
     private List<ELEMENT> arrayList;
+    private boolean writing;
 
     public ThreadSafeArrayList() {
         arrayList = new ArrayList<>();
@@ -43,10 +44,19 @@ public class ThreadSafeArrayList<ELEMENT> {
     }
 
     public synchronized List<ELEMENT> getArrayList() {
-        return arrayList;
+        return new ArrayList<>(arrayList);
     }
 
     public synchronized int size() {
         return arrayList.size();
+    }
+
+    public synchronized void swap(ELEMENT oldElement, ELEMENT newElement) {
+        arrayList.remove(oldElement);
+        arrayList.add(newElement);
+    }
+
+    public synchronized void addAll(List<ELEMENT> elements) {
+        arrayList.addAll(elements);
     }
 }

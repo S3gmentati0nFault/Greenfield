@@ -76,10 +76,13 @@ public class BotUtilities {
         if(!fleetSnapshot.isEmpty()) {
             counter = new AtomicCounter(currentSize);
 
+            for (BotIdentity botIdentity : fleetSnapshot) {
+                System.out.println(botIdentity);
+            }
+
             fleetSnapshot.forEach(botIdentity -> {
                 CommPair openComm = BotThread.getInstance().getOpenComms().getValue(botIdentity);
                 ManagedChannel channel;
-                System.out.println(openComm);
                 if (openComm != null) {
                     channel = openComm.getManagedChannel();
                 } else {
@@ -205,7 +208,8 @@ public class BotUtilities {
 //            RISOLVERE IL PROBLEMA
             for(int i = 0; i < 4; i++) {
                 for(int j = 0; j < 5 && distributions[i] > limit; j++) {
-                    moveBotsAround(district1, district2, district3, district4, distributions, limit, i, reducedLimit);
+                    moveBotsAround(district1, district2, district3, district4,
+                            distributions, limit, i, reducedLimit);
                     System.out.println(j);
                 }
             }
@@ -242,7 +246,8 @@ public class BotUtilities {
 
     private static void moveBotsAround(Queue<BotIdentity> district1, Queue<BotIdentity> district2,
                                        Queue<BotIdentity> district3, Queue<BotIdentity> district4,
-                                       int[] distributions, int limit, int overpopulatedDistrict, int reducedLimit) {
+                                       int[] distributions, int limit, int overpopulatedDistrict,
+                                       int reducedLimit) {
 
         System.out.println("MOVING SOME ROBOTS AWAY FROM " + (overpopulatedDistrict + 1));
 
@@ -311,6 +316,47 @@ public class BotUtilities {
 
             distributions[overpopulatedDistrict]--;
             distributions[receivingDistrict]++;
+
+            if(botToBeMoved == BotThread.getInstance().getIdentity()) {
+                System.out.println("MOVING MYSELF");
+                BotThread.getInstance().changeMyPosition(receivingDistrict + 1);
+            }
+            else{
+                ManagedChannel channel;
+                BotServicesGrpc.BotServicesStub serviceStub;
+
+                CommPair communicationPair = BotThread.getInstance().getOpenComms().getValue(botToBeMoved);
+                if(communicationPair == null) {
+                    channel = ManagedChannelBuilder
+                            .forTarget(botToBeMoved.getIp() + ":" + botToBeMoved.getPort())
+                            .usePlaintext()
+                            .build();
+
+                    serviceStub = BotServicesGrpc.newStub(channel);
+                    BotThread.getInstance().newCommunicationChannel(botToBeMoved, channel, serviceStub);
+                }
+                else {
+                    channel = communicationPair.getManagedChannel();
+                    serviceStub = communicationPair.getCommunicationStub();
+                }
+                BotGRPC.IntegerValue district = BotGRPC.IntegerValue.newBuilder().setValue(receivingDistrict + 1).build();
+                serviceStub.moveRequestGRPC(district, new StreamObserver<BotGRPC.Acknowledgement>() {
+                    @Override
+                    public void onNext(BotGRPC.Acknowledgement value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Logger.red("Something went wrong " + t.getMessage());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
+            }
         }
     }
 
@@ -376,8 +422,6 @@ public class BotUtilities {
         connection.disconnect();
     }
 
-//    TODO
-//    CAPIRE PERCHÈ A VOLTE QUANDO ARRIVANO LE RICHIESTE PER IL CALCOLO DEL DISTRETTO LA POSIZIONE STESSA È NULL
     public static int districtCalculator(Position position) {
         if(position.getY() < 5) {
             if(position.getX() < 5) {
@@ -395,5 +439,25 @@ public class BotUtilities {
                 return 3;
             }
         }
+    }
+
+    public static Position positionCalculator(int district) {
+        Position position = null;
+        Random random = new Random();
+        switch(district) {
+            case 1:
+                position = new Position(random.nextInt(5), random.nextInt(5));
+                break;
+            case 2:
+                position = new Position(random.nextInt(5) + 5, random.nextInt(5));
+                break;
+            case 3:
+                position = new Position(random.nextInt(5) + 5, random.nextInt(5) + 5);
+                break;
+            case 4:
+                position = new Position(random.nextInt(5), random.nextInt(5) + 5);
+                break;
+        }
+        return position;
     }
 }

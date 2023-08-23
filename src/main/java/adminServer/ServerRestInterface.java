@@ -4,6 +4,7 @@ import cleaningBot.Position;
 import beans.BotIdentity;
 import beans.BotPositions;
 import beans.AverageList;
+import exceptions.BotAlreadyExistsException;
 import extra.Logger.Logger;
 
 import javax.ws.rs.*;
@@ -29,10 +30,10 @@ public class ServerRestInterface {
     @Path("join")
     @POST
     @Consumes({"application/json"})
-    public Response joinBot(BotIdentity identity) {
+    public Response joinBot(BotIdentity identity) throws BotAlreadyExistsException {
         Position botPosition = BotPositions.getInstance().joinBot(identity);
         if(botPosition == null){
-            return Response.serverError().build();
+            return Response.serverError().status(510).build();
         }
         else{
             String jsonString = BotPositions.getInstance().jsonBuilder(botPosition);
