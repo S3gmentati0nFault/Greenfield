@@ -112,7 +112,7 @@ public class BotServices extends BotServicesImplBase {
 
         BotIdentity deadBot = new BotIdentity(request.getId(), request.getPort(), request.getHost(),
                             new Position(request.getPosition().getX(), request.getPosition().getY()));
-
+        
         try {
             if(botThread.removeBot(deadBot)) {
                 responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(1).build());
@@ -120,14 +120,9 @@ public class BotServices extends BotServicesImplBase {
             }
         } catch(Exception e) {
             responseObserver.onError(e);
+            responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(-1).build());
+            responseObserver.onCompleted();
         }
-
-//        TODO
-//        >> FLAVOUR :: DEBUGGING-RED <<
-//        CAPITA A VOLTE CHE IL MESSAGGIO DI ON.NEXT E ON.COMPLETED PARTANO (FORSE) DOPO CHE IL CANALE È STATO CHIUSO,
-//        CONTROLLARE COME FUNZIONA IL FLUSSO DEI MESSAGGI E TROVARE UN MODO ADEGUATO DI CHIUDERE I CANALI GRPC
-        responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(-1).build());
-        responseObserver.onCompleted();
     }
 
     public synchronized void moveRequestGRPC(BotGRPC.IntegerValue request,

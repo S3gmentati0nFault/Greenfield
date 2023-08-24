@@ -16,6 +16,7 @@ import services.grpc.BotGRPC;
 import services.grpc.BotServicesGrpc;
 import utilities.Variables;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MutualExclusionThread extends Thread {
@@ -47,11 +48,12 @@ public class MutualExclusionThread extends Thread {
     public synchronized void agrawalaProcedure() {
         Logger.cyan("Starting the Agrawala procedure");
         List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots().getCopy();
+        List<BotIdentity> nonRespondingRobots = new ArrayList<>();
 
         counter = new AtomicCounter(fleetSnapshot.size());
 
         if(fleetSnapshot.isEmpty()){
-            maintenanceAccess();
+            maintenanceAccess(null);
             return;
         }
 
@@ -93,23 +95,19 @@ public class MutualExclusionThread extends Thread {
                     }
                 }
 
-//                TODO
-//                QUANDO SI PRESENTA L'ERRORE, ANZICHÈ CHIAMARE SUBITO LA FUNZIONE DI RIMOZIONE AGGIUNGERE IL ROBOT DA
-//                ELIMINARE A UNA STRUTTURA LOCALE, SE ARRIVANO DEI MESSAGGI PER LA SUA ELIMINAZIONE SARÀ ELIMINATO DALLA
-//                STRUTTURA OPPURE TUTTE LE RICHIESTE VERRANNO IGNORATE SUCCESSIVAMENTE
                 @Override
                 public synchronized void onError(Throwable t) {
                     Logger.red("There was an error during the grpc");
                     if(t.getClass() == StatusRuntimeException.class) {
                         counter.decrement();
-                        BotUtilities.botRemovalFunction(botIdentity, false);
-                        maintenanceAccess();
+                        nonRespondingRobots.add(botIdentity);
+                        maintenanceAccess(nonRespondingRobots);
                     }
                 }
 
                 @Override
                 public void onCompleted() {
-                    maintenanceAccess();
+                    maintenanceAccess(nonRespondingRobots);
                 }
             });
         }
@@ -118,16 +116,23 @@ public class MutualExclusionThread extends Thread {
     /**
      * Method that simulates access to the mechanic
      */
-    public void maintenanceAccess() {
+    public void maintenanceAccess(List<BotIdentity> nonRespondingRobots) {
         if(counter.getCounter() == 0){
             Logger.yellow("Starting the maintenance process");
+
+            if(nonRespondingRobots != null) {
+                if(!nonRespondingRobots.isEmpty()) {
+                    BotUtilities.botRemovalFunction(nonRespondingRobots, false);
+                }
+            }
+
             try {
                 sleep(10000);
                 Logger.green("The machine has gone back to normal");
             }catch(Exception e) {
                 Logger.red(Variables.WAKEUP_ERROR, e.getCause());
             }
-//            botServices.clearWaitingQueue();
+
             BotThread.getInstance().getBotServices().clearWaitingQueue();
             BotThread.getInstance().setTimestamp(-1);
             BotThread.getInstance().getInputThread().wakeupHelper();

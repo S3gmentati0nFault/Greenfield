@@ -60,9 +60,20 @@ public class ServerRestInterface {
     @Path("remove")
     @DELETE
     @Consumes({"application/json"})
-    public Response deleteBot(BotIdentity botIdentity) {
+    public Response deleteBot(List<BotIdentity> deadRobots) {
         Logger.blue("DELETE");
-        if(!BotPositions.getInstance().deleteBot(botIdentity)) {
+        if(!BotPositions.getInstance().deleteBot(deadRobots)) {
+            return Response.noContent().build();
+        }
+        return Response.ok().build();
+    }
+
+    @Path("update")
+    @PUT
+    @Consumes({"application/json"})
+    public Response updateBot(BotIdentity[] botInformation) {
+        Logger.blue("PUT");
+        if(!BotPositions.getInstance().modifyBot(botInformation[0], botInformation[1])) {
             return Response.noContent().build();
         }
         return Response.ok().build();

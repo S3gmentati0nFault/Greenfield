@@ -1,6 +1,7 @@
 package cleaningBot.threads;
 
 import cleaningBot.CommPair;
+import extra.AtomicCounter.AtomicCounter;
 import extra.ThreadSafeStructures.ThreadSafeArrayList;
 import extra.ThreadSafeStructures.ThreadSafeHashMap;
 import utilities.Variables;
@@ -20,6 +21,7 @@ import services.grpc.BotServicesGrpc;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -40,11 +42,7 @@ public class BotThread extends Thread{
     private MaintenanceThread maintenanceThread;
     private InputThread inputThread;
     private static BotThread instance;
-//    TODO
-//    >> FLAVOUR :: MODIFICA-GIALLO <<
-//    FARE ALTRO TESTING E, SE SI DOVESSE DIMOSTRARE INUTILE, RIMUOVERE LA MENZIONE ALLA VARIABILE COUNTER DAL FILE. PER
-//    I TEST CONDOTTI FINO AD ORA SEMBRA CHE PROCEDA TUTTO LISCIO
-//    private AtomicCounter counter;
+    private AtomicCounter counter;
 
     public static synchronized BotThread getInstance() {
         if(instance == null) {
@@ -185,7 +183,9 @@ public class BotThread extends Thread{
 //      COME FUNZIONA IL TUTTO
         Logger.cyan("Letting my presence known");
         if(!otherBots.isEmpty()) {
-//            counter = new AtomicCounter(otherBots.size());
+            counter = new AtomicCounter(otherBots.size());
+            List<BotIdentity> nonRespondingRobots = new ArrayList<>();
+
             otherBots.getCopy().forEach(botIdentity -> {
 
 //                try {
@@ -220,7 +220,7 @@ public class BotThread extends Thread{
 
                     @Override
                     public void onNext(BotGRPC.Acknowledgement value) {
-//                        counter.decrement();
+                        counter.decrement();
                         if(!value.getAck()){
                             Logger.purple("robot " + botIdentity + " didn't add me to its network");
                         }
@@ -229,17 +229,16 @@ public class BotThread extends Thread{
                     @Override
                     public void onError(Throwable t) {
                         Logger.red("robot " + botIdentity + " sent error " + t.getClass());
-//                        counter.decrement();
+                        counter.decrement();
                         if(t.getClass() == StatusRuntimeException.class) {
-                            Logger.yellow("Removing dead robot from the field");
-                            BotUtilities.botRemovalFunction(receiver, false);
+                            nonRespondingRobots.add(botIdentity);
                         }
-//                        checkCounter();
+                        checkCounter(nonRespondingRobots);
                     }
 
                     @Override
                     public void onCompleted() {
-//                        checkCounter();
+                        checkCounter(nonRespondingRobots);
                     }
                 });
             });
@@ -252,17 +251,15 @@ public class BotThread extends Thread{
         return true;
     }
 
-//    public synchronized void checkCounter() {
-//        if(counter.getCounter() == 0) {
-//            Logger.green("Hello procedure completed");
-//            notify();
-//        }
-//    }
+    public synchronized void checkCounter(List<BotIdentity> nonRespondingRobots) {
+        if(counter.getCounter() == 0) {
+            Logger.green("Hello procedure completed");
+            if(!nonRespondingRobots.isEmpty()) {
+                BotUtilities.botRemovalFunction(nonRespondingRobots, false);
+            }
+        }
+    }
 
-//    TODO
-//    >> FLAVOUR :: DEBUGGING-ROSSO <<
-//    FIXARE L'ACCESSO ALLA STRUTTURA DATI DI MODO DA CONSENTIRE LE MODIFICHE NECESSARIE E RESTITUIRE UNA COPIA DELLA STRUTTURA
-//    E NON UN REFERENCE ALLA STRUTTURA STESSA
     /**
      * Getter for the bots in the system.
      */
@@ -337,9 +334,30 @@ public class BotThread extends Thread{
         }
     }
 
+    public synchronized boolean removeBot(List<BotIdentity> deadRobots) {
+        boolean removalOperation = true;
+        for (BotIdentity deadRobot : deadRobots) {
+            System.out.println(deadRobot);
+            removalOperation &= otherBots.removeElement(deadRobot);
+            CommPair communicationPair = openComms.removePair(deadRobot);
+            if(communicationPair != null) {
+                try{
+                    Logger.yellow("Closing the communication channel...");
+                    communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
+                    Logger.green("Communication channel closed!");
+                } catch (InterruptedException e) {
+                    Logger.red("Unable to close the channel the right way, forcing it closed now");
+                    communicationPair.getManagedChannel().shutdownNow();
+                }
+            }
+        }
+        return removalOperation;
+    }
+
     public synchronized boolean removeBot(BotIdentity deadRobot) {
+        boolean removalOperation = true;
         System.out.println(deadRobot);
-        boolean removalOperation = otherBots.removeElement(deadRobot);
+        removalOperation &= otherBots.removeElement(deadRobot);
         CommPair communicationPair = openComms.removePair(deadRobot);
         if(communicationPair != null) {
             try{
@@ -361,6 +379,7 @@ public class BotThread extends Thread{
 
     public void changeMyPosition(int district) {
         Position newPosition = BotUtilities.positionCalculator(district);
+        BotIdentity tmp = identity;
         identity.setPosition(newPosition);
         setDistrict(district);
         System.out.println("I'VE BEEN MOVED TO " + district + " MY NEW POSITION IS " + newPosition);
@@ -407,7 +426,8 @@ public class BotThread extends Thread{
 
                 @Override
                 public void onError(Throwable t) {
-                    Logger.red("Something has gone wrong during the update process");
+                    Logger.red("Something has gone wrong during the update process" + t);
+                    t.printStackTrace();
                 }
 
                 @Override
@@ -416,5 +436,55 @@ public class BotThread extends Thread{
                 }
             });
         }
+
+//        TODO
+//        >> FLAVOUR :: CONSEGNA-ARANCIONE <<
+//        CAMBIARE L'ISCRIZIONE MQTT DEL ROBOT
+        ObjectMapper mapper = new ObjectMapper();
+
+            HttpURLConnection connection =
+                    BotUtilities.buildConnection("PUT", "http://" +
+                            Variables.HOST+":" + Variables.PORT + "/admin/update");
+
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+
+            OutputStream os = null;
+            try{
+                os = connection.getOutputStream();
+            }catch(IOException e){
+                Logger.red("There was an error during output stream creation");
+            }
+
+            String json = "";
+            try{
+                json = "[" + mapper.writeValueAsString(tmp) + ", " + mapper.writeValueAsString(identity) + "]";
+            } catch (IOException e) {
+                Logger.red("There was an error while generating the json string");
+            }
+
+            byte[] input = null;
+            try{
+                input = json.getBytes("utf-8");
+            } catch (UnsupportedEncodingException e) {
+                Logger.red("There was a problem while turning the string into bytes");
+            }
+
+            try{
+                os.write(input, 0, input.length);
+            }catch(IOException e){
+                Logger.red("There was an error while writing on output stream");
+            }
+
+            BufferedReader br = null;
+            try{
+                br = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream(), "utf-8"));
+            } catch(IOException e) {
+                Logger.red("It was not possible to initialize the BufferedReader");
+            }
+
+            BotUtilities.closeConnection(connection);
     }
 }

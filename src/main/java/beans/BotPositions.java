@@ -53,17 +53,14 @@ public class BotPositions {
     public Position joinBot(BotIdentity identity) {
         Random random = new Random();
 
-//        Position pos = new Position(
-//            random.nextInt(9),
-//                random.nextInt(9)
-//        );
-//        TODO
-//        >> FLAVOUR :: PULIZIA-ROSSO <<
-//        RIMUOVERE QUESTA DEFINIZIONE INSTABILE PER LA POSIZIONE
         Position pos = new Position(
-            random.nextInt(5),
-                random.nextInt(5)
+            random.nextInt(9),
+                random.nextInt(9)
         );
+//        Position pos = new Position(
+//            random.nextInt(5),
+//                random.nextInt(5)
+//        );
 
         System.out.println(pos);
         identity.setPosition(pos);
@@ -83,17 +80,34 @@ public class BotPositions {
      * @param identity The identity of the robot.
      * @return It returns true if the deletion operation went well, false otherwise.
      */
-    public boolean deleteBot(BotIdentity identity) {
+    public boolean deleteBot(List<BotIdentity> robots) {
+        boolean returnValue = true;
+
         Logger.blue("deletion");
 
-        if(city.contains(identity)){
-            city.remove(identity);
-            return true;
+        for (BotIdentity robot : robots) {
+            if(city.contains(robot)){
+                returnValue &= city.remove(robot);
+            }
+            else {
+                Logger.red("The indicated bot is not present in the data structure");
+            }
+        }
+
+        return returnValue;
+    }
+
+    public boolean modifyBot(BotIdentity oldPosition, BotIdentity newPosition) {
+        Logger.blue("modification");
+
+        if(!city.contains(oldPosition)) {
+            return false;
         }
         else {
-            Logger.red("The indicated bot is not present in the data structure");
+            city.remove(oldPosition);
+            city.add(newPosition);
+            return true;
         }
-        return false;
     }
 
     /**

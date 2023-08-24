@@ -24,10 +24,16 @@ import java.util.*;
 public class BotUtilities {
     private static AtomicCounter counter;
 
-    public static boolean botRemovalFunction(BotIdentity deadRobot, boolean quitting) {
+    public static void botRemovalFunction(BotIdentity identity, boolean quitting) {
+        List<BotIdentity> temp = new ArrayList<>();
+        temp.add(identity);
+        botRemovalFunction(temp, quitting);
+    }
+
+    public static boolean botRemovalFunction(List<BotIdentity> deadRobots, boolean quitting) {
         ObjectMapper mapper = new ObjectMapper();
 
-        BotThread.getInstance().removeBot(deadRobot);
+        BotThread.getInstance().removeBot(deadRobots);
 
         HttpURLConnection connection = buildConnection("DELETE", "http://" +
                     Variables.HOST+":" +
@@ -48,7 +54,7 @@ public class BotUtilities {
 
         String json = "";
         try{
-            json = mapper.writeValueAsString(deadRobot);
+            json = mapper.writeValueAsString(deadRobots);
         } catch (IOException e) {
             Logger.red("There was an error while generating the json string");
             return false;
@@ -80,64 +86,68 @@ public class BotUtilities {
                 System.out.println(botIdentity);
             }
 
-            fleetSnapshot.forEach(botIdentity -> {
-                CommPair openComm = BotThread.getInstance().getOpenComms().getValue(botIdentity);
-                ManagedChannel channel;
-                if (openComm != null) {
-                    channel = openComm.getManagedChannel();
-                } else {
-                    channel = ManagedChannelBuilder
-                            .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                            .usePlaintext()
+            for (BotIdentity deadRobot : deadRobots) {
+                fleetSnapshot.forEach(botIdentity -> {
+                    CommPair openComm = BotThread.getInstance().getOpenComms().getValue(botIdentity);
+                    ManagedChannel channel;
+                    if (openComm != null) {
+                        channel = openComm.getManagedChannel();
+                    } else {
+                        channel = ManagedChannelBuilder
+                                .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
+                                .usePlaintext()
+                                .build();
+                    }
+                    BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
+                    BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
+
+
+                    BotGRPC.BotInformation identikit = BotGRPC.BotInformation
+                            .newBuilder()
+                            .setId(deadRobot.getId())
+                            .setPort(deadRobot.getPort())
+                            .setHost(deadRobot.getIp())
+                            .setPosition(BotGRPC.Position.newBuilder()
+                                    .setX(deadRobot.getPosition().getX())
+                                    .setY(deadRobot.getPosition().getY())
+                                    .build()
+                            )
                             .build();
-                }
-                BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
-                BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
 
-
-                BotGRPC.BotInformation identikit = BotGRPC.BotInformation
-                        .newBuilder()
-                        .setId(deadRobot.getId())
-                        .setPort(deadRobot.getPort())
-                        .setHost(deadRobot.getIp())
-                        .setPosition(BotGRPC.Position.newBuilder()
-                                .setX(deadRobot.getPosition().getX())
-                                .setY(deadRobot.getPosition().getY())
-                                .build()
-                        )
-                        .build();
-
-                serviceStub.crashNotificationGRPC(identikit, new StreamObserver<BotGRPC.IntegerValue>() {
-                    @Override
-                    public void onNext(BotGRPC.IntegerValue returnMessage) {
-                        counter.decrement();
-                        if (returnMessage.getValue() == -1) {
-                            Logger.yellow("The robot has already been removed from the system");
-                        } else {
-                            Logger.green("The robot has been correctly removed!");
+                    serviceStub.crashNotificationGRPC(identikit, new StreamObserver<BotGRPC.IntegerValue>() {
+                        @Override
+                        public void onNext(BotGRPC.IntegerValue returnMessage) {
+                            counter.decrement();
+                            if (returnMessage.getValue() == -1) {
+                                Logger.yellow("The robot has already been removed from the system");
+                            } else {
+                                Logger.green("The robot has been correctly removed!");
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onError(Throwable t) {
-                        Logger.red("robot " + botIdentity + " sent error " + t.getClass());
-                    }
+                        @Override
+                        public void onError(Throwable t) {
+                            Logger.red("robot " + botIdentity + " sent error " + t.getClass());
+                        }
 
-                    @Override
-                    public void onCompleted() {
-                        checkCounter(quitting);
-                    }
+                        @Override
+                        public void onCompleted() {
+                            checkCounter(quitting);
+                        }
+                    });
                 });
-            });
+            }
         }
 
         if(quitting) {
             System.exit(0);
         }
+
         else {
             fleetSnapshot.add(BotThread.getInstance().getIdentity());
             currentSize++;
 
+            System.out.println("DIMENSIONE DELLA LISTA POST ELIMINAZIONE -> " + fleetSnapshot.size());
 
 //            TODO
 //            >> FLAVOUR :: STILE-ROSSO <<
@@ -207,10 +217,14 @@ public class BotUtilities {
 //            CAPIRE L'ORIGINE DEL CICLO INFINITO CHE SI VERIFICA QUANDO AL FOR VIENE SOSTITUITO UN PIÙ SEMPLICE WHILE E
 //            RISOLVERE IL PROBLEMA
             for(int i = 0; i < 4; i++) {
-                for(int j = 0; j < 5 && distributions[i] > limit; j++) {
+//                for(int j = 0; j < 5 && distributions[i] > limit; j++) {
+//                    moveBotsAround(district1, district2, district3, district4,
+//                            distributions, limit, i, reducedLimit);
+//                    System.out.println(j);
+//                }
+                while(distributions[i] > limit) {
                     moveBotsAround(district1, district2, district3, district4,
                             distributions, limit, i, reducedLimit);
-                    System.out.println(j);
                 }
             }
 
@@ -251,7 +265,7 @@ public class BotUtilities {
 
         System.out.println("MOVING SOME ROBOTS AWAY FROM " + (overpopulatedDistrict + 1));
 
-        int receivingDistrict = -1;
+        int receivingDistrict = 0;
         int min = distributions[0];
         for(int i = 0; i < 4; i++) {
             System.out.println("Possible district -> "  + i + " its distribution: " + distributions[i]);
@@ -259,10 +273,6 @@ public class BotUtilities {
                 receivingDistrict = i;
                 min = distributions[i];
             }
-        }
-
-        if(receivingDistrict == -1) {
-            return;
         }
 
         System.out.println("RECEIVING DISTRICT -> " + (receivingDistrict + 1));
