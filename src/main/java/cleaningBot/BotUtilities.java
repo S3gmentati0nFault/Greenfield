@@ -213,15 +213,10 @@ public class BotUtilities {
             System.out.println("LIMIT -> " + limit);
 
 //            TODO
-//            >> FLAVOUR :: DEBUGGING-ROSSO <<
-//            CAPIRE L'ORIGINE DEL CICLO INFINITO CHE SI VERIFICA QUANDO AL FOR VIENE SOSTITUITO UN PIÙ SEMPLICE WHILE E
-//            RISOLVERE IL PROBLEMA
+//            >> FLAVOUR :: LOGICA-GIALLO <<
+//            PUNTARE A STABILIZZARE MAGGIORMENTE LA DISTRIBUZIONE DI MODO CHE NON VI SIANO DEI DISTRETTI CON 3 ROBOT E
+//            ALTRI CHE NE SONO COMPLETAMENTE PRIVI
             for(int i = 0; i < 4; i++) {
-//                for(int j = 0; j < 5 && distributions[i] > limit; j++) {
-//                    moveBotsAround(district1, district2, district3, district4,
-//                            distributions, limit, i, reducedLimit);
-//                    System.out.println(j);
-//                }
                 while(distributions[i] > limit) {
                     moveBotsAround(district1, district2, district3, district4,
                             distributions, limit, i, reducedLimit);
