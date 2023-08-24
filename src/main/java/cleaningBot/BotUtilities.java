@@ -71,7 +71,7 @@ public class BotUtilities {
 
         closeConnection(connection);
 
-        List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
+        List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots().getCopy();
         int currentSize = fleetSnapshot.size();
         if(!fleetSnapshot.isEmpty()) {
             counter = new AtomicCounter(currentSize);

@@ -10,6 +10,7 @@ import services.grpc.*;
 import services.grpc.BotServicesGrpc.*;
 import utilities.Variables;
 
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
@@ -83,12 +84,13 @@ public class BotServices extends BotServicesImplBase {
         BotIdentity newBot = new BotIdentity(request.getId(), request.getPort(), request.getHost(),
                             new Position(request.getPosition().getX(), request.getPosition().getY()));
 
+        List<BotIdentity> currentFleet = botThread.getOtherBots().getArrayList();
         try{
-            if(botThread.getOtherBots().contains(newBot)) {
+            if(currentFleet.contains(newBot)) {
                 responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
             }
             else{
-                botThread.getOtherBots().add(newBot);
+                currentFleet.add(newBot);
                 responseObserver.onNext(BotGRPC.Acknowledgement
                         .newBuilder()
                         .setAck(true)

@@ -186,7 +186,7 @@ public class BotThread extends Thread{
         Logger.cyan("Letting my presence known");
         if(!otherBots.isEmpty()) {
 //            counter = new AtomicCounter(otherBots.size());
-            otherBots.getArrayList().forEach(botIdentity -> {
+            otherBots.getCopy().forEach(botIdentity -> {
 
 //                try {
 //                    Logger.blue("ADD");
@@ -266,8 +266,8 @@ public class BotThread extends Thread{
     /**
      * Getter for the bots in the system.
      */
-    public List<BotIdentity> getOtherBots() {
-        return otherBots.getArrayList();
+    public ThreadSafeArrayList<BotIdentity> getOtherBots() {
+        return otherBots;
     }
 
     /**
@@ -320,7 +320,7 @@ public class BotThread extends Thread{
      * Method that prints the bots present in the system
      */
     public void printOtherBots() {
-        for (BotIdentity botIdentity : otherBots.getArrayList()) {
+        for (BotIdentity botIdentity : otherBots.getCopy()) {
             System.out.println(botIdentity);
         }
     }
@@ -365,7 +365,7 @@ public class BotThread extends Thread{
         setDistrict(district);
         System.out.println("I'VE BEEN MOVED TO " + district + " MY NEW POSITION IS " + newPosition);
 
-        List<BotIdentity> fleetSnapshot = otherBots.getArrayList();
+        List<BotIdentity> fleetSnapshot = otherBots.getCopy();
 
         for (BotIdentity botIdentity : fleetSnapshot) {
             System.out.println(botIdentity);

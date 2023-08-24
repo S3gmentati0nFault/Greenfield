@@ -44,6 +44,10 @@ public class ThreadSafeArrayList<ELEMENT> {
     }
 
     public synchronized List<ELEMENT> getArrayList() {
+        return arrayList;
+    }
+
+    public synchronized List<ELEMENT> getCopy() {
         return new ArrayList<>(arrayList);
     }
 

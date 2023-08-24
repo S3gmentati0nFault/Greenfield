@@ -38,13 +38,15 @@ public class MutualExclusionThread extends Thread {
         this.maintenanceThread = maintenanceThread;
     }
 
+//    TODO
+//    CONTROLLARE IL PROCESSO DI MUTUA ESCLUSIONE PERCHÈ SEMBRA CHE A VOLTE VENGA DUPLICATO O QUALCOSA DEL GENERE
     /**
      * Method that handles the mutual-exclusion by contacting via GRPC all the bots present
      * in the system at the moment of the malfunction
      */
     public synchronized void agrawalaProcedure() {
         Logger.cyan("Starting the Agrawala procedure");
-        List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots();
+        List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots().getCopy();
 
         counter = new AtomicCounter(fleetSnapshot.size());
 
