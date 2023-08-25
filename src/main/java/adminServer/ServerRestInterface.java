@@ -8,6 +8,7 @@ import exceptions.BotAlreadyExistsException;
 import extra.Logger.Logger;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -83,6 +84,16 @@ public class ServerRestInterface {
     @GET
     public Response getNumber() {
         return Response.ok(String.valueOf(AdminServer.getStack().size())).build();
+    }
+
+    @Path("poll/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @GET
+    public Response checkExistence(@PathParam("id") int id) {
+        if(BotPositions.getInstance().searchId(id)) {
+            return Response.ok("true").build();
+        }
+        return Response.ok("false").build();
     }
 
     @Path("measurements/bot/{id}/{number}")

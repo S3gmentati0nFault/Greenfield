@@ -27,6 +27,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static utilities.Variables.UPPER_ID_LIMIT;
+
 /**
  * @see cleaningBot.CleaningBot
  * A thread for the CleaningBot class that handles the initial connection with the
@@ -59,7 +61,8 @@ public class BotThread extends Thread{
         Random random = new Random();
 
         identity = new BotIdentity(
-                random.nextInt(100),
+//                random.nextInt(UPPER_ID_LIMIT),
+                1,
                 random.nextInt(65534),
                 "localhost");
         timestamp = -1;
@@ -84,14 +87,6 @@ public class BotThread extends Thread{
             System.exit(-1);
         }
 
-//        synchronized (this) {
-//            try {
-//                wait(10000);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-
         Logger.yellow("Starting input thread");
         inputThread = new InputThread();
         inputThread.start();
@@ -113,16 +108,51 @@ public class BotThread extends Thread{
     private synchronized boolean startNewBot() {
         ObjectMapper mapper = new ObjectMapper();
 
-//        TODO
-//        >> FLAVOUR :: FUNZIONALITÀ-VERDE <<
-//        SE IL ROBOT HA LO STESSO ID DI UN ALTRO ROBOT NEL SISTEMA, CAMBIARLO UNA VOLTA CHE ARRIVA LA RISPOSTA DAL MASTER
-        HttpURLConnection connection =
+        HttpURLConnection connection = null;
+        boolean isBotAlreadyInTheNetwork = true;
+        int i = 0;
+
+        while(isBotAlreadyInTheNetwork && i < UPPER_ID_LIMIT) {
+            connection =
+                BotUtilities.buildConnection("GET", "http://" +
+                        Variables.HOST+":" + Variables.PORT + "/admin/poll/" + identity.getId());
+
+            BufferedReader br = null;
+            try{
+                br = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream(), "utf-8"));
+            } catch(IOException e) {
+                Logger.red(":(");
+                return false;
+            }
+
+            try{
+                isBotAlreadyInTheNetwork = Boolean.parseBoolean(br.readLine());
+                if(isBotAlreadyInTheNetwork) {
+                    Random random = new Random();
+                    identity.setId(random.nextInt(UPPER_ID_LIMIT));
+                }
+            } catch (IOException e) {
+                Logger.red("It was not possible to retrieve the response from the server");
+                return false;
+            }
+        }
+
+        if(i > UPPER_ID_LIMIT) {
+            System.exit(-1);
+        }
+
+        BotUtilities.closeConnection(connection);
+
+        connection =
                 BotUtilities.buildConnection("POST", "http://" +
                         Variables.HOST+":" + Variables.PORT + "/admin/join");
 
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
         connection.setDoOutput(true);
+
+        System.out.println(identity);
 
         OutputStream os;
         try{
@@ -188,12 +218,12 @@ public class BotThread extends Thread{
 
             otherBots.getCopy().forEach(botIdentity -> {
 
-//                try {
-//                    Logger.blue("ADD");
-//                    sleep(2000);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
+                try {
+                    Logger.blue("ADD");
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
                 ManagedChannel channel = ManagedChannelBuilder
                         .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
@@ -418,6 +448,12 @@ public class BotThread extends Thread{
                             .setY(newPosition.getY())
                             .build())
                     .build();
+
+//            TODO
+//            >> FLAVOUR :: DEBUGGING-GIALLO <<
+//            INDAGARE COMPORTAMENTI STRANI IN FASE DI MODIFICA DELLA POSIZIONE DOVUTI A NON SI SA BENE CHE COSA,
+//            L'ERRORE E QUESTO QUI
+//            io.grpc.Context was cancelled without error
             serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {

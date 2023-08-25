@@ -57,10 +57,6 @@ public class BotPositions {
             random.nextInt(9),
                 random.nextInt(9)
         );
-//        Position pos = new Position(
-//            random.nextInt(5),
-//                random.nextInt(5)
-//        );
 
         System.out.println(pos);
         identity.setPosition(pos);
@@ -108,6 +104,15 @@ public class BotPositions {
             city.add(newPosition);
             return true;
         }
+    }
+
+    public boolean searchId(int id) {
+        for (BotIdentity botIdentity : city) {
+            if(botIdentity.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
