@@ -14,8 +14,11 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +98,7 @@
       <recent name="$PROJECT_DIR$/src/main/java/cleaningBot/service" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CleaningBot">
+  <component name="RunManager" selected="Application.AdminClient">
     <configuration name="AdminClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="temurin-1.8" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -270,7 +273,7 @@
       <workItem from="1692984046764" duration="9000" />
       <workItem from="1693039660783" duration="6066000" />
       <workItem from="1693060843360" duration="159000" />
-      <workItem from="1693061351598" duration="1926000" />
+      <workItem from="1693061351598" duration="5482000" />
     </task>
     <servers />
   </component>

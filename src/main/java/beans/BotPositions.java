@@ -66,9 +66,6 @@ public class BotPositions {
         System.out.println(pos);
         identity.setPosition(pos);
 
-//        TODO
-//        >> FLAVOUR :: DEBUGGING-GIALLO <<
-//        VEDERE UN ATTIMO COME MIGLIORARE LA GESTIONE DELLE POSIZIONI RIPETUTE ALL'INTERNO DELLA CITTÀ
         if(city.contains(identity)) {
             return null;
         }

@@ -1,7 +1,7 @@
 package utilities;
 public class Variables {
 
-    public static final Boolean DEBUGGING = true;
+    public static final Boolean DEBUGGING = false;
 
     public static final String HOST = "localhost";
     public static final String PORT = "3000";

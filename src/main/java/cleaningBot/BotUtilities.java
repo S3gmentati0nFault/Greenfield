@@ -151,31 +151,7 @@ public class BotUtilities {
 
             System.out.println("DIMENSIONE DELLA LISTA POST ELIMINAZIONE -> " + fleetSnapshot.size());
 
-            int[] distributions = new int[4];
-
-            BotIdentityComparator comparator = new BotIdentityComparator();
-            List<Queue<BotIdentity>> districtDistribution = new ArrayList<>();
-            for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
-                districtDistribution.add(new PriorityQueue<>(comparator));
-            }
-
-            for (BotIdentity botIdentity : fleetSnapshot) {
-                switch(districtCalculator(botIdentity.getPosition())) {
-                    case 1:
-                        districtDistribution.get(0).add(botIdentity);
-                        break;
-                    case 2:
-                        districtDistribution.get(1).add(botIdentity);
-                        break;
-                    case 3:
-                        districtDistribution.get(2).add(botIdentity);
-                        break;
-                    case 4:
-                        districtDistribution.get(3).add(botIdentity);
-                        break;
-                }
-            }
-
+            List<Queue<BotIdentity>> districtDistribution = distributionCalculator(fleetSnapshot);
 
             System.out.println("SITUAZIONE INIZIALE");
             for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
@@ -379,5 +355,31 @@ public class BotUtilities {
                 break;
         }
         return position;
+    }
+
+    public static List<Queue<BotIdentity>> distributionCalculator(List<BotIdentity> fleetSnapshot) {
+        BotIdentityComparator comparator = new BotIdentityComparator();
+            List<Queue<BotIdentity>> districtDistribution = new ArrayList<>();
+            for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
+                districtDistribution.add(new PriorityQueue<>(comparator));
+            }
+
+            for (BotIdentity botIdentity : fleetSnapshot) {
+                switch(districtCalculator(botIdentity.getPosition())) {
+                    case 1:
+                        districtDistribution.get(0).add(botIdentity);
+                        break;
+                    case 2:
+                        districtDistribution.get(1).add(botIdentity);
+                        break;
+                    case 3:
+                        districtDistribution.get(2).add(botIdentity);
+                        break;
+                    case 4:
+                        districtDistribution.get(3).add(botIdentity);
+                        break;
+                }
+            }
+            return districtDistribution;
     }
 }

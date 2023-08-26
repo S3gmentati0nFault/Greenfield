@@ -24,6 +24,7 @@ public class MutualExclusionThread extends Thread {
     private BotServices botServices;
     private AtomicCounter counter;
     private MaintenanceThread maintenanceThread;
+    private boolean justFixed;
 
     @Override
     public void run() {
@@ -47,6 +48,9 @@ public class MutualExclusionThread extends Thread {
      */
     public synchronized void agrawalaProcedure() {
         Logger.cyan("Starting the Agrawala procedure");
+
+        justFixed = false;
+
         List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots().getCopy();
         List<BotIdentity> nonRespondingRobots = new ArrayList<>();
 
@@ -116,8 +120,8 @@ public class MutualExclusionThread extends Thread {
     /**
      * Method that simulates access to the mechanic
      */
-    public void maintenanceAccess(List<BotIdentity> nonRespondingRobots) {
-        if(counter.getCounter() == 0){
+    public synchronized void maintenanceAccess(List<BotIdentity> nonRespondingRobots) {
+        if(counter.getCounter() == 0 && !justFixed){
             Logger.yellow("Starting the maintenance process");
 
             if(nonRespondingRobots != null) {
@@ -137,6 +141,8 @@ public class MutualExclusionThread extends Thread {
             BotThread.getInstance().setTimestamp(-1);
             BotThread.getInstance().getInputThread().wakeupHelper();
             maintenanceThread.wakeupMaintenanceThread();
+
+            justFixed = true;
         }
     }
 }
