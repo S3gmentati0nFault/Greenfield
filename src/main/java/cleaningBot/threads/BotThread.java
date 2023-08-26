@@ -27,7 +27,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static utilities.Variables.UPPER_ID_LIMIT;
+import static utilities.Variables.*;
 
 /**
  * @see cleaningBot.CleaningBot
@@ -468,14 +468,16 @@ public class BotThread extends Thread{
 
             BotUtilities.closeConnection(connection);
 
-            System.out.println("->->RIMUOVERE QUESTO BOT<-<-");
-            try {
-                sleep(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            if(DEBUGGING) {
+                System.out.println("->->RIMUOVERE QUESTO BOT<-<-");
+                try {
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
-            System.out.println("AGGIORNANDO GLI ALTRI ROBOT");
+                System.out.println("AGGIORNANDO GLI ALTRI ROBOT");
+            }
 
         for (BotIdentity botIdentity : fleetSnapshot) {
 
@@ -509,7 +511,7 @@ public class BotThread extends Thread{
 //            TODO
 //            >> FLAVOUR :: DEBUGGING-GIALLO <<
 //            INDAGARE COMPORTAMENTI STRANI IN FASE DI MODIFICA DELLA POSIZIONE DOVUTI A NON SI SA BENE CHE COSA,
-//            L'ERRORE E QUESTO QUI
+//            L'ERRORE È QUESTO QUI
 //            io.grpc.Context was cancelled without error
             serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
@@ -520,7 +522,7 @@ public class BotThread extends Thread{
                 @Override
                 public void onError(Throwable t) {
                     if(t.getClass() == StatusRuntimeException.class) {
-                        System.out.println("The bot that was communicating with me has crashed...");
+                        Logger.red("The bot that was communicating with me has crashed...");
                     }
                     else {
                         Logger.red("Something has gone wrong during the update process");
