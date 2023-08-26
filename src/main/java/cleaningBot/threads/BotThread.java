@@ -61,8 +61,8 @@ public class BotThread extends Thread{
         Random random = new Random();
 
         identity = new BotIdentity(
-//                random.nextInt(UPPER_ID_LIMIT),
-                1,
+                random.nextInt(UPPER_ID_LIMIT),
+//                1,
                 random.nextInt(65534),
                 "localhost");
         timestamp = -1;
@@ -151,8 +151,6 @@ public class BotThread extends Thread{
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
         connection.setDoOutput(true);
-
-        System.out.println(identity);
 
         OutputStream os;
         try{
@@ -420,60 +418,7 @@ public class BotThread extends Thread{
             System.out.println(botIdentity);
         }
 
-        for (BotIdentity botIdentity : fleetSnapshot) {
-
-            ManagedChannel channel;
-            BotServicesGrpc.BotServicesStub serviceStub;
-
-            CommPair communicationPair = openComms.getValue(botIdentity);
-            if(communicationPair == null) {
-                channel = ManagedChannelBuilder
-                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                        .usePlaintext()
-                        .build();
-
-                serviceStub = BotServicesGrpc.newStub(channel);
-                newCommunicationChannel(botIdentity, channel, serviceStub);
-            }
-            else {
-                channel = communicationPair.getManagedChannel();
-                serviceStub = communicationPair.getCommunicationStub();
-            }
-            BotGRPC.BotInformation botInfo = BotGRPC.BotInformation.newBuilder()
-                    .setId(identity.getId())
-                    .setHost(identity.getIp())
-                    .setPort(identity.getPort())
-                    .setPosition(BotGRPC.Position.newBuilder()
-                            .setX(newPosition.getX())
-                            .setY(newPosition.getY())
-                            .build())
-                    .build();
-
-//            TODO
-//            >> FLAVOUR :: DEBUGGING-GIALLO <<
-//            INDAGARE COMPORTAMENTI STRANI IN FASE DI MODIFICA DELLA POSIZIONE DOVUTI A NON SI SA BENE CHE COSA,
-//            L'ERRORE E QUESTO QUI
-//            io.grpc.Context was cancelled without error
-            serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
-                @Override
-                public void onNext(BotGRPC.Acknowledgement value) {
-
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    Logger.red("Something has gone wrong during the update process" + t);
-                    t.printStackTrace();
-                }
-
-                @Override
-                public void onCompleted() {
-
-                }
-            });
-        }
-
-//        TODO
+        //        TODO
 //        >> FLAVOUR :: CONSEGNA-ARANCIONE <<
 //        CAMBIARE L'ISCRIZIONE MQTT DEL ROBOT
         ObjectMapper mapper = new ObjectMapper();
@@ -522,5 +467,71 @@ public class BotThread extends Thread{
             }
 
             BotUtilities.closeConnection(connection);
+
+            System.out.println("->->RIMUOVERE QUESTO BOT<-<-");
+            try {
+                sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            System.out.println("AGGIORNANDO GLI ALTRI ROBOT");
+
+        for (BotIdentity botIdentity : fleetSnapshot) {
+
+            ManagedChannel channel;
+            BotServicesGrpc.BotServicesStub serviceStub;
+
+            CommPair communicationPair = openComms.getValue(botIdentity);
+            if(communicationPair == null) {
+                channel = ManagedChannelBuilder
+                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
+                        .usePlaintext()
+                        .build();
+
+                serviceStub = BotServicesGrpc.newStub(channel);
+                newCommunicationChannel(botIdentity, channel, serviceStub);
+            }
+            else {
+                channel = communicationPair.getManagedChannel();
+                serviceStub = communicationPair.getCommunicationStub();
+            }
+            BotGRPC.BotInformation botInfo = BotGRPC.BotInformation.newBuilder()
+                    .setId(identity.getId())
+                    .setHost(identity.getIp())
+                    .setPort(identity.getPort())
+                    .setPosition(BotGRPC.Position.newBuilder()
+                            .setX(newPosition.getX())
+                            .setY(newPosition.getY())
+                            .build())
+                    .build();
+
+//            TODO
+//            >> FLAVOUR :: DEBUGGING-GIALLO <<
+//            INDAGARE COMPORTAMENTI STRANI IN FASE DI MODIFICA DELLA POSIZIONE DOVUTI A NON SI SA BENE CHE COSA,
+//            L'ERRORE E QUESTO QUI
+//            io.grpc.Context was cancelled without error
+            serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
+                @Override
+                public void onNext(BotGRPC.Acknowledgement value) {
+
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    if(t.getClass() == StatusRuntimeException.class) {
+                        System.out.println("The bot that was communicating with me has crashed...");
+                    }
+                    else {
+                        Logger.red("Something has gone wrong during the update process");
+                    }
+                }
+
+                @Override
+                public void onCompleted() {
+
+                }
+            });
+        }
     }
 }

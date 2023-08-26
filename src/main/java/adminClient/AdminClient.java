@@ -14,6 +14,9 @@ import static cleaningBot.BotUtilities.buildConnection;
 
 public class AdminClient {
 
+//    TODO
+//    >> FLAVOUR :: UTILITIES-ROSSO <<
+//    AGGIUNGERE UNA FUNZIONE CHE CONSENTA DI VISUALIZZARE LA ATTUALE DISTRIBUZIONE DEI ROBOT NELLA CITTÀ
     public static void main(String[] args) {
         int command = -1;
         Logger.blue("Through this interface it's possible to:");

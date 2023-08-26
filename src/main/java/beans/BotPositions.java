@@ -53,14 +53,22 @@ public class BotPositions {
     public Position joinBot(BotIdentity identity) {
         Random random = new Random();
 
+//        Position pos = new Position(
+//            random.nextInt(9),
+//                random.nextInt(9)
+//        );
+
         Position pos = new Position(
-            random.nextInt(9),
-                random.nextInt(9)
+            random.nextInt(5),
+                random.nextInt(5)
         );
 
         System.out.println(pos);
         identity.setPosition(pos);
 
+//        TODO
+//        >> FLAVOUR :: DEBUGGING-GIALLO <<
+//        VEDERE UN ATTIMO COME MIGLIORARE LA GESTIONE DELLE POSIZIONI RIPETUTE ALL'INTERNO DELLA CITTÀ
         if(city.contains(identity)) {
             return null;
         }

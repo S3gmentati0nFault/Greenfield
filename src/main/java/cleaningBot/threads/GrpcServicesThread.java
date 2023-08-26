@@ -8,6 +8,10 @@ import io.grpc.ServerBuilder;
 
 import java.io.IOException;
 
+//TODO
+//>> FLAVOUR :: DEBUGGING-ARANCIONE <<
+//CAPIRE PERCHÈ A VOLTE IL PROCESSO DI AVVIAMENTO DEL SERVER GRPC SI PIANTA
+
 /**
  * GrpcServicesThread is a thread that handles incoming communications from other threads.
  */

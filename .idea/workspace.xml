@@ -14,13 +14,13 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminServer/ServerRestInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminClient/AdminClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/beans/BotPositions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/GrpcServicesThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/GrpcServicesThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -272,6 +272,7 @@
       <workItem from="1692972629580" duration="360000" />
       <workItem from="1692973021709" duration="9723000" />
       <workItem from="1692984046764" duration="9000" />
+      <workItem from="1693039660783" duration="6066000" />
     </task>
     <servers />
   </component>

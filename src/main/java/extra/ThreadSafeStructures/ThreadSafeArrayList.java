@@ -1,6 +1,7 @@
 package extra.ThreadSafeStructures;
 
 import extra.Logger.Logger;
+import jdk.jfr.internal.OldObjectSample;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,9 @@ public class ThreadSafeArrayList<ELEMENT> {
     }
 
     public synchronized void swap(ELEMENT oldElement, ELEMENT newElement) {
+        if(arrayList.contains(oldElement)) {
+            System.out.println("L'ELEMENTO STA DENTRO LA STRUTTURA DATI");
+        }
         arrayList.remove(oldElement);
         arrayList.add(newElement);
     }
