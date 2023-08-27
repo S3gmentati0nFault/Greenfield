@@ -6,6 +6,8 @@ import extra.Logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utilities.Variables.WAKEUP_ERROR;
+
 public class MeasurementBuffer implements simulators.Buffer {
     private List<Measurement> buffer;
     private int limitSize;
@@ -30,7 +32,7 @@ public class MeasurementBuffer implements simulators.Buffer {
             try{
                 wait();
             } catch (InterruptedException e) {
-                Logger.red("There was an error during the wakeup process");
+                Logger.red(WAKEUP_ERROR, e.getCause());
             }
         }
         List<Measurement> measurements = new ArrayList<>(buffer);

@@ -45,6 +45,8 @@ public class BotThread extends Thread{
     private InputThread inputThread;
     private static BotThread instance;
     private AtomicCounter counter;
+    private PollutionSensorThread pollutionSensorThread;
+    private MeasurementGatheringThread measurementGatheringThread;
 
     public static synchronized BotThread getInstance() {
         if(instance == null) {
@@ -70,6 +72,8 @@ public class BotThread extends Thread{
         otherBots = new ThreadSafeArrayList<>();
         openComms = new ThreadSafeHashMap<>();
         botServices = new BotServices(this);
+
+        measurementGatheringThread = null;
     }
 
     /**
@@ -77,7 +81,7 @@ public class BotThread extends Thread{
      * initiates the communication channel with the administration server.
      */
     @Override
-    public void run(){
+    public synchronized void run(){
         Logger.yellow("Starting grpc services");
         GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
         grpcThread.start();
@@ -94,10 +98,14 @@ public class BotThread extends Thread{
         Logger.yellow("Starting maintenance thread");
         maintenanceThread = new MaintenanceThread(botServices);
         maintenanceThread.start();
-//
-//        Logger.yellow("Starting the pollution measurement sensor thread");
-//        PollutionSensorThread pollutionSensorThread = new PollutionSensorThread(district, identity);
-//        pollutionSensorThread.start();
+
+        Logger.yellow("Starting the pollution measurement sensor thread");
+        pollutionSensorThread = new PollutionSensorThread(district, identity);
+        pollutionSensorThread.start();
+
+        Logger.yellow("Starting the measurement gathering thread");
+        measurementGatheringThread = new MeasurementGatheringThread();
+        measurementGatheringThread.start();
     }
 
     /**
@@ -330,6 +338,19 @@ public class BotThread extends Thread{
         return district;
     }
 
+    public synchronized MeasurementGatheringThread getMeasurementGatheringThread() {
+        if(measurementGatheringThread == null) {
+            System.out.println("WAITING...");
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Logger.red(WAKEUP_ERROR, e.getCause());
+            }
+        }
+        System.out.println("NOT WAITING ANYMORE....");
+        return measurementGatheringThread;
+    }
+
     public void setDistrict(int district) {
         this.district = district;
     }
@@ -515,9 +536,7 @@ public class BotThread extends Thread{
 //            io.grpc.Context was cancelled without error
             serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
-                public void onNext(BotGRPC.Acknowledgement value) {
-
-                }
+                public void onNext(BotGRPC.Acknowledgement value) {}
 
                 @Override
                 public void onError(Throwable t) {
@@ -530,10 +549,11 @@ public class BotThread extends Thread{
                 }
 
                 @Override
-                public void onCompleted() {
-
-                }
+                public void onCompleted() {}
             });
         }
+
+        pollutionSensorThread.closeConnection();
+        pollutionSensorThread = new PollutionSensorThread(district, identity);
     }
 }

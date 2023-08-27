@@ -17,12 +17,13 @@ public class MeasurementGatheringThread extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         buffer = new MeasurementBuffer();
         PM10Simulator simulatorThread = new PM10Simulator(buffer);
 
         Logger.yellow("Starting the simulation thread");
         simulatorThread.start();
+        BotThread.getInstance().notifyAll();
         gatherMeasurements();
     }
 
