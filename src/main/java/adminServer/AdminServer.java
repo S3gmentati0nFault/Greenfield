@@ -77,12 +77,11 @@ public class AdminServer {
                         Logger.red("There was an error while handling json mapping", e);
                     } catch (JsonParseException e) {
                         Logger.red("There was an error while handling json parsing", e);
-                        ;
                     } catch (IOException e) {
                         Logger.red("There was an error while reading from stream", e);
                     }
 
-                    AverageList al = null;
+                    AverageList al;
                     if (senderIdentity != -1 && averageList != null) {
                         al = new AverageList(averageList.size(), senderIdentity,
                                 timestamp, averageList);

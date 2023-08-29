@@ -20,23 +20,37 @@ public class MeasurementBuffer implements simulators.Buffer {
 
     @Override
     public synchronized void addMeasurement(Measurement m) {
-        buffer.add(m);
-        if(buffer.size() == limitSize) {
+//        System.out.println("PROVO A SCRIVERE");
+        if(buffer.size() < limitSize) {
+            buffer.add(m);
+        }
+        else {
             notifyAll();
+            try {
+//                System.out.println("WAITING TO WRITE");
+                wait();
+//                System.out.println("WRITING");
+            } catch (InterruptedException e) {
+                Logger.red(WAKEUP_ERROR, e);
+            }
         }
     }
 
     @Override
     public synchronized List<Measurement> readAllAndClean() {
+//        System.out.println("PROVO A LEGGERE");
         if(buffer.size() < limitSize) {
             try{
+//                System.out.println("WAITING TO READ");
                 wait();
+//                System.out.println("READING");
             } catch (InterruptedException e) {
-                Logger.red(WAKEUP_ERROR, e.getCause());
+                Logger.red(WAKEUP_ERROR, e);
             }
         }
         List<Measurement> measurements = new ArrayList<>(buffer);
-        buffer.subList(limitSize / 2, limitSize).clear();
+        buffer.subList(0, (limitSize / 2)).clear();
+        notifyAll();
         return measurements;
     }
 }

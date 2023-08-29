@@ -161,7 +161,13 @@ public class BotUtilities {
                 }
             }
 
-            int limit = (currentSize / 4) + (currentSize % 4);
+            int limit = (currentSize / 4);
+            if(currentSize % 4 > 1) {
+                limit += 1;
+            }
+            else{
+                limit += currentSize % 4;
+            }
             int reducedLimit = (currentSize / 4);
 
             System.out.println("LIMIT -> " + limit);
@@ -170,6 +176,7 @@ public class BotUtilities {
 //            >> FLAVOUR :: LOGICA-GIALLO <<
 //            PUNTARE A STABILIZZARE MAGGIORMENTE LA DISTRIBUZIONE DI MODO CHE NON VI SIANO DEI DISTRETTI CON 3 ROBOT E
 //            ALTRI CHE NE SONO COMPLETAMENTE PRIVI
+
             for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
                 while(districtDistribution.get(i).size() > limit) {
                     moveBotsAround(districtDistribution, limit, i, reducedLimit);
@@ -204,6 +211,10 @@ public class BotUtilities {
 
         System.out.println("RECEIVING DISTRICT -> " + (receivingDistrict + 1));
 
+        //            TODO
+//            >> FLAVOUR :: DEBUGGING-ARANCIONE <<
+//            CONTROLLARE LA PRESENZA DI UN BUG PER CUI IN FASE DI ELIMINAZIONE CI SONO DEI PROBLEMI NEL RICONOSCIMENTO
+//            DELLA CONDIZIONE DI USCITA DAL CICLO
         while(distribution.get(receivingDistrict).size() < reducedLimit &&
                 distribution.get(overpopulatedDistrict).size() > limit) {
 

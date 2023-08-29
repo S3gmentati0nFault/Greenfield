@@ -339,16 +339,20 @@ public class BotThread extends Thread{
     }
 
     public synchronized MeasurementGatheringThread getMeasurementGatheringThread() {
-        if(measurementGatheringThread == null) {
-            System.out.println("WAITING...");
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Logger.red(WAKEUP_ERROR, e.getCause());
+            if(measurementGatheringThread == null) {
+                System.out.println("WAITING...");
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Logger.red(WAKEUP_ERROR, e.getCause());
+                }
+                System.out.println("NOT WAITING ANYMORE....");
             }
-        }
-        System.out.println("NOT WAITING ANYMORE....");
         return measurementGatheringThread;
+    }
+
+    public PollutionSensorThread getPollutionSensorThread() {
+        return pollutionSensorThread;
     }
 
     public void setDistrict(int district) {
@@ -555,5 +559,6 @@ public class BotThread extends Thread{
 
         pollutionSensorThread.closeConnection();
         pollutionSensorThread = new PollutionSensorThread(district, identity);
+        pollutionSensorThread.start();
     }
 }

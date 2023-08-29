@@ -17,33 +17,39 @@ public class MeasurementGatheringThread extends Thread {
     }
 
     @Override
-    public synchronized void run() {
+    public void run() {
         buffer = new MeasurementBuffer();
         PM10Simulator simulatorThread = new PM10Simulator(buffer);
 
         Logger.yellow("Starting the simulation thread");
         simulatorThread.start();
-        BotThread.getInstance().notifyAll();
-        gatherMeasurements();
+        readingProcess();
+    }
+
+    public void readingProcess() {
+        while(true) {
+            gatherMeasurements();
+//            System.out.println("CICLANDO...");
+        }
     }
 
     private void gatherMeasurements() {
-        while(true) {
+//        System.out.println("CONTATTO IL SENSORE");
             List<Measurement> measurements = buffer.readAllAndClean();
             float avg = 0;
             for (Measurement measurement : measurements) {
                 avg += measurement.getValue();
             }
             avg = avg / 8f;
-            averages.add(avg);
-        }
+            synchronized(this) {
+                averages.add(avg);
+            }
     }
 
-    public List<Float> getAverages() {
-        return averages;
-    }
-
-    public synchronized void clear() {
+    public synchronized List<Float> getAverages() {
+        System.out.println("PASSO LE MEDIE AL MIO SUPERIORE");
+        List<Float> returnList = new ArrayList<>(averages);
         averages.clear();
+        return returnList;
     }
 }

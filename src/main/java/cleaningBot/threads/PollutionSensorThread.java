@@ -2,7 +2,6 @@ package cleaningBot.threads;
 
 import beans.BotIdentity;
 import extra.Logger.Logger;
-import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -12,8 +11,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.IOException;
 import java.util.List;
-
-import static utilities.Variables.WAKEUP_ERROR;
 
 public class PollutionSensorThread extends Thread {
     private int district;
@@ -25,15 +22,15 @@ public class PollutionSensorThread extends Thread {
     public PollutionSensorThread(int district, BotIdentity identity) {
         this.district = district;
         botIdentity = identity;
-        measurementGatheringThread = BotThread.getInstance().getMeasurementGatheringThread();
     }
 
     @Override
     public void run() {
+        measurementGatheringThread = BotThread.getInstance().getMeasurementGatheringThread();
         startBrokering();
     }
 
-    public synchronized void startBrokering() {
+    public void startBrokering() {
         brokering = true;
         String broker = "tcp://localhost:1883";
         String clientID = MqttClient.generateClientId();
@@ -42,6 +39,9 @@ public class PollutionSensorThread extends Thread {
         ObjectMapper mapper = new ObjectMapper();
         int qos = 1;
 
+//        TODO
+//        >> FLAVOUR :: CONSEGNA-ROSSO <<
+//        FIXARE IL COMPORTAMENTO DEL SISTEMA DI GESTIONE DELLE MISURAZIONI
         try{
             client = new MqttClient(broker, clientID);
             MqttConnectOptions connectOptions = new MqttConnectOptions();
@@ -49,44 +49,28 @@ public class PollutionSensorThread extends Thread {
             client.connect(connectOptions);
 
             while(brokering) {
-                try{
-                    wait(15000);
+                try {
+                    System.out.println("In attesa di un nuovo ciclo di lettura");
+                    sleep(15000);
                 } catch (InterruptedException e) {
-                    Logger.red("There was an error during the wakeup procedure");
+                    throw new RuntimeException(e);
                 }
+                System.out.println(">> Getting averages <<");
                 List<Float> averages = measurementGatheringThread.getAverages();
-                String payload = botIdentity.getId()
+                StringBuilder payload = new StringBuilder(botIdentity.getId()
                         + "-" + mapper.writeValueAsString(System.currentTimeMillis())
-                        + "-[";
+                        + "-[");
 
                 for (Float average : averages) {
-                    payload = payload + String.valueOf(average) + ",";
+                    payload.append(String.valueOf(average)).append(",");
                 }
 
-                payload = payload.replaceAll(",$", "") + "]";
+                payload = new StringBuilder(payload.toString().replaceAll(",$", "") + "]");
 
-                MqttMessage message = new MqttMessage(payload.getBytes());
+                System.out.println(payload.toString());
+                MqttMessage message = new MqttMessage(payload.toString().getBytes());
                 message.setQos(qos);
                 client.publish(topic, message);
-                measurementGatheringThread.clear();
-            }
-
-            List<Float> averages = measurementGatheringThread.getAverages();
-            if(!averages.isEmpty()) {
-                String payload = botIdentity.getId()
-                        + "-" + mapper.writeValueAsString(System.currentTimeMillis())
-                        + "-[";
-
-                for (Float average : averages) {
-                    payload = payload + String.valueOf(average) + ",";
-                }
-
-                payload = payload.replaceAll(",$", "") + "]";
-
-                MqttMessage message = new MqttMessage(payload.getBytes());
-                message.setQos(qos);
-                client.publish(topic, message);
-                measurementGatheringThread.clear();
             }
         } catch (MqttException e) {
             Logger.red("There was an error during the Mqtt publisher startup");
