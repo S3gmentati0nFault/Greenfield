@@ -29,12 +29,10 @@ public class MeasurementGatheringThread extends Thread {
     public void readingProcess() {
         while(true) {
             gatherMeasurements();
-//            System.out.println("CICLANDO...");
         }
     }
 
     private void gatherMeasurements() {
-//        System.out.println("CONTATTO IL SENSORE");
             List<Measurement> measurements = buffer.readAllAndClean();
             float avg = 0;
             for (Measurement measurement : measurements) {
@@ -47,7 +45,6 @@ public class MeasurementGatheringThread extends Thread {
     }
 
     public synchronized List<Float> getAverages() {
-        System.out.println("PASSO LE MEDIE AL MIO SUPERIORE");
         List<Float> returnList = new ArrayList<>(averages);
         averages.clear();
         return returnList;

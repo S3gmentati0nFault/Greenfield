@@ -20,16 +20,13 @@ public class MeasurementBuffer implements simulators.Buffer {
 
     @Override
     public synchronized void addMeasurement(Measurement m) {
-//        System.out.println("PROVO A SCRIVERE");
         if(buffer.size() < limitSize) {
             buffer.add(m);
         }
         else {
             notifyAll();
             try {
-//                System.out.println("WAITING TO WRITE");
                 wait();
-//                System.out.println("WRITING");
             } catch (InterruptedException e) {
                 Logger.red(WAKEUP_ERROR, e);
             }
@@ -38,12 +35,9 @@ public class MeasurementBuffer implements simulators.Buffer {
 
     @Override
     public synchronized List<Measurement> readAllAndClean() {
-//        System.out.println("PROVO A LEGGERE");
         if(buffer.size() < limitSize) {
             try{
-//                System.out.println("WAITING TO READ");
                 wait();
-//                System.out.println("READING");
             } catch (InterruptedException e) {
                 Logger.red(WAKEUP_ERROR, e);
             }

@@ -16,6 +16,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
+import static utilities.Variables.DEBUGGING;
 import static utilities.Variables.WAKEUP_ERROR;
 
 /**
@@ -52,7 +53,9 @@ public class BotServices extends BotServicesImplBase {
     public synchronized void maintenanceRequestGRPC(BotGRPC.Identifier request,
                                                     StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("processQueryGRPC");
-        System.out.println("Current Thread: " + Thread.currentThread().getId());
+        if(DEBUGGING) {
+            System.out.println("Current Thread: " + Thread.currentThread().getId());
+        }
         if(request.getTimestamp() > botThread.getTimestamp() &&
                 botThread.getTimestamp() != -1){
 
@@ -102,9 +105,6 @@ public class BotServices extends BotServicesImplBase {
             responseObserver.onError(e);
         }
         responseObserver.onCompleted();
-
-        System.out.println(BotThread.getInstance().getOtherBots().size());
-        System.out.println(BotThread.getInstance().getOpenComms().size());
     }
 
     public void crashNotificationGRPC(BotGRPC.BotInformation request,
@@ -131,7 +131,7 @@ public class BotServices extends BotServicesImplBase {
         Logger.purple("moveRequestGRPC");
 
         if(botThread.getDistrict() == request.getValue()) {
-            System.out.println("I'm already in that district");
+            Logger.red("I'm already present in that district");
             responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
             responseObserver.onCompleted();
         }
@@ -139,12 +139,16 @@ public class BotServices extends BotServicesImplBase {
             synchronized (this) {
                 botThread.changeMyPosition(request.getValue());
                 try {
-                    System.out.println("WAITING...");
+                    if(DEBUGGING) {
+                        System.out.println("WAITING...");
+                    }
                     wait();
                 } catch (InterruptedException e) {
                     Logger.red(WAKEUP_ERROR, e);
                 }
-                System.out.println("NOT WAITING...");
+                if(DEBUGGING) {
+                    System.out.println("NOT WAITING...");
+                }
                 responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
                 responseObserver.onCompleted();
             }
@@ -169,14 +173,6 @@ public class BotServices extends BotServicesImplBase {
         if(waitingInstances.size() != 0) {
             waitingInstances.forEach(
                     service -> {
-//                    TEST PER MOSTRARE L'ATTESA
-//                    try {
-//                        System.out.println("%%% DORMO %%%");
-//                        sleep(5000);
-//                        System.out.println("%%% BASTA DORMIRE %%%");
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
                         Logger.yellow("Waking service " + service.getTimestamp() + " up");
                         service.getBotServices().notify();
                     }

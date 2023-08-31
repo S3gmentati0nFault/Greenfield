@@ -12,6 +12,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.io.IOException;
 import java.util.List;
 
+import static utilities.Variables.DEBUGGING;
+
 public class PollutionSensorThread extends Thread {
     private int district;
     private BotIdentity botIdentity;
@@ -35,7 +37,7 @@ public class PollutionSensorThread extends Thread {
         String broker = "tcp://localhost:1883";
         String clientID = MqttClient.generateClientId();
         String topic = "greenfield/pollution/" + district;
-        System.out.println(topic);
+        Logger.yellow("Publishing on topic > " + topic);
         ObjectMapper mapper = new ObjectMapper();
         int qos = 1;
 
@@ -47,12 +49,16 @@ public class PollutionSensorThread extends Thread {
 
             while(brokering) {
                 try {
-                    System.out.println("In attesa di un nuovo ciclo di lettura");
+                    if(DEBUGGING) {
+                        System.out.println("In attesa di un nuovo ciclo di lettura");
+                    }
                     sleep(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println(">> Getting averages <<");
+                if(DEBUGGING) {
+                    System.out.println(">> Mi arrubo le medie <<");
+                }
                 List<Float> averages = measurementGatheringThread.getAverages();
                 StringBuilder payload = new StringBuilder(botIdentity.getId()
                         + "-" + mapper.writeValueAsString(System.currentTimeMillis())
@@ -64,7 +70,9 @@ public class PollutionSensorThread extends Thread {
 
                 payload = new StringBuilder(payload.toString().replaceAll(",$", "") + "]");
 
-                System.out.println(payload.toString());
+                if(DEBUGGING) {
+                    System.out.println(payload.toString());
+                }
                 MqttMessage message = new MqttMessage(payload.toString().getBytes());
                 message.setQos(qos);
                 client.publish(topic, message);
@@ -80,7 +88,7 @@ public class PollutionSensorThread extends Thread {
     }
 
     public void closeConnection() {
-        System.out.println("CLOSING CONNECTION...");
+        Logger.yellow("Closing MQTT connection");
         brokering = false;
 
         try {

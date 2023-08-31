@@ -19,6 +19,8 @@ import utilities.Variables;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utilities.Variables.DEBUGGING;
+
 public class MutualExclusionThread extends Thread {
 
     private BotServices botServices;
@@ -91,9 +93,13 @@ public class MutualExclusionThread extends Thread {
             serviceStub.maintenanceRequestGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {
-                    System.out.println("FUORI -> " + Thread.currentThread().getId());
+                    if(DEBUGGING) {
+                        System.out.println("FUORI -> " + Thread.currentThread().getId());
+                    }
                     synchronized (this) {
-                        System.out.println("DENTRO -> " + Thread.currentThread().getId());
+                        if(DEBUGGING) {
+                            System.out.println("DENTRO -> " + Thread.currentThread().getId());
+                        }
                         counter.decrement();
                         Logger.green("The response was positive! Still waiting for " + counter.getCounter() + " answers");
                     }

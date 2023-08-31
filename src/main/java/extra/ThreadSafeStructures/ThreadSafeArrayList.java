@@ -6,6 +6,8 @@ import jdk.jfr.internal.OldObjectSample;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utilities.Variables.DEBUGGING;
+
 public class ThreadSafeArrayList<ELEMENT> {
     private List<ELEMENT> arrayList;
     private boolean writing;
@@ -57,7 +59,7 @@ public class ThreadSafeArrayList<ELEMENT> {
     }
 
     public synchronized void swap(ELEMENT oldElement, ELEMENT newElement) {
-        if(arrayList.contains(oldElement)) {
+        if(DEBUGGING & arrayList.contains(oldElement)) {
             System.out.println("L'ELEMENTO STA DENTRO LA STRUTTURA DATI");
         }
         arrayList.remove(oldElement);

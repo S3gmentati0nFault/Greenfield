@@ -1,6 +1,5 @@
 package utilities;
 public class Variables {
-
     public static final Boolean DEBUGGING = false;
     public static final Boolean BOT_THREAD_DEBUGGING = true;
 

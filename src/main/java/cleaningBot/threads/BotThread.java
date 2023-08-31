@@ -338,13 +338,17 @@ public class BotThread extends Thread{
 
     public synchronized MeasurementGatheringThread getMeasurementGatheringThread() {
             if(measurementGatheringThread == null) {
-                System.out.println("WAITING...");
+                if(DEBUGGING) {
+                    System.out.println("WAITING...");
+                }
                 try {
                     wait();
                 } catch (InterruptedException e) {
                     Logger.red(WAKEUP_ERROR, e.getCause());
                 }
-                System.out.println("NOT WAITING ANYMORE....");
+                if(DEBUGGING) {
+                    System.out.println("NOT WAITING ANYMORE...");
+                }
             }
         return measurementGatheringThread;
     }
@@ -388,7 +392,9 @@ public class BotThread extends Thread{
     public synchronized boolean removeBot(List<BotIdentity> deadRobots) {
         boolean removalOperation = true;
         for (BotIdentity deadRobot : deadRobots) {
-            System.out.println(deadRobot);
+            if(DEBUGGING) {
+                System.out.println(deadRobot);
+            }
             removalOperation &= otherBots.removeElement(deadRobot);
             CommPair communicationPair = openComms.removePair(deadRobot);
             if(communicationPair != null) {
@@ -407,7 +413,9 @@ public class BotThread extends Thread{
 
     public synchronized boolean removeBot(BotIdentity deadRobot) {
         boolean removalOperation = true;
-        System.out.println(deadRobot);
+        if(DEBUGGING) {
+            System.out.println(deadRobot);
+        }
         removalOperation &= otherBots.removeElement(deadRobot);
         CommPair communicationPair = openComms.removePair(deadRobot);
         if(communicationPair != null) {
@@ -433,7 +441,7 @@ public class BotThread extends Thread{
         BotIdentity tmp = identity;
         identity.setPosition(newPosition);
         setDistrict(district);
-        System.out.println("I'VE BEEN MOVED TO " + district + " MY NEW POSITION IS " + newPosition);
+        Logger.yellow("My new district is > " + district + " > My new position is > " + newPosition);
 
         List<BotIdentity> fleetSnapshot = otherBots.getCopy();
 
@@ -496,7 +504,6 @@ public class BotThread extends Thread{
             }
 
         for (BotIdentity botIdentity : fleetSnapshot) {
-            System.out.println("-> " + botIdentity + " <-");
 
             ManagedChannel channel;
             BotServicesGrpc.BotServicesStub serviceStub;
