@@ -34,11 +34,11 @@ import static utilities.Variables.*;
  * A thread for the CleaningBot class that handles the initial connection with the
  * administration server
  */
-public class BotThread extends Thread{
-    private ThreadSafeArrayList<BotIdentity> otherBots;
-    private ThreadSafeHashMap<BotIdentity, CommPair> openComms;
+public class BotThread extends Thread {
+    private final ThreadSafeArrayList<BotIdentity> otherBots;
+    private final ThreadSafeHashMap<BotIdentity, CommPair> openComms;
     private BotIdentity identity;
-    private BotServices botServices;
+    private final BotServices botServices;
     private long timestamp;
     private int district;
     private MaintenanceThread maintenanceThread;
@@ -49,7 +49,7 @@ public class BotThread extends Thread{
     private MeasurementGatheringThread measurementGatheringThread;
 
     public static synchronized BotThread getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new BotThread();
         }
         return instance;
@@ -59,7 +59,7 @@ public class BotThread extends Thread{
      * Empty constructor that generates random values for both the id and the
      * port.
      */
-    public BotThread(){
+    public BotThread() {
         Random random = new Random();
 
         identity = new BotIdentity(
@@ -81,12 +81,12 @@ public class BotThread extends Thread{
      * initiates the communication channel with the administration server.
      */
     @Override
-    public synchronized void run(){
+    public synchronized void run() {
         Logger.yellow("Starting grpc services");
         GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
         grpcThread.start();
 
-        if(!startNewBot()){
+        if (!startNewBot()) {
             Logger.red("There was an error during Thread instantiation");
             System.exit(-1);
         }
@@ -111,6 +111,7 @@ public class BotThread extends Thread{
     /**
      * Method that opens a connection with the administration server and makes its
      * presence known to both the server and the other bots in the network.
+     *
      * @return It returns true if the operation went well, false otherwise.
      */
     private synchronized boolean startNewBot() {
@@ -120,23 +121,23 @@ public class BotThread extends Thread{
         boolean isBotAlreadyInTheNetwork = true;
         int i = 0;
 
-        while(isBotAlreadyInTheNetwork && i < UPPER_ID_LIMIT) {
+        while (isBotAlreadyInTheNetwork && i < UPPER_ID_LIMIT) {
             connection =
-                BotUtilities.buildConnection("GET", "http://" +
-                        Variables.HOST+":" + Variables.PORT + "/admin/poll/" + identity.getId());
+                    BotUtilities.buildConnection("GET", "http://" +
+                            Variables.HOST + ":" + Variables.PORT + "/admin/poll/" + identity.getId());
 
             BufferedReader br = null;
-            try{
+            try {
                 br = new BufferedReader(
                         new InputStreamReader(connection.getInputStream(), "utf-8"));
-            } catch(IOException e) {
+            } catch (IOException e) {
                 Logger.red(":(");
                 return false;
             }
 
-            try{
+            try {
                 isBotAlreadyInTheNetwork = Boolean.parseBoolean(br.readLine());
-                if(isBotAlreadyInTheNetwork) {
+                if (isBotAlreadyInTheNetwork) {
                     Random random = new Random();
                     identity.setId(random.nextInt(UPPER_ID_LIMIT));
                 }
@@ -146,7 +147,7 @@ public class BotThread extends Thread{
             }
         }
 
-        if(i > UPPER_ID_LIMIT) {
+        if (i > UPPER_ID_LIMIT) {
             System.exit(-1);
         }
 
@@ -154,22 +155,22 @@ public class BotThread extends Thread{
 
         connection =
                 BotUtilities.buildConnection("POST", "http://" +
-                        Variables.HOST+":" + Variables.PORT + "/admin/join");
+                        Variables.HOST + ":" + Variables.PORT + "/admin/join");
 
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
         connection.setDoOutput(true);
 
         OutputStream os;
-        try{
+        try {
             os = connection.getOutputStream();
-        }catch(IOException e){
+        } catch (IOException e) {
             Logger.red("There was an error during output stream creation");
             return false;
         }
 
         String json = "";
-        try{
+        try {
             json = mapper.writeValueAsString(identity);
         } catch (IOException e) {
             Logger.red("There was an error while generating the json string");
@@ -177,33 +178,34 @@ public class BotThread extends Thread{
         }
 
         byte[] input = null;
-        try{
+        try {
             input = json.getBytes("utf-8");
         } catch (UnsupportedEncodingException e) {
             Logger.red("There was a problem while turning the string into bytes");
             return false;
         }
 
-        try{
+        try {
             os.write(input, 0, input.length);
-        }catch(IOException e){
+        } catch (IOException e) {
             Logger.red("There was an error while writing on output stream");
             return false;
         }
 
         BufferedReader br = null;
-        try{
+        try {
             br = new BufferedReader(
                     new InputStreamReader(connection.getInputStream(), "utf-8"));
-        } catch(IOException e) {
+        } catch (IOException e) {
             Logger.red("It was not possible to initialize the BufferedReader");
             return false;
         }
 
-        try{
+        try {
             String[] responseLine = br.readLine().split("-");
             identity.setPosition(new ObjectMapper().readValue(responseLine[0], Position.class));
-            List<BotIdentity> robots = new ObjectMapper().readValue(responseLine[1], new TypeReference<List<BotIdentity>>(){});
+            List<BotIdentity> robots = new ObjectMapper().readValue(responseLine[1], new TypeReference<List<BotIdentity>>() {
+            });
             otherBots.addAll(robots);
         } catch (IOException e) {
             Logger.red("It was not possible to retrieve the response from the server");
@@ -214,69 +216,62 @@ public class BotThread extends Thread{
         otherBots.removeElement(identity);
 
         Logger.cyan("Letting my presence known");
-        if(!otherBots.isEmpty()) {
-            counter = new AtomicCounter(otherBots.size());
-            List<BotIdentity> nonRespondingRobots = new ArrayList<>();
+        if (otherBots.isEmpty()) {
+            return true;
+        }
+        counter = new AtomicCounter(otherBots.size());
+        List<BotIdentity> nonRespondingRobots = new ArrayList<>();
 
-            otherBots.getCopy().forEach(botIdentity -> {
+        otherBots.getCopy().forEach(botIdentity -> {
 
-                if(BOT_THREAD_DEBUGGING) {
-                    try {
-                        Logger.blue("DO SOMETHING NOW");
-                        sleep(10000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+            if (BOT_THREAD_DEBUGGING) {
+                try {
+                    Logger.blue("DO SOMETHING NOW");
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            CommPair commPair = BotUtilities.retrieveCommunicationPair(botIdentity);
+
+            BotGRPC.BotInformation identikit = BotGRPC.BotInformation
+                    .newBuilder()
+                    .setId(identity.getId())
+                    .setPort(identity.getPort())
+                    .setHost(identity.getIp())
+                    .setPosition(BotGRPC.Position.newBuilder()
+                            .setX(identity.getPosition().getX())
+                            .setY(identity.getPosition().getY())
+                            .build()
+                    )
+                    .build();
+
+            commPair.getCommunicationStub().joinRequestGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
+                @Override
+                public void onNext(BotGRPC.Acknowledgement value) {
+                    counter.decrement();
+                    if (!value.getAck()) {
+                        Logger.purple("robot " + botIdentity + " didn't add me to its network");
                     }
                 }
 
-                ManagedChannel channel = ManagedChannelBuilder
-                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                        .usePlaintext()
-                        .build();
-                BotServicesGrpc.BotServicesStub serviceStub = BotServicesGrpc.newStub(channel);
-
-                openComms.addPair(botIdentity, new CommPair(channel, serviceStub));
-
-                BotGRPC.BotInformation identikit = BotGRPC.BotInformation
-                        .newBuilder()
-                        .setId(identity.getId())
-                        .setPort(identity.getPort())
-                        .setHost(identity.getIp())
-                        .setPosition(BotGRPC.Position.newBuilder()
-                                .setX(identity.getPosition().getX())
-                                .setY(identity.getPosition().getY())
-                                .build()
-                        )
-                        .build();
-
-                serviceStub.joinRequestGRPC(identikit, new StreamObserver<BotGRPC.Acknowledgement>() {
-                    BotIdentity receiver = botIdentity;
-
-                    @Override
-                    public void onNext(BotGRPC.Acknowledgement value) {
-                        counter.decrement();
-                        if(!value.getAck()){
-                            Logger.purple("robot " + botIdentity + " didn't add me to its network");
-                        }
+                @Override
+                public void onError(Throwable t) {
+                    Logger.red("robot " + botIdentity + " sent error " + t.getClass());
+                    counter.decrement();
+                    if (t.getClass() == StatusRuntimeException.class) {
+                        nonRespondingRobots.add(botIdentity);
                     }
+                    checkCounter(nonRespondingRobots);
+                }
 
-                    @Override
-                    public void onError(Throwable t) {
-                        Logger.red("robot " + botIdentity + " sent error " + t.getClass());
-                        counter.decrement();
-                        if(t.getClass() == StatusRuntimeException.class) {
-                            nonRespondingRobots.add(botIdentity);
-                        }
-                        checkCounter(nonRespondingRobots);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        checkCounter(nonRespondingRobots);
-                    }
-                });
+                @Override
+                public void onCompleted() {
+                    checkCounter(nonRespondingRobots);
+                }
             });
-        }
+        });
 
         district = BotUtilities.districtCalculator(identity.getPosition());
 
@@ -286,9 +281,10 @@ public class BotThread extends Thread{
     }
 
     public synchronized void checkCounter(List<BotIdentity> nonRespondingRobots) {
-        if(counter.getCounter() == 0) {
+        if (counter.getCounter() == 0) {
             Logger.green("Hello procedure completed");
-            if(!nonRespondingRobots.isEmpty()) {
+            counter.add(10);
+            if (!nonRespondingRobots.isEmpty()) {
                 BotUtilities.botRemovalFunction(nonRespondingRobots, false);
             }
         }
@@ -337,24 +333,20 @@ public class BotThread extends Thread{
     }
 
     public synchronized MeasurementGatheringThread getMeasurementGatheringThread() {
-            if(measurementGatheringThread == null) {
-                if(DEBUGGING) {
-                    System.out.println("WAITING...");
-                }
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    Logger.red(WAKEUP_ERROR, e.getCause());
-                }
-                if(DEBUGGING) {
-                    System.out.println("NOT WAITING ANYMORE...");
-                }
+        if (measurementGatheringThread == null) {
+            if (DEBUGGING) {
+                System.out.println("WAITING...");
             }
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Logger.red(WAKEUP_ERROR, e.getCause());
+            }
+            if (DEBUGGING) {
+                System.out.println("NOT WAITING ANYMORE...");
+            }
+        }
         return measurementGatheringThread;
-    }
-
-    public PollutionSensorThread getPollutionSensorThread() {
-        return pollutionSensorThread;
     }
 
     public void setDistrict(int district) {
@@ -392,13 +384,13 @@ public class BotThread extends Thread{
     public synchronized boolean removeBot(List<BotIdentity> deadRobots) {
         boolean removalOperation = true;
         for (BotIdentity deadRobot : deadRobots) {
-            if(DEBUGGING) {
+            if (DEBUGGING) {
                 System.out.println(deadRobot);
             }
             removalOperation &= otherBots.removeElement(deadRobot);
             CommPair communicationPair = openComms.removePair(deadRobot);
-            if(communicationPair != null) {
-                try{
+            if (communicationPair != null) {
+                try {
                     Logger.yellow("Closing the communication channel...");
                     communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
                     Logger.green("Communication channel closed!");
@@ -413,13 +405,13 @@ public class BotThread extends Thread{
 
     public synchronized boolean removeBot(BotIdentity deadRobot) {
         boolean removalOperation = true;
-        if(DEBUGGING) {
+        if (DEBUGGING) {
             System.out.println(deadRobot);
         }
         removalOperation &= otherBots.removeElement(deadRobot);
         CommPair communicationPair = openComms.removePair(deadRobot);
-        if(communicationPair != null) {
-            try{
+        if (communicationPair != null) {
+            try {
                 Logger.yellow("Closing the communication channel...");
                 communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
                 Logger.green("Communication channel closed!");
@@ -431,9 +423,10 @@ public class BotThread extends Thread{
         return removalOperation;
     }
 
-    public void newCommunicationChannel(BotIdentity destination, ManagedChannel channel, BotServicesGrpc.BotServicesStub stub) {
+    public CommPair newCommunicationChannel(BotIdentity destination, ManagedChannel channel, BotServicesGrpc.BotServicesStub stub) {
         CommPair commPair = new CommPair(channel, stub);
         openComms.addPair(destination, commPair);
+        return commPair;
     }
 
     public void changeMyPosition(int district) {
@@ -447,61 +440,42 @@ public class BotThread extends Thread{
 
         ObjectMapper mapper = new ObjectMapper();
 
-            HttpURLConnection connection =
-                    BotUtilities.buildConnection("PUT", "http://" +
-                            Variables.HOST+":" + Variables.PORT + "/admin/update");
+        HttpURLConnection connection =
+                BotUtilities.buildConnection("PUT", "http://" +
+                        Variables.HOST + ":" + Variables.PORT + "/admin/update");
 
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setDoOutput(true);
 
-            OutputStream os = null;
-            try{
-                os = connection.getOutputStream();
-            }catch(IOException e){
-                Logger.red("There was an error during output stream creation");
-            }
+        OutputStream os = null;
+        try {
+            os = connection.getOutputStream();
+        } catch (IOException e) {
+            Logger.red("There was an error during output stream creation");
+        }
 
-            String json = "";
-            try{
-                json = "[" + mapper.writeValueAsString(tmp) + ", " + mapper.writeValueAsString(identity) + "]";
-            } catch (IOException e) {
-                Logger.red("There was an error while generating the json string");
-            }
+        String json = "";
+        try {
+            json = "[" + mapper.writeValueAsString(tmp) + ", " + mapper.writeValueAsString(identity) + "]";
+        } catch (IOException e) {
+            Logger.red("There was an error while generating the json string");
+        }
 
-            byte[] input = null;
-            try{
-                input = json.getBytes("utf-8");
-            } catch (UnsupportedEncodingException e) {
-                Logger.red("There was a problem while turning the string into bytes");
-            }
+        byte[] input = null;
+        try {
+            input = json.getBytes("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            Logger.red("There was a problem while turning the string into bytes");
+        }
 
-            try{
-                os.write(input, 0, input.length);
-            }catch(IOException e){
-                Logger.red("There was an error while writing on output stream");
-            }
+        try {
+            os.write(input, 0, input.length);
+        } catch (IOException e) {
+            Logger.red("There was an error while writing on output stream");
+        }
 
-            BufferedReader br = null;
-            try{
-                br = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream(), "utf-8"));
-            } catch(IOException e) {
-                Logger.red("It was not possible to initialize the BufferedReader");
-            }
-
-            BotUtilities.closeConnection(connection);
-
-            if(DEBUGGING) {
-                System.out.println("->->RIMUOVERE QUESTO BOT<-<-");
-                try {
-                    sleep(10000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                System.out.println("AGGIORNANDO GLI ALTRI ROBOT");
-            }
+        BotUtilities.closeConnection(connection);
 
         for (BotIdentity botIdentity : fleetSnapshot) {
 
@@ -509,7 +483,7 @@ public class BotThread extends Thread{
             BotServicesGrpc.BotServicesStub serviceStub;
 
             CommPair communicationPair = openComms.getValue(botIdentity);
-            if(communicationPair == null) {
+            if (communicationPair == null) {
                 channel = ManagedChannelBuilder
                         .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                         .usePlaintext()
@@ -517,8 +491,7 @@ public class BotThread extends Thread{
 
                 serviceStub = BotServicesGrpc.newStub(channel);
                 newCommunicationChannel(botIdentity, channel, serviceStub);
-            }
-            else {
+            } else {
                 serviceStub = communicationPair.getCommunicationStub();
             }
             BotGRPC.BotInformation botInfo = BotGRPC.BotInformation.newBuilder()
@@ -533,19 +506,20 @@ public class BotThread extends Thread{
 
             serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
-                public void onNext(BotGRPC.Acknowledgement value) {}
+                public void onNext(BotGRPC.Acknowledgement value) {
+                }
 
                 @Override
                 public void onError(Throwable t) {
                     Logger.red("Something went wrong during communication", t);
-                    synchronized(botServices) {
+                    synchronized (botServices) {
                         botServices.notify();
                     }
                 }
 
                 @Override
                 public void onCompleted() {
-                    synchronized(botServices) {
+                    synchronized (botServices) {
                         botServices.notify();
                     }
                 }
