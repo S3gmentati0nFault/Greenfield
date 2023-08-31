@@ -14,12 +14,11 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/adminServer/AdminServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/MeasurementBuffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/MeasurementBuffer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MeasurementGatheringThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MeasurementGatheringThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +84,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -280,7 +279,10 @@
       <workItem from="1693213224839" duration="7422000" />
       <workItem from="1693230509922" duration="6386000" />
       <workItem from="1693237581088" duration="117000" />
-      <workItem from="1693315538328" duration="1529000" />
+      <workItem from="1693315538328" duration="2792000" />
+      <workItem from="1693318502856" duration="174000" />
+      <workItem from="1693318683402" duration="3828000" />
+      <workItem from="1693471740561" duration="5673000" />
     </task>
     <servers />
   </component>
@@ -311,6 +313,29 @@
     </option>
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java</url>
+          <line>155</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java</url>
+          <line>157</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java</url>
+          <line>153</line>
+          <properties class="cleaningBot.service.BotServices" method="positionModificationRequestGRPC">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="sun.net.www.protocol.http.HttpURLConnection" memberName="currentProxyCredentials" />

@@ -213,10 +213,6 @@ public class BotThread extends Thread{
         BotUtilities.closeConnection(connection);
         otherBots.removeElement(identity);
 
-//      TODO
-//      >> FLAVOUR :: DEBUGGING-ARANCIONE <<
-//      CAPIRE PERCHÉ MI RESTITUISCE ERRORE DI CONCURRENT MODIFICATION QUANDO AGGIUNGO UN TIMER QUI SOTTO E RIVEDERE
-//      COME FUNZIONA IL TUTTO
         Logger.cyan("Letting my presence known");
         if(!otherBots.isEmpty()) {
             counter = new AtomicCounter(otherBots.size());
@@ -224,11 +220,13 @@ public class BotThread extends Thread{
 
             otherBots.getCopy().forEach(botIdentity -> {
 
-                try {
-                    Logger.blue("ADD");
-                    sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if(BOT_THREAD_DEBUGGING) {
+                    try {
+                        Logger.blue("DO SOMETHING NOW");
+                        sleep(10000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 ManagedChannel channel = ManagedChannelBuilder
@@ -439,13 +437,6 @@ public class BotThread extends Thread{
 
         List<BotIdentity> fleetSnapshot = otherBots.getCopy();
 
-        for (BotIdentity botIdentity : fleetSnapshot) {
-            System.out.println(botIdentity);
-        }
-
-        //        TODO
-//        >> FLAVOUR :: CONSEGNA-ARANCIONE <<
-//        CAMBIARE L'ISCRIZIONE MQTT DEL ROBOT
         ObjectMapper mapper = new ObjectMapper();
 
             HttpURLConnection connection =
@@ -505,6 +496,7 @@ public class BotThread extends Thread{
             }
 
         for (BotIdentity botIdentity : fleetSnapshot) {
+            System.out.println("-> " + botIdentity + " <-");
 
             ManagedChannel channel;
             BotServicesGrpc.BotServicesStub serviceStub;
@@ -520,7 +512,6 @@ public class BotThread extends Thread{
                 newCommunicationChannel(botIdentity, channel, serviceStub);
             }
             else {
-                channel = communicationPair.getManagedChannel();
                 serviceStub = communicationPair.getCommunicationStub();
             }
             BotGRPC.BotInformation botInfo = BotGRPC.BotInformation.newBuilder()
@@ -533,30 +524,30 @@ public class BotThread extends Thread{
                             .build())
                     .build();
 
-//            TODO
-//            >> FLAVOUR :: DEBUGGING-GIALLO <<
-//            INDAGARE COMPORTAMENTI STRANI IN FASE DI MODIFICA DELLA POSIZIONE DOVUTI A NON SI SA BENE CHE COSA,
-//            L'ERRORE È QUESTO QUI
-//            io.grpc.Context was cancelled without error
             serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {}
 
                 @Override
                 public void onError(Throwable t) {
-                    if(t.getClass() == StatusRuntimeException.class) {
-                        Logger.red("The bot that was communicating with me has crashed...");
-                    }
-                    else {
-                        Logger.red("Something has gone wrong during the update process");
+                    Logger.red("Something went wrong during communication", t);
+                    synchronized(botServices) {
+                        botServices.notify();
                     }
                 }
 
                 @Override
-                public void onCompleted() {}
+                public void onCompleted() {
+                    synchronized(botServices) {
+                        botServices.notify();
+                    }
+                }
             });
         }
 
+//        TODO
+//        >> FLAVOUR :: DEBUGGING-ARANCIONE <<
+//        TROVARE UN MODO MIGLIORE DI GESTIRE IL CAMBIO DI CANALE (ES, SINCRONIZZARSI CON LA CHIUSURA DELL'ALTRO)
         pollutionSensorThread.closeConnection();
         pollutionSensorThread = new PollutionSensorThread(district, identity);
         pollutionSensorThread.start();

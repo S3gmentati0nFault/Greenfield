@@ -32,6 +32,9 @@ public class BotUtilities {
         botRemovalFunction(temp, quitting);
     }
 
+//    TODO
+//    >> FLAVOUR :: EFFICIENZA-ARANCIO <<
+//    PASSARE A UN SISTEMA A LISTE DI MODO DA NON REPLICARE IL PROCESSO DI STABILIZZAZIONE PER OGNI ROBOT DA ELIMINARE
     public static boolean botRemovalFunction(List<BotIdentity> deadRobots, boolean quitting) {
         ObjectMapper mapper = new ObjectMapper();
 
@@ -172,11 +175,6 @@ public class BotUtilities {
 
             System.out.println("LIMIT -> " + limit);
 
-//            TODO
-//            >> FLAVOUR :: LOGICA-GIALLO <<
-//            PUNTARE A STABILIZZARE MAGGIORMENTE LA DISTRIBUZIONE DI MODO CHE NON VI SIANO DEI DISTRETTI CON 3 ROBOT E
-//            ALTRI CHE NE SONO COMPLETAMENTE PRIVI
-
             for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
                 while(districtDistribution.get(i).size() > limit) {
                     moveBotsAround(districtDistribution, limit, i, reducedLimit);
@@ -211,11 +209,7 @@ public class BotUtilities {
 
         System.out.println("RECEIVING DISTRICT -> " + (receivingDistrict + 1));
 
-        //            TODO
-//            >> FLAVOUR :: DEBUGGING-ARANCIONE <<
-//            CONTROLLARE LA PRESENZA DI UN BUG PER CUI IN FASE DI ELIMINAZIONE CI SONO DEI PROBLEMI NEL RICONOSCIMENTO
-//            DELLA CONDIZIONE DI USCITA DAL CICLO
-        while(distribution.get(receivingDistrict).size() < reducedLimit &&
+        while(distribution.get(receivingDistrict).size() <= reducedLimit &&
                 distribution.get(overpopulatedDistrict).size() > limit) {
 
             BotIdentity botToBeMoved = null;

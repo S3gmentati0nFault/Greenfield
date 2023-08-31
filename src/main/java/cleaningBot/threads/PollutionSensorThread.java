@@ -39,9 +39,6 @@ public class PollutionSensorThread extends Thread {
         ObjectMapper mapper = new ObjectMapper();
         int qos = 1;
 
-//        TODO
-//        >> FLAVOUR :: CONSEGNA-ROSSO <<
-//        FIXARE IL COMPORTAMENTO DEL SISTEMA DI GESTIONE DELLE MISURAZIONI
         try{
             client = new MqttClient(broker, clientID);
             MqttConnectOptions connectOptions = new MqttConnectOptions();

@@ -16,6 +16,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
+import static utilities.Variables.WAKEUP_ERROR;
 
 /**
  * This class implements the GRPC methods defined inside the proto file.
@@ -60,7 +61,7 @@ public class BotServices extends BotServicesImplBase {
             try{
                 wait();
             }catch(Exception e){
-                Logger.red(Variables.WAKEUP_ERROR);
+                Logger.red(WAKEUP_ERROR);
                 e.printStackTrace();
             }
             waitingInstances.remove(new WaitingThread(this, request.getTimestamp()));
@@ -125,7 +126,7 @@ public class BotServices extends BotServicesImplBase {
         }
     }
 
-    public synchronized void moveRequestGRPC(BotGRPC.IntegerValue request,
+    public void moveRequestGRPC(BotGRPC.IntegerValue request,
                                              StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("moveRequestGRPC");
 
@@ -135,9 +136,18 @@ public class BotServices extends BotServicesImplBase {
             responseObserver.onCompleted();
         }
         else {
-            botThread.changeMyPosition(request.getValue());
-            responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
-            responseObserver.onCompleted();
+            synchronized (this) {
+                botThread.changeMyPosition(request.getValue());
+                try {
+                    System.out.println("WAITING...");
+                    wait();
+                } catch (InterruptedException e) {
+                    Logger.red(WAKEUP_ERROR, e);
+                }
+                System.out.println("NOT WAITING...");
+                responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
+                responseObserver.onCompleted();
+            }
         }
     }
 
