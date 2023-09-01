@@ -37,6 +37,15 @@ public class BotUtilities {
 //    >> FLAVOUR :: EFFICIENZA-ARANCIO <<
 //    PASSARE A UN SISTEMA A LISTE DI MODO DA NON REPLICARE IL PROCESSO DI STABILIZZAZIONE PER OGNI ROBOT DA ELIMINARE
     public static boolean botRemovalFunction(List<BotIdentity> deadRobots, boolean quitting) {
+
+        if(DEBUGGING) {
+            System.out.println("--------DEADROBOTS--------");
+            for (BotIdentity deadRobot : deadRobots) {
+                System.out.println(deadRobot);
+            }
+            System.out.println("--------------------------");
+        }
+
         ObjectMapper mapper = new ObjectMapper();
 
         BotThread.getInstance().removeBot(deadRobots);
@@ -124,7 +133,7 @@ public class BotUtilities {
 
                             @Override
                             public void onError(Throwable t) {
-                                Logger.red("robot " + botIdentity + " sent error " + t.getClass());
+                                Logger.red("robot " + botIdentity.getId() + " didn't reply to my CrashNotification call");
                             }
 
                             @Override
@@ -209,8 +218,7 @@ public class BotUtilities {
         while (distribution.get(receivingDistrict).size() <= reducedLimit &&
                 distribution.get(overpopulatedDistrict).size() > limit) {
 
-            BotIdentity botToBeMoved = null;
-            botToBeMoved = distribution.get(overpopulatedDistrict).poll();
+            final BotIdentity botToBeMoved = distribution.get(overpopulatedDistrict).poll();
             if (DEBUGGING) {
                 System.out.println("Moving " + botToBeMoved + " to " + (receivingDistrict + 1));
             }
@@ -236,7 +244,7 @@ public class BotUtilities {
 
                             @Override
                             public void onError(Throwable t) {
-                                Logger.red("Something went wrong " + t.getMessage());
+                                Logger.red("Robot " + botToBeMoved.getId() + " did not reply to my moveRequest call");
                             }
 
                             @Override

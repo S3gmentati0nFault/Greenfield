@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static utilities.Variables.DEBUGGING;
+import static utilities.Variables.WAKEUP_ERROR;
 
 public class PollutionSensorThread extends Thread {
     private int district;
@@ -20,6 +21,7 @@ public class PollutionSensorThread extends Thread {
     private MeasurementGatheringThread measurementGatheringThread;
     private boolean brokering;
     private MqttClient client;
+    private String topic;
 
     public PollutionSensorThread(int district, BotIdentity identity) {
         this.district = district;
@@ -36,7 +38,7 @@ public class PollutionSensorThread extends Thread {
         brokering = true;
         String broker = "tcp://localhost:1883";
         String clientID = MqttClient.generateClientId();
-        String topic = "greenfield/pollution/" + district;
+        topic = "greenfield/pollution/" + district;
         Logger.yellow("Publishing on topic > " + topic);
         ObjectMapper mapper = new ObjectMapper();
         int qos = 1;
@@ -45,16 +47,20 @@ public class PollutionSensorThread extends Thread {
             client = new MqttClient(broker, clientID);
             MqttConnectOptions connectOptions = new MqttConnectOptions();
             connectOptions.setCleanSession(false);
+            connectOptions.setAutomaticReconnect(false);
             client.connect(connectOptions);
 
             while(brokering) {
-                try {
-                    if(DEBUGGING) {
-                        System.out.println("In attesa di un nuovo ciclo di lettura");
+                synchronized (this) {
+                    try {
+                        if (DEBUGGING) {
+                            System.out.println("In attesa di un nuovo ciclo di lettura");
+                        }
+                        notify();
+                        sleep(15000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-                    sleep(15000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
                 if(DEBUGGING) {
                     System.out.println(">> Mi arrubo le medie <<");
@@ -87,14 +93,20 @@ public class PollutionSensorThread extends Thread {
         }
     }
 
-    public void closeConnection() {
-        Logger.yellow("Closing MQTT connection");
-        brokering = false;
+    public void closeConnection(int district) {
+        Logger.yellow("Changing MQTT topic");
 
-        try {
-            client.disconnect(10000);
-        } catch (MqttException e) {
-            e.printStackTrace();
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Logger.red(WAKEUP_ERROR, e);
+            }
+
+            System.out.println("DISTRICT -> " + district);
+            this.district = district;
+            topic = "greenfield/pollution/" + district;
+            Logger.yellow("Publishing on topic > " + topic);
         }
     }
 }

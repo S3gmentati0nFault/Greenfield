@@ -80,10 +80,6 @@ cleaningBot/MeasurementBuffer.java
  cleaningBot.MeasurementBuffer
 beans/AverageList.java
  beans.AverageList
-adminClient/AdminClient.java
- adminClient.AdminClient
- adminClient.AdminClient$1
- adminClient.AdminClient$2
 cleaningBot/threads/QuitHelperThread.java
  cleaningBot.threads.QuitHelperThread
 cleaningBot/service/ServiceComparator.java
@@ -116,3 +112,7 @@ cleaningBot/threads/MaintenanceThread.java
 cleaningBot/threads/MutualExclusionThread.java
  cleaningBot.threads.MutualExclusionThread
  cleaningBot.threads.MutualExclusionThread$1
+adminClient/AdminClient.java
+ adminClient.AdminClient
+ adminClient.AdminClient$1
+ adminClient.AdminClient$2

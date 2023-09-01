@@ -258,7 +258,7 @@ public class BotThread extends Thread {
 
                 @Override
                 public void onError(Throwable t) {
-                    Logger.red("robot " + botIdentity + " sent error " + t.getClass());
+                    Logger.red("Robot " + botIdentity.getId() + " did not reply to my joinRequest call");
                     counter.decrement();
                     if (t.getClass() == StatusRuntimeException.class) {
                         nonRespondingRobots.add(botIdentity);
@@ -438,6 +438,14 @@ public class BotThread extends Thread {
 
         List<BotIdentity> fleetSnapshot = otherBots.getCopy();
 
+//        if(DEBUGGING) {
+//            System.out.println("-----------FLEETSNAPSHOT-----------");
+//            for (BotIdentity botIdentity : fleetSnapshot) {
+//                System.out.println(botIdentity);
+//            }
+//            System.out.println("----------------------------------");
+//        }
+
         ObjectMapper mapper = new ObjectMapper();
 
         HttpURLConnection connection =
@@ -505,13 +513,14 @@ public class BotThread extends Thread {
                     .build();
 
             serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
+
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Logger.red("Something went wrong during communication", t);
+                    Logger.red("Robot " + botIdentity.getId() + " did not reply");
                     synchronized (botServices) {
                         botServices.notify();
                     }
@@ -526,11 +535,6 @@ public class BotThread extends Thread {
             });
         }
 
-//        TODO
-//        >> FLAVOUR :: DEBUGGING-ARANCIONE <<
-//        TROVARE UN MODO MIGLIORE DI GESTIRE IL CAMBIO DI CANALE (ES, SINCRONIZZARSI CON LA CHIUSURA DELL'ALTRO)
-        pollutionSensorThread.closeConnection();
-        pollutionSensorThread = new PollutionSensorThread(district, identity);
-        pollutionSensorThread.start();
+        pollutionSensorThread.closeConnection(district);
     }
 }
