@@ -65,6 +65,10 @@ public class BotIdentity {
         return port;
     }
 
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     /**
      * Ip getter.
      */

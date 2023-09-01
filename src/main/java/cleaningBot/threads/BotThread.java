@@ -82,9 +82,22 @@ public class BotThread extends Thread {
      */
     @Override
     public synchronized void run() {
-        Logger.yellow("Starting grpc services");
-        GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
-        grpcThread.start();
+        boolean isServerRunning = false;
+        Random random = new Random();
+        while(!isServerRunning) {
+            Logger.yellow("Starting grpc services");
+            GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
+            grpcThread.start();
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Logger.red(WAKEUP_ERROR, e);
+            }
+            isServerRunning = grpcThread.isRunning();
+            if(!isServerRunning) {
+                identity.setPort(random.nextInt(65534));
+            }
+        }
 
         if (!startNewBot()) {
             Logger.red("There was an error during Thread instantiation");
@@ -215,6 +228,8 @@ public class BotThread extends Thread {
         BotUtilities.closeConnection(connection);
         otherBots.removeElement(identity);
 
+        district = BotUtilities.districtCalculator(identity.getPosition());
+
         Logger.cyan("Letting my presence known");
         if (otherBots.isEmpty()) {
             return true;
@@ -272,8 +287,6 @@ public class BotThread extends Thread {
                 }
             });
         });
-
-        district = BotUtilities.districtCalculator(identity.getPosition());
 
         BotUtilities.closeConnection(connection);
 

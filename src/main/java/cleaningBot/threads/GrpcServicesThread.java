@@ -8,22 +8,20 @@ import io.grpc.ServerBuilder;
 
 import java.io.IOException;
 
-//TODO
-//>> FLAVOUR :: DEBUGGING-ARANCIONE <<
-//CAPIRE PERCHÈ A VOLTE IL PROCESSO DI AVVIAMENTO DEL SERVER GRPC SI PIANTA
-
 /**
  * GrpcServicesThread is a thread that handles incoming communications from other threads.
  */
 public class GrpcServicesThread extends Thread {
     private final BotServices grpcServices;
     private int port;
+    private Server server;
+    private boolean running;
 
     /**
-     * @see BotThread
-     * Custom constructor that starts the communication server up.
      * @param port
      * @param botServices
+     * @see BotThread
+     * Custom constructor that starts the communication server up.
      */
     public GrpcServicesThread(int port, BotServices botServices) {
         this.port = port;
@@ -35,15 +33,29 @@ public class GrpcServicesThread extends Thread {
      * Override of the run method that starts the server up
      */
     @Override
-    public void run(){
-        try{
-            Server server = ServerBuilder.forPort(port).addService(grpcServices).build();
+    public void run() {
+        try {
+            server = ServerBuilder.forPort(port).addService(grpcServices).build();
             server.start();
+            System.out.println("ciao");
+            running = true;
+            synchronized (BotThread.getInstance()) {
+                BotThread.getInstance().notify();
+            }
             server.awaitTermination();
         } catch (IOException e) {
-            Logger.red("There was an error while trying to fire up the grpcServices communication server");
+            Logger.red("The port is already occupied, rebooting the server...");
+            running = false;
+            synchronized (BotThread.getInstance()) {
+                BotThread.getInstance().notify();
+            }
+            server.shutdownNow();
         } catch (InterruptedException e) {
-            Logger.red("There was an error while trying to stop the grpcServices communication server");
+            Logger.red("There was an error while trying to shutdown the server", e);
         }
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }

@@ -33,9 +33,6 @@ public class BotUtilities {
         botRemovalFunction(temp, quitting);
     }
 
-    //    TODO
-//    >> FLAVOUR :: EFFICIENZA-ARANCIO <<
-//    PASSARE A UN SISTEMA A LISTE DI MODO DA NON REPLICARE IL PROCESSO DI STABILIZZAZIONE PER OGNI ROBOT DA ELIMINARE
     public static boolean botRemovalFunction(List<BotIdentity> deadRobots, boolean quitting) {
 
         if(DEBUGGING) {

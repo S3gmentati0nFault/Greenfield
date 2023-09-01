@@ -1,7 +1,7 @@
-beans/BotIdentity.java
- beans.BotIdentity
-beans/BotPositions.java
- beans.BotPositions
+beans/AverageList.java
+ beans.AverageList
+simulators/Measurement.java
+ simulators.Measurement
 simulators/Buffer.java
  simulators.Buffer
 exceptions/AlreadyOnMaintenanceException.java
@@ -22,8 +22,8 @@ utilities/Variables.java
  utilities.Variables
 extra/ThreadSafeStructures/ThreadSafeHashMap.java
  extra.ThreadSafeStructures.ThreadSafeHashMap
-adminServer/ServerRestInterface.java
- adminServer.ServerRestInterface
+cleaningBot/MeasurementBuffer.java
+ cleaningBot.MeasurementBuffer
 services/grpc/BotServicesGrpc.java
  services.grpc.BotServicesGrpc
  services.grpc.BotServicesGrpc$1
@@ -58,8 +58,8 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Position$1
  services.grpc.BotGRPC$Position$Builder
  services.grpc.BotGRPC$PositionOrBuilder
-cleaningBot/BotIdentityComparator.java
- cleaningBot.BotIdentityComparator
+simulators/Simulator.java
+ simulators.Simulator
 cleaningBot/threads/MeasurementGatheringThread.java
  cleaningBot.threads.MeasurementGatheringThread
 exceptions/BotAlreadyExistsException.java
@@ -72,14 +72,18 @@ simulators/PM10Simulator.java
  simulators.PM10Simulator
 cleaningBot/Position.java
  cleaningBot.Position
-simulators/Simulator.java
- simulators.Simulator
-simulators/Measurement.java
- simulators.Measurement
-cleaningBot/MeasurementBuffer.java
- cleaningBot.MeasurementBuffer
-beans/AverageList.java
- beans.AverageList
+beans/BotIdentity.java
+ beans.BotIdentity
+beans/BotPositions.java
+ beans.BotPositions
+adminClient/AdminClient.java
+ adminClient.AdminClient
+ adminClient.AdminClient$1
+ adminClient.AdminClient$2
+adminServer/ServerRestInterface.java
+ adminServer.ServerRestInterface
+cleaningBot/BotIdentityComparator.java
+ cleaningBot.BotIdentityComparator
 cleaningBot/threads/QuitHelperThread.java
  cleaningBot.threads.QuitHelperThread
 cleaningBot/service/ServiceComparator.java
@@ -112,7 +116,3 @@ cleaningBot/threads/MaintenanceThread.java
 cleaningBot/threads/MutualExclusionThread.java
  cleaningBot.threads.MutualExclusionThread
  cleaningBot.threads.MutualExclusionThread$1
-adminClient/AdminClient.java
- adminClient.AdminClient
- adminClient.AdminClient$1
- adminClient.AdminClient$2
