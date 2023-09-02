@@ -11,15 +11,24 @@ import static utilities.Variables.WAKEUP_ERROR;
 public class MeasurementBuffer implements simulators.Buffer {
     private List<Measurement> buffer;
     private int limitSize;
+    private boolean isRunning;
 
 
     public MeasurementBuffer() {
         buffer = new ArrayList<>();
         limitSize = 8;
+        isRunning = true;
     }
 
     @Override
     public synchronized void addMeasurement(Measurement m) {
+        if(!isRunning) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         if(buffer.size() < limitSize) {
             buffer.add(m);
         }
@@ -35,6 +44,13 @@ public class MeasurementBuffer implements simulators.Buffer {
 
     @Override
     public synchronized List<Measurement> readAllAndClean() {
+        if(!isRunning) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         if(buffer.size() < limitSize) {
             try{
                 wait();
@@ -46,5 +62,13 @@ public class MeasurementBuffer implements simulators.Buffer {
         buffer.subList(0, (limitSize / 2)).clear();
         notifyAll();
         return measurements;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
     }
 }

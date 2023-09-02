@@ -52,6 +52,13 @@ public class PollutionSensorThread extends Thread {
 
             while(brokering) {
                 synchronized (this) {
+                    if(BotThread.getInstance().getMaintenanceThread().getOnMaintenance()) {
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            Logger.red(WAKEUP_ERROR, e);
+                        }
+                    }
                     try {
                         if (DEBUGGING) {
                             System.out.println("In attesa di un nuovo ciclo di lettura");
@@ -59,7 +66,7 @@ public class PollutionSensorThread extends Thread {
                         notify();
                         sleep(15000);
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        Logger.red(WAKEUP_ERROR, e);
                     }
                 }
                 if(DEBUGGING) {

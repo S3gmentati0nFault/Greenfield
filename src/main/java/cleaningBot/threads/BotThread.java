@@ -329,6 +329,10 @@ public class BotThread extends Thread {
         return maintenanceThread;
     }
 
+    public PollutionSensorThread getPollutionSensorThread() {
+        return pollutionSensorThread;
+    }
+
     public InputThread getInputThread() {
         return inputThread;
     }

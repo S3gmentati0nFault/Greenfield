@@ -8,6 +8,8 @@ import extra.Logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utilities.Variables.WAKEUP_ERROR;
+
 public class MeasurementGatheringThread extends Thread {
     List<Float> averages;
     MeasurementBuffer buffer;
@@ -28,6 +30,20 @@ public class MeasurementGatheringThread extends Thread {
 
     public void readingProcess() {
         while(true) {
+            if(BotThread.getInstance().getMaintenanceThread().getOnMaintenance()) {
+                buffer.setRunning(false);
+                synchronized(this) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        Logger.red(WAKEUP_ERROR, e);
+                    }
+                }
+                buffer.setRunning(true);
+                synchronized (buffer) {
+                    buffer.notifyAll();
+                }
+            }
             gatherMeasurements();
         }
     }
