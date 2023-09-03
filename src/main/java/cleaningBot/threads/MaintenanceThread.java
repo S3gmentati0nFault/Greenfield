@@ -15,7 +15,8 @@ import static utilities.Variables.*;
  */
 public class MaintenanceThread extends Thread {
     private BotServices botServices;
-    private boolean onMaintenance;
+    private boolean inQueue;
+    private boolean doingMaintenance;
     private final int PROBABILITY;
     private final long TIMEOUT;
 
@@ -25,7 +26,7 @@ public class MaintenanceThread extends Thread {
      */
     public MaintenanceThread(BotServices botServices) {
         this.botServices = botServices;
-        onMaintenance = false;
+        inQueue = false;
         if(DEBUGGING) {
             PROBABILITY = DEBUGGING_MAINTENANCE_PROBABILITY;
             TIMEOUT = DEBUGGING_TIMEOUT;
@@ -69,11 +70,11 @@ public class MaintenanceThread extends Thread {
 
     public void doMaintenance()
             throws AlreadyOnMaintenanceException {
-        if (onMaintenance) {
+        if (inQueue) {
             throw new AlreadyOnMaintenanceException();
         }
 
-        setOnMaintenance(true);
+        setInQueue(true);
         MutualExclusionThread mutualExclusionThread =
                 new MutualExclusionThread(this);
         mutualExclusionThread.start();
@@ -86,30 +87,30 @@ public class MaintenanceThread extends Thread {
             }
         }
 
-        setOnMaintenance(false);
-        PollutionSensorThread sensor = BotThread.getInstance().getPollutionSensorThread();
-        MeasurementGatheringThread measurementGatheringThread = BotThread.getInstance().getMeasurementGatheringThread();
-        synchronized (sensor) {
-            sensor.notify();
-        }
-        synchronized (measurementGatheringThread) {
-            measurementGatheringThread.notify();
-        }
+        setInQueue(false);
     }
 
     public synchronized void wakeupMaintenanceThread() {
         notifyAll();
     }
 
-    public synchronized boolean getOnMaintenance() {
-        return onMaintenance;
+    public synchronized boolean isInQueue() {
+        return inQueue;
     }
 
-    public synchronized void setOnMaintenance(boolean onMaintenance)
+    public synchronized void setInQueue(boolean inQueue)
             throws AlreadyOnMaintenanceException {
-        if (this.onMaintenance && onMaintenance) {
+        if (this.inQueue && inQueue) {
             throw new AlreadyOnMaintenanceException();
         }
-        this.onMaintenance = onMaintenance;
+        this.inQueue = inQueue;
+    }
+
+    public boolean isDoingMaintenance() {
+        return doingMaintenance;
+    }
+
+    public void setDoingMaintenance(boolean doingMaintenance) {
+        this.doingMaintenance = doingMaintenance;
     }
 }

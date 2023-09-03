@@ -6,6 +6,7 @@ import extra.Logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utilities.Variables.DEBUGGING;
 import static utilities.Variables.WAKEUP_ERROR;
 
 public class MeasurementBuffer implements simulators.Buffer {
@@ -23,11 +24,13 @@ public class MeasurementBuffer implements simulators.Buffer {
     @Override
     public synchronized void addMeasurement(Measurement m) {
         if(!isRunning) {
+            Logger.whiteDebuggingPrint(this.getClass() + ".addMeasurement IS WAITING");
             try {
                 wait();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            Logger.whiteDebuggingPrint(this.getClass() + ".addMeasurement IS NOT WAITING");
         }
         if(buffer.size() < limitSize) {
             buffer.add(m);
@@ -35,6 +38,7 @@ public class MeasurementBuffer implements simulators.Buffer {
         else {
             notifyAll();
             try {
+                Logger.whiteDebuggingPrint("Il buffer è pieno");
                 wait();
             } catch (InterruptedException e) {
                 Logger.red(WAKEUP_ERROR, e);
@@ -45,14 +49,17 @@ public class MeasurementBuffer implements simulators.Buffer {
     @Override
     public synchronized List<Measurement> readAllAndClean() {
         if(!isRunning) {
+            Logger.whiteDebuggingPrint(this.getClass() + ".readAllAndClean IS WAITING");
             try {
                 wait();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            Logger.whiteDebuggingPrint(this.getClass() + ".readAllAndClean IS NOT WAITING");
         }
         if(buffer.size() < limitSize) {
             try{
+                Logger.whiteDebuggingPrint("Il buffer è stato svuotato");
                 wait();
             } catch (InterruptedException e) {
                 Logger.red(WAKEUP_ERROR, e);

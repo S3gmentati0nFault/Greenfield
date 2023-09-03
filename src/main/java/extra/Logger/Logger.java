@@ -2,6 +2,8 @@ package extra.Logger;
 
 import java.time.LocalDateTime;
 
+import static utilities.Variables.DEBUGGING;
+
 public class Logger {
     static LocalDateTime now;
     public static void red(String message){
@@ -44,6 +46,13 @@ public class Logger {
     public static void cyan(String message){
         now = LocalDateTime.now();
         System.out.println(Colors.ANSI_CYAN + " <<ß>> " + message + " <<ß>> " + Colors.ANSI_RESET);
+    }
+
+    public static void whiteDebuggingPrint(String message) {
+        if(DEBUGGING) {
+            now = LocalDateTime.now();
+            System.out.println("< " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " > ->-> " + message + " <-<-");
+        }
     }
 }
 

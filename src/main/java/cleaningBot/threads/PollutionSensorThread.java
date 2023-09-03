@@ -2,6 +2,7 @@ package cleaningBot.threads;
 
 import beans.BotIdentity;
 import extra.Logger.Logger;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -40,63 +41,82 @@ public class PollutionSensorThread extends Thread {
         String clientID = MqttClient.generateClientId();
         topic = "greenfield/pollution/" + district;
         Logger.yellow("Publishing on topic > " + topic);
-        ObjectMapper mapper = new ObjectMapper();
-        int qos = 1;
 
-        try{
+        try {
             client = new MqttClient(broker, clientID);
             MqttConnectOptions connectOptions = new MqttConnectOptions();
             connectOptions.setCleanSession(false);
             connectOptions.setAutomaticReconnect(false);
             client.connect(connectOptions);
 
-            while(brokering) {
+            while (brokering) {
                 synchronized (this) {
-                    if(BotThread.getInstance().getMaintenanceThread().getOnMaintenance()) {
-                        try {
-                            wait();
-                        } catch (InterruptedException e) {
-                            Logger.red(WAKEUP_ERROR, e);
-                        }
-                    }
                     try {
                         if (DEBUGGING) {
                             System.out.println("In attesa di un nuovo ciclo di lettura");
                         }
-                        notify();
-                        sleep(15000);
+                        wait(15000);
                     } catch (InterruptedException e) {
                         Logger.red(WAKEUP_ERROR, e);
                     }
+                    if (BotThread.getInstance().getMaintenanceThread().isDoingMaintenance()) {
+                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS WAITING");
+                        wait();
+                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS NOT WAITING");
+                    }
                 }
-                if(DEBUGGING) {
-                    System.out.println(">> Mi arrubo le medie <<");
-                }
-                List<Float> averages = measurementGatheringThread.getAverages();
-                StringBuilder payload = new StringBuilder(botIdentity.getId()
-                        + "-" + mapper.writeValueAsString(System.currentTimeMillis())
-                        + "-[");
-
-                for (Float average : averages) {
-                    payload.append(String.valueOf(average)).append(",");
-                }
-
-                payload = new StringBuilder(payload.toString().replaceAll(",$", "") + "]");
-
-                if(DEBUGGING) {
-                    System.out.println(payload.toString());
-                }
-                MqttMessage message = new MqttMessage(payload.toString().getBytes());
-                message.setQos(qos);
-                client.publish(topic, message);
+                publishAverages();
             }
         } catch (MqttException e) {
             Logger.red("There was an error during the Mqtt publisher startup");
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void publishAverages() {
+        ObjectMapper mapper = new ObjectMapper();
+        int qos = 1;
+
+        if (DEBUGGING) {
+            System.out.println(">> Mi arrubo le medie <<");
+        }
+        List<Float> averages = measurementGatheringThread.getAverages();
+        StringBuilder payload = null;
+        try {
+            payload = new StringBuilder(botIdentity.getId()
+                + "-" + mapper.writeValueAsString(System.currentTimeMillis())
+                + "-[");
         } catch (JsonMappingException e) {
-            Logger.red("There was an error while translating the object into json");
+            Logger.red("There was a problem while trying to build the payload for the MQTT message", e);
+        } catch (JsonGenerationException e) {
+            Logger.red("There was a problem while trying to build the payload for the MQTT message", e);
         } catch (IOException e) {
-            Logger.red("There was an error while handling the json parsing", e);
+            Logger.red("There was a problem while trying to build the payload for the MQTT message", e);
+        }
+
+        if(payload == null) {
+            Logger.red("There was problems while trying to build the MQTT message");
+            return;
+        }
+
+        for (Float average : averages) {
+            payload.append(String.valueOf(average)).append(",");
+        }
+
+        payload = new StringBuilder(payload.toString().replaceAll(",$", "") + "]");
+
+        if (DEBUGGING) {
+            System.out.println(payload.toString());
+        }
+        MqttMessage message = new MqttMessage(payload.toString().getBytes());
+        message.setQos(qos);
+
+        try {
+            client.publish(topic, message);
+        } catch (MqttException e) {
+            Logger.red("There was an error while sending the MQTT message");
         }
     }
 

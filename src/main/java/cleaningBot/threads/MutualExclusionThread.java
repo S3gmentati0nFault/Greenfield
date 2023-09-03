@@ -26,7 +26,6 @@ public class MutualExclusionThread extends Thread {
     private BotServices botServices;
     private AtomicCounter counter;
     private MaintenanceThread maintenanceThread;
-    private boolean justFixed;
 
     @Override
     public void run() {
@@ -50,8 +49,6 @@ public class MutualExclusionThread extends Thread {
      */
     public synchronized void agrawalaProcedure() {
         Logger.cyan("Starting the Agrawala procedure");
-
-        justFixed = false;
 
         List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots().getCopy();
         List<BotIdentity> nonRespondingRobots = new ArrayList<>();
@@ -92,7 +89,7 @@ public class MutualExclusionThread extends Thread {
 
             serviceStub.maintenanceRequestGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
-                public void onNext(BotGRPC.Acknowledgement value) {
+                public synchronized void onNext(BotGRPC.Acknowledgement value) {
                     if(DEBUGGING) {
                         System.out.println("FUORI -> " + Thread.currentThread().getId());
                     }
@@ -108,26 +105,29 @@ public class MutualExclusionThread extends Thread {
                 @Override
                 public synchronized void onError(Throwable t) {
                     Logger.red("Robot " + botIdentity.getId() + " did not reply to my maintenanceRequest call");
-                    if(t.getClass() == StatusRuntimeException.class) {
-                        counter.decrement();
-                        nonRespondingRobots.add(botIdentity);
-                        maintenanceAccess(nonRespondingRobots);
-                    }
+                    Logger.green("Defaulting to positive reply, still waiting for " + counter.getCounter() + " answers");
+                    counter.decrement();
+                    nonRespondingRobots.add(botIdentity);
+                    maintenanceAccess(nonRespondingRobots);
                 }
 
                 @Override
-                public void onCompleted() {
+                public synchronized void onCompleted() {
                     maintenanceAccess(nonRespondingRobots);
                 }
             });
         }
     }
 
+//    TODO
+//    >> FLAVOUR :: EFFICENZA-ARANCIONE <<
+//    TRASFORMARE IL METODO DI BOTREMOVALFUNCTION IN UN THREAD
     /**
      * Method that simulates access to the mechanic
      */
     public synchronized void maintenanceAccess(List<BotIdentity> nonRespondingRobots) {
-        if(counter.getCounter() == 0 && !justFixed){
+        if(counter.getCounter() == 0){
+            counter.add(10);
             Logger.yellow("Starting the maintenance process");
 
             if(nonRespondingRobots != null) {
@@ -136,6 +136,7 @@ public class MutualExclusionThread extends Thread {
                 }
             }
 
+            maintenanceThread.setDoingMaintenance(true);
             try {
                 sleep(10000);
                 Logger.green("The machine has gone back to normal");
@@ -143,12 +144,20 @@ public class MutualExclusionThread extends Thread {
                 Logger.red(Variables.WAKEUP_ERROR, e.getCause());
             }
 
+            maintenanceThread.setDoingMaintenance(false);
+            MeasurementGatheringThread measurementGatheringThread = BotThread.getInstance().getMeasurementGatheringThread();
+            PollutionSensorThread sensor = BotThread.getInstance().getPollutionSensorThread();
+            synchronized (measurementGatheringThread) {
+                measurementGatheringThread.notifyAll();
+            }
+            synchronized (sensor) {
+                sensor.notifyAll();
+            }
+
             BotThread.getInstance().getBotServices().clearWaitingQueue();
             BotThread.getInstance().setTimestamp(-1);
             BotThread.getInstance().getInputThread().wakeupHelper();
             maintenanceThread.wakeupMaintenanceThread();
-
-            justFixed = true;
         }
     }
 }

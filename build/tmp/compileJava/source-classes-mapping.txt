@@ -92,6 +92,10 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Position$1
  services.grpc.BotGRPC$Position$Builder
  services.grpc.BotGRPC$PositionOrBuilder
+cleaningBot/MeasurementBuffer.java
+ cleaningBot.MeasurementBuffer
+cleaningBot/threads/MeasurementGatheringThread.java
+ cleaningBot.threads.MeasurementGatheringThread
 cleaningBot/threads/BotThread.java
  cleaningBot.threads.BotThread
  cleaningBot.threads.BotThread$1
@@ -99,10 +103,6 @@ cleaningBot/threads/BotThread.java
  cleaningBot.threads.BotThread$3
 cleaningBot/service/ServiceComparator.java
  cleaningBot.service.ServiceComparator
-cleaningBot/MeasurementBuffer.java
- cleaningBot.MeasurementBuffer
-cleaningBot/threads/MeasurementGatheringThread.java
- cleaningBot.threads.MeasurementGatheringThread
 cleaningBot/threads/GrpcServicesThread.java
  cleaningBot.threads.GrpcServicesThread
 cleaningBot/service/WaitingThread.java

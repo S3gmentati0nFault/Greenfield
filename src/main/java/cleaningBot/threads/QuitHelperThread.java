@@ -7,7 +7,7 @@ public class QuitHelperThread extends Thread {
     @Override
     public synchronized void run() {
         Logger.yellow("Waiting for maintenance to finish");
-        if(BotThread.getInstance().getMaintenanceThread().getOnMaintenance()) {
+        if(BotThread.getInstance().getMaintenanceThread().isInQueue()) {
             try {
                 wait();
             } catch (InterruptedException e) {

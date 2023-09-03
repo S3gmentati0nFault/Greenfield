@@ -44,7 +44,6 @@ public class BotThread extends Thread {
     private MaintenanceThread maintenanceThread;
     private InputThread inputThread;
     private static BotThread instance;
-    private AtomicCounter counter;
     private PollutionSensorThread pollutionSensorThread;
     private MeasurementGatheringThread measurementGatheringThread;
 
@@ -234,7 +233,7 @@ public class BotThread extends Thread {
         if (otherBots.isEmpty()) {
             return true;
         }
-        counter = new AtomicCounter(otherBots.size());
+        AtomicCounter counter = new AtomicCounter(otherBots.size());
         List<BotIdentity> nonRespondingRobots = new ArrayList<>();
 
         otherBots.getCopy().forEach(botIdentity -> {
@@ -278,12 +277,12 @@ public class BotThread extends Thread {
                     if (t.getClass() == StatusRuntimeException.class) {
                         nonRespondingRobots.add(botIdentity);
                     }
-                    checkCounter(nonRespondingRobots);
+                    checkCounter(nonRespondingRobots, counter);
                 }
 
                 @Override
                 public void onCompleted() {
-                    checkCounter(nonRespondingRobots);
+                    checkCounter(nonRespondingRobots, counter);
                 }
             });
         });
@@ -293,7 +292,7 @@ public class BotThread extends Thread {
         return true;
     }
 
-    public synchronized void checkCounter(List<BotIdentity> nonRespondingRobots) {
+    public synchronized void checkCounter(List<BotIdentity> nonRespondingRobots, AtomicCounter counter) {
         if (counter.getCounter() == 0) {
             Logger.green("Hello procedure completed");
             counter.add(10);
@@ -455,14 +454,6 @@ public class BotThread extends Thread {
 
         List<BotIdentity> fleetSnapshot = otherBots.getCopy();
 
-//        if(DEBUGGING) {
-//            System.out.println("-----------FLEETSNAPSHOT-----------");
-//            for (BotIdentity botIdentity : fleetSnapshot) {
-//                System.out.println(botIdentity);
-//            }
-//            System.out.println("----------------------------------");
-//        }
-
         ObjectMapper mapper = new ObjectMapper();
 
         HttpURLConnection connection =
@@ -502,6 +493,9 @@ public class BotThread extends Thread {
 
         BotUtilities.closeConnection(connection);
 
+        List<BotIdentity> nonRespondingBots = new ArrayList<>();
+        AtomicCounter counter = new AtomicCounter(fleetSnapshot.size());
+
         for (BotIdentity botIdentity : fleetSnapshot) {
 
             ManagedChannel channel;
@@ -533,25 +527,35 @@ public class BotThread extends Thread {
 
                 @Override
                 public void onNext(BotGRPC.Acknowledgement value) {
+                    counter.decrement();
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     Logger.red("Robot " + botIdentity.getId() + " did not reply");
-                    synchronized (botServices) {
-                        botServices.notify();
-                    }
+                    counter.decrement();
+                    nonRespondingBots.add(botIdentity);
+                    checkAndWakeup(nonRespondingBots, counter);
                 }
 
                 @Override
                 public void onCompleted() {
-                    synchronized (botServices) {
-                        botServices.notify();
-                    }
+                    checkAndWakeup(nonRespondingBots, counter);
                 }
             });
         }
 
         pollutionSensorThread.closeConnection(district);
+    }
+
+    private void checkAndWakeup(List<BotIdentity> deadRobots, AtomicCounter counter) {
+        synchronized(this) {
+            if (counter.getCounter() == 0) {
+                counter.add(10);
+                synchronized (botServices) {
+                    botServices.notify();
+                }
+            }
+        }
     }
 }

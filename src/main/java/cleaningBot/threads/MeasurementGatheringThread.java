@@ -8,6 +8,7 @@ import extra.Logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utilities.Variables.DEBUGGING;
 import static utilities.Variables.WAKEUP_ERROR;
 
 public class MeasurementGatheringThread extends Thread {
@@ -30,8 +31,9 @@ public class MeasurementGatheringThread extends Thread {
 
     public void readingProcess() {
         while(true) {
-            if(BotThread.getInstance().getMaintenanceThread().getOnMaintenance()) {
+            if(BotThread.getInstance().getMaintenanceThread().isDoingMaintenance()) {
                 buffer.setRunning(false);
+                Logger.whiteDebuggingPrint(this.getClass() + " IS WAITING");
                 synchronized(this) {
                     try {
                         wait();
@@ -40,6 +42,9 @@ public class MeasurementGatheringThread extends Thread {
                     }
                 }
                 buffer.setRunning(true);
+
+                Logger.whiteDebuggingPrint(this.getClass() + " IS NOT WAITING");
+
                 synchronized (buffer) {
                     buffer.notifyAll();
                 }
@@ -50,6 +55,7 @@ public class MeasurementGatheringThread extends Thread {
 
     private void gatherMeasurements() {
             List<Measurement> measurements = buffer.readAllAndClean();
+            Logger.whiteDebuggingPrint("Gathering the measurements");
             float avg = 0;
             for (Measurement measurement : measurements) {
                 avg += measurement.getValue();
