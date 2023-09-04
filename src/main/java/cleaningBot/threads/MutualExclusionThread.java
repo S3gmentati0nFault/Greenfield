@@ -43,6 +43,7 @@ public class MutualExclusionThread extends Thread {
 
 //    TODO
 //    CONTROLLARE IL PROCESSO DI MUTUA ESCLUSIONE PERCHÈ SEMBRA CHE A VOLTE VENGA DUPLICATO O QUALCOSA DEL GENERE
+
     /**
      * Method that handles the mutual-exclusion by contacting via GRPC all the bots present
      * in the system at the moment of the malfunction
@@ -55,7 +56,7 @@ public class MutualExclusionThread extends Thread {
 
         counter = new AtomicCounter(fleetSnapshot.size());
 
-        if(fleetSnapshot.isEmpty()){
+        if (fleetSnapshot.isEmpty()) {
             maintenanceAccess(null);
             return;
         }
@@ -65,7 +66,7 @@ public class MutualExclusionThread extends Thread {
             BotServicesGrpc.BotServicesStub serviceStub;
 
             CommPair communicationPair = BotThread.getInstance().getOpenComms().getValue(botIdentity);
-            if(communicationPair == null) {
+            if (communicationPair == null) {
                 channel = ManagedChannelBuilder
                         .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
                         .usePlaintext()
@@ -73,8 +74,7 @@ public class MutualExclusionThread extends Thread {
 
                 serviceStub = BotServicesGrpc.newStub(channel);
                 BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
-            }
-            else {
+            } else {
                 channel = communicationPair.getManagedChannel();
                 serviceStub = communicationPair.getCommunicationStub();
             }
@@ -90,11 +90,11 @@ public class MutualExclusionThread extends Thread {
             serviceStub.maintenanceRequestGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
                 @Override
                 public synchronized void onNext(BotGRPC.Acknowledgement value) {
-                    if(DEBUGGING) {
+                    if (DEBUGGING) {
                         System.out.println("FUORI -> " + Thread.currentThread().getId());
                     }
                     synchronized (this) {
-                        if(DEBUGGING) {
+                        if (DEBUGGING) {
                             System.out.println("DENTRO -> " + Thread.currentThread().getId());
                         }
                         counter.decrement();
@@ -122,16 +122,17 @@ public class MutualExclusionThread extends Thread {
 //    TODO
 //    >> FLAVOUR :: EFFICENZA-ARANCIONE <<
 //    TRASFORMARE IL METODO DI BOTREMOVALFUNCTION IN UN THREAD
+
     /**
      * Method that simulates access to the mechanic
      */
     public synchronized void maintenanceAccess(List<BotIdentity> nonRespondingRobots) {
-        if(counter.getCounter() == 0){
+        if (counter.getCounter() == 0) {
             counter.add(10);
             Logger.yellow("Starting the maintenance process");
 
-            if(nonRespondingRobots != null) {
-                if(!nonRespondingRobots.isEmpty()) {
+            if (nonRespondingRobots != null) {
+                if (!nonRespondingRobots.isEmpty()) {
 //                    BotUtilities.botRemovalFunction(nonRespondingRobots, false);
                     Logger.yellow("Starting the eliminator thread to delete " + nonRespondingRobots.size());
                     EliminatorThread eliminatorThread = new EliminatorThread(nonRespondingRobots, false);
@@ -143,7 +144,7 @@ public class MutualExclusionThread extends Thread {
             try {
                 sleep(10000);
                 Logger.green("The machine has gone back to normal");
-            }catch(Exception e) {
+            } catch (Exception e) {
                 Logger.red(Variables.WAKEUP_ERROR, e.getCause());
             }
 
@@ -158,8 +159,15 @@ public class MutualExclusionThread extends Thread {
             }
 
             BotThread.getInstance().getBotServices().clearWaitingQueue();
+
+            QuitHelperThread quitHelperThread = BotThread.getInstance().getInputThread().getQuitHelperThread();
+            if (quitHelperThread != null) {
+                synchronized (quitHelperThread) {
+                    quitHelperThread.notify();
+                }
+            }
+
             BotThread.getInstance().setTimestamp(-1);
-            BotThread.getInstance().getInputThread().wakeupHelper();
             maintenanceThread.wakeupMaintenanceThread();
         }
     }

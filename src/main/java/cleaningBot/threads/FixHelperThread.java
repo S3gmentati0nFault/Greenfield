@@ -4,11 +4,7 @@ import exceptions.AlreadyOnMaintenanceException;
 import extra.Logger.Logger;
 
 public class FixHelperThread extends Thread{
-    private InputThread inputThread;
-
-    public FixHelperThread(InputThread inputThread) {
-        this.inputThread = inputThread;
-    }
+    public FixHelperThread(InputThread inputThread) {}
 
     @Override
     public void run() {
@@ -17,6 +13,6 @@ public class FixHelperThread extends Thread{
         } catch (AlreadyOnMaintenanceException e) {
             Logger.red("The thread is already in maintenance!", e);
         }
-        inputThread.maintenanceDone();
+        BotThread.getInstance().getInputThread().getMaintenanceRequested().setFlag(false);
     }
 }

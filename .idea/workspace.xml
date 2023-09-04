@@ -13,24 +13,14 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/extracted-include-protos/test/BotGRPC.proto" beforeDir="false" afterPath="$PROJECT_DIR$/build/extracted-include-protos/test/BotGRPC.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/source/proto/main/grpc/services/grpc/BotServicesGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/source/proto/main/grpc/services/grpc/BotServicesGrpc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/source/proto/main/java/services/grpc/BotGRPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/source/proto/main/java/services/grpc/BotGRPC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/BotGRPC.proto" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/BotGRPC.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/BotUtilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/MeasurementBuffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/MeasurementBuffer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/service/BotServices.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/BotThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/GrpcServicesThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/GrpcServicesThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MeasurementGatheringThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MeasurementGatheringThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/EliminatorThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/EliminatorThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/FixHelperThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/FixHelperThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/InputThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MaintenanceThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/MutualExclusionThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/PollutionSensorThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/QuitHelperThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cleaningBot/threads/QuitHelperThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/Logger/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/Logger/Logger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extra/ThreadSafeStructures/ThreadSafeArrayList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilities/Variables.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/proto/BotGRPC.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/BotGRPC.proto" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -303,7 +293,7 @@
       <workItem from="1693574138390" duration="9489000" />
       <workItem from="1693645809337" duration="5309000" />
       <workItem from="1693730581063" duration="18574000" />
-      <workItem from="1693816645200" duration="4958000" />
+      <workItem from="1693816645200" duration="8044000" />
     </task>
     <servers />
   </component>
@@ -358,6 +348,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="io.grpc.StatusRuntimeException" package="io.grpc" />
           <option name="timeStamp" value="9" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="exceptions.AlreadyOnMaintenanceException" package="exceptions" />
+          <option name="timeStamp" value="10" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

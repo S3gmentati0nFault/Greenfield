@@ -6,8 +6,8 @@ import extra.Logger.Logger;
 public class QuitHelperThread extends Thread {
     @Override
     public synchronized void run() {
-        Logger.yellow("Waiting for maintenance to finish");
         if(BotThread.getInstance().getMaintenanceThread().isInQueue()) {
+            Logger.yellow("Waiting for maintenance to finish");
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -18,14 +18,10 @@ public class QuitHelperThread extends Thread {
         Logger.yellow("Starting temporary eliminator Thread to delete this robot");
         EliminatorThread eliminatorThread = new EliminatorThread(BotThread.getInstance().getIdentity(), true);
         eliminatorThread.start();
-        try {
-            eliminatorThread.join();
-        } catch (InterruptedException e) {
-            Logger.red("There was a problem while eliminating this robot from the network", e);
-        }
-    }
-
-    public synchronized void wakeup() {
-        notify();
+//        try {
+//            eliminatorThread.join();
+//        } catch (InterruptedException e) {
+//            Logger.red("There was a problem while eliminating this robot from the network", e);
+//        }
     }
 }

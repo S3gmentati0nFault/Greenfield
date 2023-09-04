@@ -92,6 +92,9 @@ public class EliminatorThread extends Thread {
         int currentSize = fleetSnapshot.size();
 
         if (fleetSnapshot.isEmpty()) {
+            if(quitting) {
+                System.exit(0);
+            }
             return true;
         }
 

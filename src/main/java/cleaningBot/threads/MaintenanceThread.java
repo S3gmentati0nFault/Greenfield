@@ -27,11 +27,10 @@ public class MaintenanceThread extends Thread {
     public MaintenanceThread(BotServices botServices) {
         this.botServices = botServices;
         inQueue = false;
-        if(DEBUGGING) {
+        if (DEBUGGING) {
             PROBABILITY = DEBUGGING_MAINTENANCE_PROBABILITY;
             TIMEOUT = DEBUGGING_TIMEOUT;
-        }
-        else {
+        } else {
             PROBABILITY = MAINTENANCE_PROBABILITY;
             TIMEOUT = MAINTENANCE_TIMEOUT;
         }
@@ -70,11 +69,15 @@ public class MaintenanceThread extends Thread {
 
     public void doMaintenance()
             throws AlreadyOnMaintenanceException {
-        if (inQueue) {
-            throw new AlreadyOnMaintenanceException();
+        synchronized (this) {
+            try {
+                setInQueue(true);
+            } catch (AlreadyOnMaintenanceException e) {
+                Logger.red("The robot is already undergoing maintenance, this request will be skipped");
+                return;
+            }
         }
 
-        setInQueue(true);
         MutualExclusionThread mutualExclusionThread =
                 new MutualExclusionThread(this);
         mutualExclusionThread.start();

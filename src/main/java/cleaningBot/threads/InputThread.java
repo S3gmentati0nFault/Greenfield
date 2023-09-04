@@ -2,6 +2,7 @@ package cleaningBot.threads;
 
 import beans.BotIdentity;
 import cleaningBot.BotUtilities;
+import extra.AtomicFlag.AtomicFlag;
 import extra.Logger.Logger;
 
 import java.util.ConcurrentModificationException;
@@ -17,14 +18,14 @@ import static utilities.Variables.NUMBER_OF_DISTRICTS;
 public class InputThread extends Thread {
     private QuitHelperThread quitHelperThread;
     private FixHelperThread fixHelperThread;
-    private boolean quitting, maintenanceRequested;
+    AtomicFlag quitting, maintenanceRequested;
 
     /**
      * Generic public constructor
      */
     public InputThread() {
-        quitting = false;
-        maintenanceRequested = false;
+        quitting = new AtomicFlag(false);
+        maintenanceRequested = new AtomicFlag(false);
     }
 
     /**
@@ -32,63 +33,54 @@ public class InputThread extends Thread {
      */
     @Override
     public void run() {
-        while(true){
+        while (true) {
             Scanner keyboard = new Scanner(System.in);
             String input = keyboard.next();
 
             if (input.equals("GET")) {
                 System.out.println("-> " + BotThread.getInstance().getIdentity());
                 BotThread.getInstance().printOtherBots();
-            }
-            else if (input.equals("OPEN")) {
+            } else if (input.equals("OPEN")) {
                 BotThread.getInstance().printOpenComms();
-            }
-            else if(input.equals("FIX")) {
-                synchronized(this) {
-                    if(maintenanceRequested) {
-                        Logger.red("Maintenance has already been requested, wait please...");
-                    }
-                    else{
-                        maintenanceRequested = true;
-                        Logger.yellow("Requesting immediate maintenance...");
-                        fixHelperThread = new FixHelperThread(this);
-                        fixHelperThread.start();
-                    }
+            } else if (input.equals("FIX")) {
+                if (maintenanceRequested.isFlag()) {
+                    Logger.red("Maintenance has already been requested, wait please...");
+                } else {
+                    maintenanceRequested.setFlag(true);
+                    Logger.yellow("Requesting immediate maintenance...");
+                    fixHelperThread = new FixHelperThread(this);
+                    fixHelperThread.start();
                 }
-            }
-            else if(input.equals("DIST")) {
+            } else if (input.equals("DIST")) {
                 List<BotIdentity> fleetSnapshot = BotThread.getInstance().getOtherBots().getCopy();
                 fleetSnapshot.add(BotThread.getInstance().getIdentity());
                 List<Queue<BotIdentity>> distribution = BotUtilities.distributionCalculator(fleetSnapshot);
-                for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
+                for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
                     System.out.println("DISTRICT " + (i + 1) + "\t< " + distribution.get(i).size() + " >");
                     for (BotIdentity botIdentity : distribution.get(i)) {
                         System.out.println(botIdentity);
                     }
                 }
-            }
-            else if(input.equals("QUIT")) {
-                if(quitting) {
+            } else if (input.equals("QUIT")) {
+                if (quitting.isFlag()) {
                     Logger.red("Already quitting the program, wait please...");
                 }
-                quitting = true;
+                quitting.setFlag(true);
                 Logger.yellow("Initiating the quit procedure...");
                 quitHelperThread = new QuitHelperThread();
                 quitHelperThread.start();
-            }
-            else{
+            } else {
                 Logger.red("Input could not be recognized");
             }
         }
     }
 
-    public synchronized void maintenanceDone() {
-        maintenanceRequested = false;
+
+    public QuitHelperThread getQuitHelperThread() {
+        return quitHelperThread;
     }
 
-    public synchronized void wakeupHelper() {
-        if(quitting){
-            quitHelperThread.wakeup();
-        }
+    public AtomicFlag getMaintenanceRequested() {
+        return maintenanceRequested;
     }
 }
