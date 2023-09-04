@@ -39,7 +39,7 @@ public class GrpcServicesThread extends Thread {
         try {
             server = ServerBuilder.forPort(port).addService(grpcServices).build();
             server.start();
-            Logger.yellow("Server started");
+            Logger.green("Server started");
             running = true;
             synchronized (BotThread.getInstance()) {
                 BotThread.getInstance().notify();

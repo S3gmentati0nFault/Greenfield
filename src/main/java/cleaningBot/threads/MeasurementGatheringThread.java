@@ -55,7 +55,6 @@ public class MeasurementGatheringThread extends Thread {
 
     private void gatherMeasurements() {
             List<Measurement> measurements = buffer.readAllAndClean();
-//            Logger.whiteDebuggingPrint("Gathering the measurements");
             float avg = 0;
             for (Measurement measurement : measurements) {
                 avg += measurement.getValue();

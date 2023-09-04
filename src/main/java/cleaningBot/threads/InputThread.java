@@ -5,7 +5,6 @@ import cleaningBot.BotUtilities;
 import extra.AtomicFlag.AtomicFlag;
 import extra.Logger.Logger;
 
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
@@ -47,7 +46,7 @@ public class InputThread extends Thread {
                     Logger.red("Maintenance has already been requested, wait please...");
                 } else {
                     maintenanceRequested.setFlag(true);
-                    Logger.yellow("Requesting immediate maintenance...");
+                    Logger.cyan("Requesting immediate maintenance...");
                     fixHelperThread = new FixHelperThread(this);
                     fixHelperThread.start();
                 }
@@ -66,7 +65,7 @@ public class InputThread extends Thread {
                     Logger.red("Already quitting the program, wait please...");
                 }
                 quitting.setFlag(true);
-                Logger.yellow("Initiating the quit procedure...");
+                Logger.cyan("Initiating the quit procedure...");
                 quitHelperThread = new QuitHelperThread();
                 quitHelperThread.start();
             } else {

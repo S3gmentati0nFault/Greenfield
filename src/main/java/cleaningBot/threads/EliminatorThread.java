@@ -130,7 +130,7 @@ public class EliminatorThread extends Thread {
                         public void onNext(BotGRPC.IntegerValue returnMessage) {
                             counter.decrement();
                             if (returnMessage.getValue() == -1) {
-                                Logger.yellow("The robot has already been removed from the system");
+                                Logger.purple("The robot has already been removed from the system");
                             } else {
                                 Logger.green("The robot has been correctly removed!");
                             }

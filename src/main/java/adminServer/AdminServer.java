@@ -30,9 +30,6 @@ public class AdminServer {
         }
         server.start();
 
-        System.out.println("Server running!");
-        System.out.println("Server started on: http://"+Variables.HOST+":"+Variables.PORT);
-
         MqttClient client;
         String broker = "tcp://localhost:1883";
         String clientId = MqttClient.generateClientId();

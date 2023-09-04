@@ -415,7 +415,7 @@ public class BotThread extends Thread {
 
     public synchronized boolean removeBot(List<BotIdentity> deadRobots) {
         boolean removalOperation = true;
-        Logger.yellow("Closing the communication channel for " + deadRobots.size() + " robots");
+        Logger.blue("Closing the communication channel for " + deadRobots.size() + " robots");
         for (BotIdentity deadRobot : deadRobots) {
             Logger.whiteDebuggingPrint(deadRobot.toString(), BOT_THREAD_DEBUGGING);
             removalOperation &= otherBots.removeElement(deadRobot);
@@ -443,7 +443,7 @@ public class BotThread extends Thread {
         BotIdentity tmp = identity;
         identity.setPosition(newPosition);
         setDistrict(district);
-        Logger.yellow("My new district is > " + district + " > My new position is > " + newPosition);
+        Logger.cyan("My new district is > " + district + " > My new position is > " + newPosition);
 
         List<BotIdentity> fleetSnapshot = otherBots.getCopy();
 

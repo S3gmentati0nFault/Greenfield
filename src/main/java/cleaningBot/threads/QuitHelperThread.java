@@ -7,21 +7,16 @@ public class QuitHelperThread extends Thread {
     @Override
     public synchronized void run() {
         if(BotThread.getInstance().getMaintenanceThread().isInQueue()) {
-            Logger.yellow("Waiting for maintenance to finish");
+            Logger.blue("Waiting for maintenance to finish");
             try {
                 wait();
             } catch (InterruptedException e) {
                 Logger.red("There was an error while trying to wake up");
             }
         }
-        Logger.yellow("Removing the robot from the city");
+        Logger.cyan("Removing the robot from the city");
         Logger.yellow("Starting temporary eliminator Thread to delete this robot");
         EliminatorThread eliminatorThread = new EliminatorThread(BotThread.getInstance().getIdentity(), true);
         eliminatorThread.start();
-//        try {
-//            eliminatorThread.join();
-//        } catch (InterruptedException e) {
-//            Logger.red("There was a problem while eliminating this robot from the network", e);
-//        }
     }
 }

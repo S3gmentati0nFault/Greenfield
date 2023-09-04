@@ -40,7 +40,7 @@ public class PollutionSensorThread extends Thread {
         String broker = "tcp://localhost:1883";
         String clientID = MqttClient.generateClientId();
         topic = "greenfield/pollution/" + district;
-        Logger.yellow("Publishing on topic > " + topic);
+        Logger.blue("Publishing on topic > " + topic);
 
         try {
             client = new MqttClient(broker, clientID);
@@ -122,7 +122,7 @@ public class PollutionSensorThread extends Thread {
     }
 
     public void closeConnection(int district) {
-        Logger.yellow("Changing MQTT topic");
+        Logger.cyan("Changing MQTT topic");
 
         synchronized (this) {
             try {
@@ -134,7 +134,7 @@ public class PollutionSensorThread extends Thread {
             System.out.println("DISTRICT -> " + district);
             this.district = district;
             topic = "greenfield/pollution/" + district;
-            Logger.yellow("Publishing on topic > " + topic);
+            Logger.blue("Publishing on topic > " + topic);
         }
     }
 }

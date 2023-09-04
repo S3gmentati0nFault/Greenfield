@@ -129,11 +129,10 @@ public class MutualExclusionThread extends Thread {
     public synchronized void maintenanceAccess(List<BotIdentity> nonRespondingRobots) {
         if (counter.getCounter() == 0) {
             counter.add(10);
-            Logger.yellow("Starting the maintenance process");
+            Logger.cyan("Starting the maintenance process");
 
             if (nonRespondingRobots != null) {
                 if (!nonRespondingRobots.isEmpty()) {
-//                    BotUtilities.botRemovalFunction(nonRespondingRobots, false);
                     Logger.yellow("Starting the eliminator thread to delete " + nonRespondingRobots.size());
                     EliminatorThread eliminatorThread = new EliminatorThread(nonRespondingRobots, false);
                     eliminatorThread.start();
