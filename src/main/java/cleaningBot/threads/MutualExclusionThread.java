@@ -105,8 +105,8 @@ public class MutualExclusionThread extends Thread {
                 @Override
                 public synchronized void onError(Throwable t) {
                     Logger.red("Robot " + botIdentity.getId() + " did not reply to my maintenanceRequest call");
-                    Logger.green("Defaulting to positive reply, still waiting for " + counter.getCounter() + " answers");
                     counter.decrement();
+                    Logger.green("Defaulting to positive reply, still waiting for " + counter.getCounter() + " answers");
                     nonRespondingRobots.add(botIdentity);
                     maintenanceAccess(nonRespondingRobots);
                 }
@@ -132,7 +132,10 @@ public class MutualExclusionThread extends Thread {
 
             if(nonRespondingRobots != null) {
                 if(!nonRespondingRobots.isEmpty()) {
-                    BotUtilities.botRemovalFunction(nonRespondingRobots, false);
+//                    BotUtilities.botRemovalFunction(nonRespondingRobots, false);
+                    Logger.yellow("Starting the eliminator thread to delete " + nonRespondingRobots.size());
+                    EliminatorThread eliminatorThread = new EliminatorThread(nonRespondingRobots, false);
+                    eliminatorThread.start();
                 }
             }
 

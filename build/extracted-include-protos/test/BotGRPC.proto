@@ -4,7 +4,7 @@ package services.grpc;
 service BotServices {
   rpc maintenanceRequestGRPC(Identifier) returns (Acknowledgement) {}
   rpc joinRequestGRPC(BotInformation) returns (Acknowledgement) {}
-  rpc crashNotificationGRPC(BotInformation) returns (IntegerValue) {}
+  rpc crashNotificationGRPC(DeadRobotList) returns (IntegerValue) {}
   rpc moveRequestGRPC(IntegerValue) returns (Acknowledgement) {}
   rpc positionModificationRequestGRPC(BotInformation) returns (Acknowledgement) {}
 }
@@ -32,4 +32,8 @@ message BotInformation {
 message Position {
   int32 x = 1;
   int32 y = 2;
+}
+
+message DeadRobotList {
+  repeated BotInformation deadRobots = 1;
 }

@@ -60,10 +60,11 @@ public class PollutionSensorThread extends Thread {
                         Logger.red(WAKEUP_ERROR, e);
                     }
                     if (BotThread.getInstance().getMaintenanceThread().isDoingMaintenance()) {
-                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS WAITING");
+//                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS WAITING");
                         wait();
-                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS NOT WAITING");
+//                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS NOT WAITING");
                     }
+                    notify();
                 }
                 publishAverages();
             }

@@ -33,7 +33,7 @@ public class MeasurementGatheringThread extends Thread {
         while(true) {
             if(BotThread.getInstance().getMaintenanceThread().isDoingMaintenance()) {
                 buffer.setRunning(false);
-                Logger.whiteDebuggingPrint(this.getClass() + " IS WAITING");
+                Logger.whiteDebuggingPrint(this.getClass() + " IS WAITING", DEBUGGING);
                 synchronized(this) {
                     try {
                         wait();
@@ -43,7 +43,7 @@ public class MeasurementGatheringThread extends Thread {
                 }
                 buffer.setRunning(true);
 
-                Logger.whiteDebuggingPrint(this.getClass() + " IS NOT WAITING");
+                Logger.whiteDebuggingPrint(this.getClass() + " IS NOT WAITING", DEBUGGING);
 
                 synchronized (buffer) {
                     buffer.notifyAll();
@@ -55,7 +55,7 @@ public class MeasurementGatheringThread extends Thread {
 
     private void gatherMeasurements() {
             List<Measurement> measurements = buffer.readAllAndClean();
-            Logger.whiteDebuggingPrint("Gathering the measurements");
+//            Logger.whiteDebuggingPrint("Gathering the measurements");
             float avg = 0;
             for (Measurement measurement : measurements) {
                 avg += measurement.getValue();

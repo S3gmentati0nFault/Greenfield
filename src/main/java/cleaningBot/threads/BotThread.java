@@ -83,24 +83,36 @@ public class BotThread extends Thread {
     public synchronized void run() {
         boolean isServerRunning = false;
         Random random = new Random();
-        while(!isServerRunning) {
+        while (!isServerRunning) {
             Logger.yellow("Starting grpc services");
             GrpcServicesThread grpcThread = new GrpcServicesThread(identity.getPort(), botServices);
             grpcThread.start();
             try {
+                Logger.whiteDebuggingPrint("WAITING", DEBUGGING);
                 wait();
+                Logger.whiteDebuggingPrint("NOT WAITING", DEBUGGING);
             } catch (InterruptedException e) {
                 Logger.red(WAKEUP_ERROR, e);
             }
             isServerRunning = grpcThread.isRunning();
-            if(!isServerRunning) {
+            if (!isServerRunning) {
                 identity.setPort(random.nextInt(65534));
             }
         }
 
-        if (!startNewBot()) {
+        int res = startNewBot();
+
+        if (res == 0) {
             Logger.red("There was an error during Thread instantiation");
             System.exit(-1);
+        } else if (res == 1) {
+            try {
+                Logger.whiteDebuggingPrint(this.getClass() + ".run IS WAITING", DEBUGGING);
+                wait();
+                Logger.whiteDebuggingPrint(this.getClass() + ".run IS NOT WAITING", DEBUGGING);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         Logger.yellow("Starting input thread");
@@ -126,7 +138,7 @@ public class BotThread extends Thread {
      *
      * @return It returns true if the operation went well, false otherwise.
      */
-    private synchronized boolean startNewBot() {
+    private synchronized int startNewBot() {
         ObjectMapper mapper = new ObjectMapper();
 
         HttpURLConnection connection = null;
@@ -144,7 +156,7 @@ public class BotThread extends Thread {
                         new InputStreamReader(connection.getInputStream(), "utf-8"));
             } catch (IOException e) {
                 Logger.red(":(");
-                return false;
+                return 0;
             }
 
             try {
@@ -155,8 +167,9 @@ public class BotThread extends Thread {
                 }
             } catch (IOException e) {
                 Logger.red("It was not possible to retrieve the response from the server");
-                return false;
+                return 0;
             }
+            i++;
         }
 
         if (i > UPPER_ID_LIMIT) {
@@ -178,7 +191,7 @@ public class BotThread extends Thread {
             os = connection.getOutputStream();
         } catch (IOException e) {
             Logger.red("There was an error during output stream creation");
-            return false;
+            return 0;
         }
 
         String json = "";
@@ -186,7 +199,7 @@ public class BotThread extends Thread {
             json = mapper.writeValueAsString(identity);
         } catch (IOException e) {
             Logger.red("There was an error while generating the json string");
-            return false;
+            return 0;
         }
 
         byte[] input = null;
@@ -194,14 +207,14 @@ public class BotThread extends Thread {
             input = json.getBytes("utf-8");
         } catch (UnsupportedEncodingException e) {
             Logger.red("There was a problem while turning the string into bytes");
-            return false;
+            return 0;
         }
 
         try {
             os.write(input, 0, input.length);
         } catch (IOException e) {
             Logger.red("There was an error while writing on output stream");
-            return false;
+            return 0;
         }
 
         BufferedReader br = null;
@@ -210,7 +223,7 @@ public class BotThread extends Thread {
                     new InputStreamReader(connection.getInputStream(), "utf-8"));
         } catch (IOException e) {
             Logger.red("It was not possible to initialize the BufferedReader");
-            return false;
+            return 0;
         }
 
         try {
@@ -221,7 +234,7 @@ public class BotThread extends Thread {
             otherBots.addAll(robots);
         } catch (IOException e) {
             Logger.red("It was not possible to retrieve the response from the server");
-            return false;
+            return 0;
         }
 
         BotUtilities.closeConnection(connection);
@@ -229,10 +242,10 @@ public class BotThread extends Thread {
 
         district = BotUtilities.districtCalculator(identity.getPosition());
 
-        Logger.cyan("Letting my presence known");
         if (otherBots.isEmpty()) {
-            return true;
+            return -1;
         }
+        Logger.cyan("Letting my presence known");
         AtomicCounter counter = new AtomicCounter(otherBots.size());
         List<BotIdentity> nonRespondingRobots = new ArrayList<>();
 
@@ -289,15 +302,18 @@ public class BotThread extends Thread {
 
         BotUtilities.closeConnection(connection);
 
-        return true;
+        return 1;
     }
 
     public synchronized void checkCounter(List<BotIdentity> nonRespondingRobots, AtomicCounter counter) {
         if (counter.getCounter() == 0) {
             Logger.green("Hello procedure completed");
             counter.add(10);
+            notify();
             if (!nonRespondingRobots.isEmpty()) {
-                BotUtilities.botRemovalFunction(nonRespondingRobots, false);
+                Logger.yellow("Starting the eliminator thread to delete " + nonRespondingRobots.size());
+                EliminatorThread eliminatorThread = new EliminatorThread(nonRespondingRobots, false);
+                eliminatorThread.start();
             }
         }
     }
@@ -399,41 +415,18 @@ public class BotThread extends Thread {
 
     public synchronized boolean removeBot(List<BotIdentity> deadRobots) {
         boolean removalOperation = true;
+        Logger.yellow("Closing the communication channel for " + deadRobots.size() + " robots");
         for (BotIdentity deadRobot : deadRobots) {
-            if (DEBUGGING) {
-                System.out.println(deadRobot);
-            }
+            Logger.whiteDebuggingPrint(deadRobot.toString(), BOT_THREAD_DEBUGGING);
             removalOperation &= otherBots.removeElement(deadRobot);
             CommPair communicationPair = openComms.removePair(deadRobot);
             if (communicationPair != null) {
                 try {
-                    Logger.yellow("Closing the communication channel...");
                     communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
-                    Logger.green("Communication channel closed!");
                 } catch (InterruptedException e) {
                     Logger.red("Unable to close the channel the right way, forcing it closed now");
                     communicationPair.getManagedChannel().shutdownNow();
                 }
-            }
-        }
-        return removalOperation;
-    }
-
-    public synchronized boolean removeBot(BotIdentity deadRobot) {
-        boolean removalOperation = true;
-        if (DEBUGGING) {
-            System.out.println(deadRobot);
-        }
-        removalOperation &= otherBots.removeElement(deadRobot);
-        CommPair communicationPair = openComms.removePair(deadRobot);
-        if (communicationPair != null) {
-            try {
-                Logger.yellow("Closing the communication channel...");
-                communicationPair.getManagedChannel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
-                Logger.green("Communication channel closed!");
-            } catch (InterruptedException e) {
-                Logger.red("Unable to close the channel the right way, forcing it closed now");
-                communicationPair.getManagedChannel().shutdownNow();
             }
         }
         return removalOperation;
@@ -549,7 +542,7 @@ public class BotThread extends Thread {
     }
 
     private void checkAndWakeup(List<BotIdentity> deadRobots, AtomicCounter counter) {
-        synchronized(this) {
+        synchronized (this) {
             if (counter.getCounter() == 0) {
                 counter.add(10);
                 synchronized (botServices) {

@@ -8,6 +8,8 @@ import io.grpc.ServerBuilder;
 
 import java.io.IOException;
 
+import static utilities.Variables.DEBUGGING;
+
 /**
  * GrpcServicesThread is a thread that handles incoming communications from other threads.
  */
@@ -37,7 +39,7 @@ public class GrpcServicesThread extends Thread {
         try {
             server = ServerBuilder.forPort(port).addService(grpcServices).build();
             server.start();
-            System.out.println("ciao");
+            Logger.yellow("Server started");
             running = true;
             synchronized (BotThread.getInstance()) {
                 BotThread.getInstance().notify();

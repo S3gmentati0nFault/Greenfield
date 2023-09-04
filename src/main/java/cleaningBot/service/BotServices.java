@@ -10,14 +10,10 @@ import services.grpc.*;
 import services.grpc.BotServicesGrpc.*;
 import utilities.Variables;
 
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
-import static utilities.Variables.DEBUGGING;
-import static utilities.Variables.WAKEUP_ERROR;
+import static utilities.Variables.*;
 
 /**
  * This class implements the GRPC methods defined inside the proto file.
@@ -62,11 +58,13 @@ public class BotServices extends BotServicesImplBase {
             Logger.yellow("The message has a timestamp greater than mine");
             waitingInstances.add(new WaitingThread(this, request.getTimestamp()));
             try{
+                Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS WAITING", BOT_SERVICES_DEBUGGING);
                 wait();
             }catch(Exception e){
                 Logger.red(WAKEUP_ERROR);
                 e.printStackTrace();
             }
+            Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS NOT WAITING", BOT_SERVICES_DEBUGGING);
             waitingInstances.remove(new WaitingThread(this, request.getTimestamp()));
         }
         else{
@@ -107,15 +105,20 @@ public class BotServices extends BotServicesImplBase {
         responseObserver.onCompleted();
     }
 
-    public void crashNotificationGRPC(BotGRPC.BotInformation request,
+    public void crashNotificationGRPC(BotGRPC.DeadRobotList request,
                                       StreamObserver<BotGRPC.IntegerValue> responseObserver) {
         Logger.purple("crashAdvertiseGRPC");
 
-        BotIdentity deadBot = new BotIdentity(request.getId(), request.getPort(), request.getHost(),
-                            new Position(request.getPosition().getX(), request.getPosition().getY()));
+        List<BotGRPC.BotInformation> informations = request.getDeadRobotsList();
+        List<BotIdentity> deadRobots = new ArrayList<>();
+        for (BotGRPC.BotInformation information : informations) {
+            BotIdentity deadBot = new BotIdentity(information.getId(), information.getPort(), information.getHost(),
+                            new Position(information.getPosition().getX(), information.getPosition().getY()));
+            deadRobots.add(deadBot);
+        }
         
         try {
-            if(botThread.removeBot(deadBot)) {
+            if(botThread.removeBot(deadRobots)) {
                 responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(1).build());
                 responseObserver.onCompleted();
             }
@@ -139,16 +142,13 @@ public class BotServices extends BotServicesImplBase {
             synchronized (this) {
                 botThread.changeMyPosition(request.getValue());
                 try {
-                    if(DEBUGGING) {
-                        System.out.println("WAITING...");
-                    }
+                    Logger.whiteDebuggingPrint(this.getClass() + ".moveRequest IS WAITING", BOT_SERVICES_DEBUGGING);
                     wait();
                 } catch (InterruptedException e) {
                     Logger.red(WAKEUP_ERROR, e);
                 }
-                if(DEBUGGING) {
-                    System.out.println("NOT WAITING...");
-                }
+                Logger.whiteDebuggingPrint(this.getClass() + ".moveRequest IS NOT WAITING", BOT_SERVICES_DEBUGGING);
+
                 responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
                 responseObserver.onCompleted();
             }

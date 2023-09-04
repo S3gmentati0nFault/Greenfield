@@ -48,8 +48,8 @@ public class Logger {
         System.out.println(Colors.ANSI_CYAN + " <<ß>> " + message + " <<ß>> " + Colors.ANSI_RESET);
     }
 
-    public static void whiteDebuggingPrint(String message) {
-        if(DEBUGGING) {
+    public static void whiteDebuggingPrint(String message, Boolean debuggingFlag) {
+        if(debuggingFlag) {
             now = LocalDateTime.now();
             System.out.println("< " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + " > ->-> " + message + " <-<-");
         }

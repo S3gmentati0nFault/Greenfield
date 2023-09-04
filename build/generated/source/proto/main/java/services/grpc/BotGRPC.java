@@ -2998,6 +2998,794 @@ public final class BotGRPC {
 
   }
 
+  public interface DeadRobotListOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:services.grpc.DeadRobotList)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    java.util.List<services.grpc.BotGRPC.BotInformation> 
+        getDeadRobotsList();
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    services.grpc.BotGRPC.BotInformation getDeadRobots(int index);
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    int getDeadRobotsCount();
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    java.util.List<? extends services.grpc.BotGRPC.BotInformationOrBuilder> 
+        getDeadRobotsOrBuilderList();
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    services.grpc.BotGRPC.BotInformationOrBuilder getDeadRobotsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code services.grpc.DeadRobotList}
+   */
+  public  static final class DeadRobotList extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:services.grpc.DeadRobotList)
+      DeadRobotListOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use DeadRobotList.newBuilder() to construct.
+    private DeadRobotList(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private DeadRobotList() {
+      deadRobots_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new DeadRobotList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DeadRobotList(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                deadRobots_ = new java.util.ArrayList<services.grpc.BotGRPC.BotInformation>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              deadRobots_.add(
+                  input.readMessage(services.grpc.BotGRPC.BotInformation.parser(), extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          deadRobots_ = java.util.Collections.unmodifiableList(deadRobots_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return services.grpc.BotGRPC.internal_static_services_grpc_DeadRobotList_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return services.grpc.BotGRPC.internal_static_services_grpc_DeadRobotList_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              services.grpc.BotGRPC.DeadRobotList.class, services.grpc.BotGRPC.DeadRobotList.Builder.class);
+    }
+
+    public static final int DEADROBOTS_FIELD_NUMBER = 1;
+    private java.util.List<services.grpc.BotGRPC.BotInformation> deadRobots_;
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    public java.util.List<services.grpc.BotGRPC.BotInformation> getDeadRobotsList() {
+      return deadRobots_;
+    }
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    public java.util.List<? extends services.grpc.BotGRPC.BotInformationOrBuilder> 
+        getDeadRobotsOrBuilderList() {
+      return deadRobots_;
+    }
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    public int getDeadRobotsCount() {
+      return deadRobots_.size();
+    }
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    public services.grpc.BotGRPC.BotInformation getDeadRobots(int index) {
+      return deadRobots_.get(index);
+    }
+    /**
+     * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+     */
+    public services.grpc.BotGRPC.BotInformationOrBuilder getDeadRobotsOrBuilder(
+        int index) {
+      return deadRobots_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      for (int i = 0; i < deadRobots_.size(); i++) {
+        output.writeMessage(1, deadRobots_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < deadRobots_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, deadRobots_.get(i));
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof services.grpc.BotGRPC.DeadRobotList)) {
+        return super.equals(obj);
+      }
+      services.grpc.BotGRPC.DeadRobotList other = (services.grpc.BotGRPC.DeadRobotList) obj;
+
+      if (!getDeadRobotsList()
+          .equals(other.getDeadRobotsList())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getDeadRobotsCount() > 0) {
+        hash = (37 * hash) + DEADROBOTS_FIELD_NUMBER;
+        hash = (53 * hash) + getDeadRobotsList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static services.grpc.BotGRPC.DeadRobotList parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(services.grpc.BotGRPC.DeadRobotList prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code services.grpc.DeadRobotList}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:services.grpc.DeadRobotList)
+        services.grpc.BotGRPC.DeadRobotListOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return services.grpc.BotGRPC.internal_static_services_grpc_DeadRobotList_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return services.grpc.BotGRPC.internal_static_services_grpc_DeadRobotList_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                services.grpc.BotGRPC.DeadRobotList.class, services.grpc.BotGRPC.DeadRobotList.Builder.class);
+      }
+
+      // Construct using services.grpc.BotGRPC.DeadRobotList.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getDeadRobotsFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        if (deadRobotsBuilder_ == null) {
+          deadRobots_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          deadRobotsBuilder_.clear();
+        }
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return services.grpc.BotGRPC.internal_static_services_grpc_DeadRobotList_descriptor;
+      }
+
+      @java.lang.Override
+      public services.grpc.BotGRPC.DeadRobotList getDefaultInstanceForType() {
+        return services.grpc.BotGRPC.DeadRobotList.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public services.grpc.BotGRPC.DeadRobotList build() {
+        services.grpc.BotGRPC.DeadRobotList result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public services.grpc.BotGRPC.DeadRobotList buildPartial() {
+        services.grpc.BotGRPC.DeadRobotList result = new services.grpc.BotGRPC.DeadRobotList(this);
+        int from_bitField0_ = bitField0_;
+        if (deadRobotsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            deadRobots_ = java.util.Collections.unmodifiableList(deadRobots_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.deadRobots_ = deadRobots_;
+        } else {
+          result.deadRobots_ = deadRobotsBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof services.grpc.BotGRPC.DeadRobotList) {
+          return mergeFrom((services.grpc.BotGRPC.DeadRobotList)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(services.grpc.BotGRPC.DeadRobotList other) {
+        if (other == services.grpc.BotGRPC.DeadRobotList.getDefaultInstance()) return this;
+        if (deadRobotsBuilder_ == null) {
+          if (!other.deadRobots_.isEmpty()) {
+            if (deadRobots_.isEmpty()) {
+              deadRobots_ = other.deadRobots_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureDeadRobotsIsMutable();
+              deadRobots_.addAll(other.deadRobots_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.deadRobots_.isEmpty()) {
+            if (deadRobotsBuilder_.isEmpty()) {
+              deadRobotsBuilder_.dispose();
+              deadRobotsBuilder_ = null;
+              deadRobots_ = other.deadRobots_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              deadRobotsBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getDeadRobotsFieldBuilder() : null;
+            } else {
+              deadRobotsBuilder_.addAllMessages(other.deadRobots_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        services.grpc.BotGRPC.DeadRobotList parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (services.grpc.BotGRPC.DeadRobotList) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<services.grpc.BotGRPC.BotInformation> deadRobots_ =
+        java.util.Collections.emptyList();
+      private void ensureDeadRobotsIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          deadRobots_ = new java.util.ArrayList<services.grpc.BotGRPC.BotInformation>(deadRobots_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.BotInformation.Builder, services.grpc.BotGRPC.BotInformationOrBuilder> deadRobotsBuilder_;
+
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public java.util.List<services.grpc.BotGRPC.BotInformation> getDeadRobotsList() {
+        if (deadRobotsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(deadRobots_);
+        } else {
+          return deadRobotsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public int getDeadRobotsCount() {
+        if (deadRobotsBuilder_ == null) {
+          return deadRobots_.size();
+        } else {
+          return deadRobotsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public services.grpc.BotGRPC.BotInformation getDeadRobots(int index) {
+        if (deadRobotsBuilder_ == null) {
+          return deadRobots_.get(index);
+        } else {
+          return deadRobotsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder setDeadRobots(
+          int index, services.grpc.BotGRPC.BotInformation value) {
+        if (deadRobotsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureDeadRobotsIsMutable();
+          deadRobots_.set(index, value);
+          onChanged();
+        } else {
+          deadRobotsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder setDeadRobots(
+          int index, services.grpc.BotGRPC.BotInformation.Builder builderForValue) {
+        if (deadRobotsBuilder_ == null) {
+          ensureDeadRobotsIsMutable();
+          deadRobots_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          deadRobotsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder addDeadRobots(services.grpc.BotGRPC.BotInformation value) {
+        if (deadRobotsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureDeadRobotsIsMutable();
+          deadRobots_.add(value);
+          onChanged();
+        } else {
+          deadRobotsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder addDeadRobots(
+          int index, services.grpc.BotGRPC.BotInformation value) {
+        if (deadRobotsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureDeadRobotsIsMutable();
+          deadRobots_.add(index, value);
+          onChanged();
+        } else {
+          deadRobotsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder addDeadRobots(
+          services.grpc.BotGRPC.BotInformation.Builder builderForValue) {
+        if (deadRobotsBuilder_ == null) {
+          ensureDeadRobotsIsMutable();
+          deadRobots_.add(builderForValue.build());
+          onChanged();
+        } else {
+          deadRobotsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder addDeadRobots(
+          int index, services.grpc.BotGRPC.BotInformation.Builder builderForValue) {
+        if (deadRobotsBuilder_ == null) {
+          ensureDeadRobotsIsMutable();
+          deadRobots_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          deadRobotsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder addAllDeadRobots(
+          java.lang.Iterable<? extends services.grpc.BotGRPC.BotInformation> values) {
+        if (deadRobotsBuilder_ == null) {
+          ensureDeadRobotsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, deadRobots_);
+          onChanged();
+        } else {
+          deadRobotsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder clearDeadRobots() {
+        if (deadRobotsBuilder_ == null) {
+          deadRobots_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          deadRobotsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public Builder removeDeadRobots(int index) {
+        if (deadRobotsBuilder_ == null) {
+          ensureDeadRobotsIsMutable();
+          deadRobots_.remove(index);
+          onChanged();
+        } else {
+          deadRobotsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public services.grpc.BotGRPC.BotInformation.Builder getDeadRobotsBuilder(
+          int index) {
+        return getDeadRobotsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public services.grpc.BotGRPC.BotInformationOrBuilder getDeadRobotsOrBuilder(
+          int index) {
+        if (deadRobotsBuilder_ == null) {
+          return deadRobots_.get(index);  } else {
+          return deadRobotsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public java.util.List<? extends services.grpc.BotGRPC.BotInformationOrBuilder> 
+           getDeadRobotsOrBuilderList() {
+        if (deadRobotsBuilder_ != null) {
+          return deadRobotsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(deadRobots_);
+        }
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public services.grpc.BotGRPC.BotInformation.Builder addDeadRobotsBuilder() {
+        return getDeadRobotsFieldBuilder().addBuilder(
+            services.grpc.BotGRPC.BotInformation.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public services.grpc.BotGRPC.BotInformation.Builder addDeadRobotsBuilder(
+          int index) {
+        return getDeadRobotsFieldBuilder().addBuilder(
+            index, services.grpc.BotGRPC.BotInformation.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .services.grpc.BotInformation deadRobots = 1;</code>
+       */
+      public java.util.List<services.grpc.BotGRPC.BotInformation.Builder> 
+           getDeadRobotsBuilderList() {
+        return getDeadRobotsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.BotInformation.Builder, services.grpc.BotGRPC.BotInformationOrBuilder> 
+          getDeadRobotsFieldBuilder() {
+        if (deadRobotsBuilder_ == null) {
+          deadRobotsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              services.grpc.BotGRPC.BotInformation, services.grpc.BotGRPC.BotInformation.Builder, services.grpc.BotGRPC.BotInformationOrBuilder>(
+                  deadRobots_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          deadRobots_ = null;
+        }
+        return deadRobotsBuilder_;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:services.grpc.DeadRobotList)
+    }
+
+    // @@protoc_insertion_point(class_scope:services.grpc.DeadRobotList)
+    private static final services.grpc.BotGRPC.DeadRobotList DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new services.grpc.BotGRPC.DeadRobotList();
+    }
+
+    public static services.grpc.BotGRPC.DeadRobotList getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<DeadRobotList>
+        PARSER = new com.google.protobuf.AbstractParser<DeadRobotList>() {
+      @java.lang.Override
+      public DeadRobotList parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new DeadRobotList(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<DeadRobotList> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DeadRobotList> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public services.grpc.BotGRPC.DeadRobotList getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_services_grpc_Identifier_descriptor;
   private static final 
@@ -3023,6 +3811,11 @@ public final class BotGRPC {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_services_grpc_Position_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_services_grpc_DeadRobotList_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_services_grpc_DeadRobotList_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -3038,19 +3831,21 @@ public final class BotGRPC {
       "lue\022\r\n\005value\030\001 \001(\005\"c\n\016BotInformation\022\n\n\002" +
       "id\030\001 \001(\005\022\014\n\004port\030\002 \001(\005\022\014\n\004host\030\003 \001(\t\022)\n\010" +
       "position\030\004 \001(\0132\027.services.grpc.Position\"" +
-      " \n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\0052\305\003\n\013Bo" +
-      "tServices\022U\n\026maintenanceRequestGRPC\022\031.se" +
-      "rvices.grpc.Identifier\032\036.services.grpc.A" +
-      "cknowledgement\"\000\022R\n\017joinRequestGRPC\022\035.se" +
-      "rvices.grpc.BotInformation\032\036.services.gr" +
-      "pc.Acknowledgement\"\000\022U\n\025crashNotificatio" +
-      "nGRPC\022\035.services.grpc.BotInformation\032\033.s" +
-      "ervices.grpc.IntegerValue\"\000\022P\n\017moveReque" +
-      "stGRPC\022\033.services.grpc.IntegerValue\032\036.se" +
-      "rvices.grpc.Acknowledgement\"\000\022b\n\037positio" +
-      "nModificationRequestGRPC\022\035.services.grpc" +
-      ".BotInformation\032\036.services.grpc.Acknowle" +
-      "dgement\"\000b\006proto3"
+      " \n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"B\n\rDea" +
+      "dRobotList\0221\n\ndeadRobots\030\001 \003(\0132\035.service" +
+      "s.grpc.BotInformation2\304\003\n\013BotServices\022U\n" +
+      "\026maintenanceRequestGRPC\022\031.services.grpc." +
+      "Identifier\032\036.services.grpc.Acknowledgeme" +
+      "nt\"\000\022R\n\017joinRequestGRPC\022\035.services.grpc." +
+      "BotInformation\032\036.services.grpc.Acknowled" +
+      "gement\"\000\022T\n\025crashNotificationGRPC\022\034.serv" +
+      "ices.grpc.DeadRobotList\032\033.services.grpc." +
+      "IntegerValue\"\000\022P\n\017moveRequestGRPC\022\033.serv" +
+      "ices.grpc.IntegerValue\032\036.services.grpc.A" +
+      "cknowledgement\"\000\022b\n\037positionModification" +
+      "RequestGRPC\022\035.services.grpc.BotInformati" +
+      "on\032\036.services.grpc.Acknowledgement\"\000b\006pr" +
+      "oto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -3086,6 +3881,12 @@ public final class BotGRPC {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_services_grpc_Position_descriptor,
         new java.lang.String[] { "X", "Y", });
+    internal_static_services_grpc_DeadRobotList_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_services_grpc_DeadRobotList_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_services_grpc_DeadRobotList_descriptor,
+        new java.lang.String[] { "DeadRobots", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -115,29 +115,29 @@ public class BotUtilities {
                         )
                         .build();
 
-                communicationPair
-                        .getCommunicationStub()
-                        .crashNotificationGRPC(identikit, new StreamObserver<BotGRPC.IntegerValue>() {
-                            @Override
-                            public void onNext(BotGRPC.IntegerValue returnMessage) {
-                                counter.decrement();
-                                if (returnMessage.getValue() == -1) {
-                                    Logger.yellow("The robot has already been removed from the system");
-                                } else {
-                                    Logger.green("The robot has been correctly removed!");
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable t) {
-                                Logger.red("robot " + botIdentity.getId() + " didn't reply to my CrashNotification call");
-                            }
-
-                            @Override
-                            public void onCompleted() {
-                                checkCounter(quitting);
-                            }
-                        });
+//                communicationPair
+//                        .getCommunicationStub()
+//                        .crashNotificationGRPC(identikit, new StreamObserver<BotGRPC.IntegerValue>() {
+//                            @Override
+//                            public void onNext(BotGRPC.IntegerValue returnMessage) {
+//                                counter.decrement();
+//                                if (returnMessage.getValue() == -1) {
+//                                    Logger.yellow("The robot has already been removed from the system");
+//                                } else {
+//                                    Logger.green("The robot has been correctly removed!");
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable t) {
+//                                Logger.red("robot " + botIdentity.getId() + " didn't reply to my CrashNotification call");
+//                            }
+//
+//                            @Override
+//                            public void onCompleted() {
+//                                checkCounter(quitting);
+//                            }
+//                        });
             });
         }
 

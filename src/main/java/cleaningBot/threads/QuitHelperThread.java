@@ -15,7 +15,14 @@ public class QuitHelperThread extends Thread {
             }
         }
         Logger.yellow("Removing the robot from the city");
-        BotUtilities.botRemovalFunction(BotThread.getInstance().getIdentity(), true);
+        Logger.yellow("Starting temporary eliminator Thread to delete this robot");
+        EliminatorThread eliminatorThread = new EliminatorThread(BotThread.getInstance().getIdentity(), true);
+        eliminatorThread.start();
+        try {
+            eliminatorThread.join();
+        } catch (InterruptedException e) {
+            Logger.red("There was a problem while eliminating this robot from the network", e);
+        }
     }
 
     public synchronized void wakeup() {

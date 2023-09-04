@@ -59,9 +59,8 @@ public class ThreadSafeArrayList<ELEMENT> {
     }
 
     public synchronized void swap(ELEMENT oldElement, ELEMENT newElement) {
-        if(DEBUGGING & arrayList.contains(oldElement)) {
-            System.out.println("L'ELEMENTO STA DENTRO LA STRUTTURA DATI");
-        }
+        Logger.whiteDebuggingPrint("L'ELEMENTO STA DENTRO LA STRUTTURA DATI",
+                DEBUGGING & arrayList.contains(oldElement));
         arrayList.remove(oldElement);
         arrayList.add(newElement);
     }
