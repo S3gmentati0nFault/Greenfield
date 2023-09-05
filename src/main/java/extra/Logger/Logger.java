@@ -2,8 +2,6 @@ package extra.Logger;
 
 import java.time.LocalDateTime;
 
-import static utilities.Variables.DEBUGGING;
-
 public class Logger {
     static LocalDateTime now;
     public static void red(String message){

@@ -300,8 +300,6 @@ public class BotThread extends Thread {
             });
         });
 
-        BotUtilities.closeConnection(connection);
-
         return 1;
     }
 

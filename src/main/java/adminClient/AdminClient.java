@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Queue;
 
 import static cleaningBot.BotUtilities.buildConnection;
-import static cleaningBot.BotUtilities.distributionCalculator;
 import static utilities.Variables.NUMBER_OF_DISTRICTS;
 
 public class AdminClient {

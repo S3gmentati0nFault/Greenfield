@@ -105,6 +105,10 @@ public class BotServices extends BotServicesImplBase {
         responseObserver.onCompleted();
     }
 
+//    TODO
+//    >> FLAVOUR :: DEBUGGING-ROSSO <<
+//    RIVEDERE COME FUNZIONA LA CRASH NOTIFICATION GRPC E ANDARE A FARE I DOVUTI FIX PER
+//    GESTIRE L'AGGIORNAMENTO DEI ROBOT CHE VENGONO AGGIUNTI ALLA RETE
     public void crashNotificationGRPC(BotGRPC.DeadRobotList request,
                                       StreamObserver<BotGRPC.IntegerValue> responseObserver) {
         Logger.purple("crashAdvertiseGRPC");

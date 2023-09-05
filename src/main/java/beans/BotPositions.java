@@ -1,5 +1,6 @@
 package beans;
 
+import cleaningBot.BotUtilities;
 import extra.Logger.Logger;
 import cleaningBot.Position;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -7,6 +8,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.IOException;
 import java.util.*;
+
+import static utilities.Variables.NUMBER_OF_DISTRICTS;
 
 /**
  * BotPositions bean which simulates the city, it stores the position of all
@@ -51,17 +54,29 @@ public class BotPositions {
      * present in the system.
      */
     public Position joinBot(BotIdentity identity) {
-        Random random = new Random();
+//        Random random = new Random();
 
 //        Position pos = new Position(
 //            random.nextInt(9),
 //                random.nextInt(9)
 //        );
 
-        Position pos = new Position(
-            random.nextInt(5),
-                random.nextInt(5)
-        );
+        int[] districts = new int[4];
+
+        for (BotIdentity botIdentity : city) {
+            districts[BotUtilities.districtCalculator(botIdentity.getPosition()) - 1]++;
+        }
+
+        int min = 0;
+
+        for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
+            System.out.println(districts[i]);
+            if (districts[i] < districts[min]) {
+                min = i;
+            }
+        }
+
+        Position pos = BotUtilities.positionCalculator(min + 1);
 
         System.out.println(pos);
         identity.setPosition(pos);
