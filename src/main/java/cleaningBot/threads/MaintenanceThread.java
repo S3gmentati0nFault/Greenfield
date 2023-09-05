@@ -73,7 +73,7 @@ public class MaintenanceThread extends Thread {
             try {
                 setInQueue(true);
             } catch (AlreadyOnMaintenanceException e) {
-                Logger.red("The robot is already undergoing maintenance, this request will be skipped");
+                Logger.red("The robot is already in queue for maintenance, this request will be skipped");
                 return;
             }
         }

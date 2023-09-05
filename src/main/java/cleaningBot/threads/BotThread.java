@@ -311,7 +311,7 @@ public class BotThread extends Thread {
             counter.add(10);
             notify();
             if (!nonRespondingRobots.isEmpty()) {
-                Logger.yellow("Starting the eliminator thread to delete " + nonRespondingRobots.size());
+                Logger.yellow("Starting the eliminator thread to delete " + nonRespondingRobots.size() + " robots");
                 EliminatorThread eliminatorThread = new EliminatorThread(nonRespondingRobots, false);
                 eliminatorThread.start();
             }

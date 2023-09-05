@@ -19,7 +19,7 @@ import utilities.Variables;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utilities.Variables.DEBUGGING;
+import static utilities.Variables.*;
 
 public class MutualExclusionThread extends Thread {
 
@@ -40,9 +40,6 @@ public class MutualExclusionThread extends Thread {
     public MutualExclusionThread(MaintenanceThread maintenanceThread) {
         this.maintenanceThread = maintenanceThread;
     }
-
-//    TODO
-//    CONTROLLARE IL PROCESSO DI MUTUA ESCLUSIONE PERCHÈ SEMBRA CHE A VOLTE VENGA DUPLICATO O QUALCOSA DEL GENERE
 
     /**
      * Method that handles the mutual-exclusion by contacting via GRPC all the bots present
@@ -65,19 +62,7 @@ public class MutualExclusionThread extends Thread {
             ManagedChannel channel;
             BotServicesGrpc.BotServicesStub serviceStub;
 
-            CommPair communicationPair = BotThread.getInstance().getOpenComms().getValue(botIdentity);
-            if (communicationPair == null) {
-                channel = ManagedChannelBuilder
-                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                        .usePlaintext()
-                        .build();
-
-                serviceStub = BotServicesGrpc.newStub(channel);
-                BotThread.getInstance().newCommunicationChannel(botIdentity, channel, serviceStub);
-            } else {
-                channel = communicationPair.getManagedChannel();
-                serviceStub = communicationPair.getCommunicationStub();
-            }
+            CommPair communicationPair = BotUtilities.retrieveCommunicationPair(botIdentity);
 
             long timestamp = System.currentTimeMillis();
             BotThread.getInstance().setTimestamp(timestamp);
@@ -87,41 +72,44 @@ public class MutualExclusionThread extends Thread {
                     .setTimestamp(timestamp)
                     .build();
 
-            serviceStub.maintenanceRequestGRPC(identifier, new StreamObserver<BotGRPC.Acknowledgement>() {
-                @Override
-                public synchronized void onNext(BotGRPC.Acknowledgement value) {
-                    if (DEBUGGING) {
-                        System.out.println("FUORI -> " + Thread.currentThread().getId());
-                    }
-                    synchronized (this) {
-                        if (DEBUGGING) {
-                            System.out.println("DENTRO -> " + Thread.currentThread().getId());
+//            TODO
+//            >> FLAVOUR :: DEBUGGING-GIALLO <<
+//            CONTROLLARE UN COMPORTAMENTO STRANO PER CUI, QUALCHE VOLTA, LA STAMPA DEL CONTATORE VIENE RIPETUTA, COME SE
+//            NON CI FOSSE SINCRONIZZAZIONE O COME SE IL THREAD CORRENTE RILASCIASSE SUBITO IL MONITOR.
+//            ESEMPIO: 1, 1, 0 ANZICHÈ 2, 1, 0
+            communicationPair.getCommunicationStub().maintenanceRequestGRPC(identifier,
+                    new StreamObserver<BotGRPC.Acknowledgement>() {
+                        @Override
+                        public synchronized void onNext(BotGRPC.Acknowledgement value) {
+                            Logger.whiteDebuggingPrint("onNext", MUTUAL_EXCLUSION_DEBUGGING);
+                            counter.decrement();
+//                            if(MUTUAL_EXCLUSION_DEBUGGING) {
+//                                try {
+//                                    sleep(5000);
+//                                } catch (InterruptedException e) {
+//                                    Logger.red(WAKEUP_ERROR, e);
+//                                }
+//                            }
+                            Logger.green("The response was positive! Still waiting for " + counter.getCounter() + " answers");
                         }
-                        counter.decrement();
-                        Logger.green("The response was positive! Still waiting for " + counter.getCounter() + " answers");
-                    }
-                }
 
-                @Override
-                public synchronized void onError(Throwable t) {
-                    Logger.red("Robot " + botIdentity.getId() + " did not reply to my maintenanceRequest call");
-                    counter.decrement();
-                    Logger.green("Defaulting to positive reply, still waiting for " + counter.getCounter() + " answers");
-                    nonRespondingRobots.add(botIdentity);
-                    maintenanceAccess(nonRespondingRobots);
-                }
+                        @Override
+                        public synchronized void onError(Throwable t) {
+                            Logger.red("Robot " + botIdentity.getId() + " did not reply to my maintenanceRequest call");
+                            counter.decrement();
+                            Logger.green("Defaulting to positive reply, still waiting for " + counter.getCounter() + " answers");
+                            nonRespondingRobots.add(botIdentity);
+                            maintenanceAccess(nonRespondingRobots);
+                        }
 
-                @Override
-                public synchronized void onCompleted() {
-                    maintenanceAccess(nonRespondingRobots);
-                }
-            });
+                        @Override
+                        public synchronized void onCompleted() {
+                            Logger.whiteDebuggingPrint("onCompleted", MUTUAL_EXCLUSION_DEBUGGING);
+                            maintenanceAccess(nonRespondingRobots);
+                        }
+                    });
         }
     }
-
-//    TODO
-//    >> FLAVOUR :: EFFICENZA-ARANCIONE <<
-//    TRASFORMARE IL METODO DI BOTREMOVALFUNCTION IN UN THREAD
 
     /**
      * Method that simulates access to the mechanic

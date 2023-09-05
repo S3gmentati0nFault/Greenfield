@@ -6,37 +6,41 @@ simulators/Buffer.java
  simulators.Buffer
 exceptions/AlreadyOnMaintenanceException.java
  exceptions.AlreadyOnMaintenanceException
-extra/ThreadSafeStructures/ThreadSafeArrayList.java
- extra.ThreadSafeStructures.ThreadSafeArrayList
+cleaningBot/service/ServiceComparator.java
+ cleaningBot.service.ServiceComparator
 extra/Logger/Colors.java
  extra.Logger.Colors
-simulators/PM10Simulator.java
- simulators.PM10Simulator
+cleaningBot/threads/InputThread.java
+ cleaningBot.threads.InputThread
 extra/AtomicCounter/AtomicCounter.java
  extra.AtomicCounter.AtomicCounter
 cleaningBot/CommPair.java
  cleaningBot.CommPair
-cleaningBot/service/WaitingThread.java
- cleaningBot.service.WaitingThread
+cleaningBot/threads/EliminatorThread.java
+ cleaningBot.threads.EliminatorThread
+ cleaningBot.threads.EliminatorThread$1
+ cleaningBot.threads.EliminatorThread$2
 utilities/Variables.java
  utilities.Variables
-extra/AtomicFlag/AtomicFlag.java
- extra.AtomicFlag.AtomicFlag
+cleaningBot/threads/BotThread.java
+ cleaningBot.threads.BotThread
+ cleaningBot.threads.BotThread$1
+ cleaningBot.threads.BotThread$2
+ cleaningBot.threads.BotThread$3
 adminServer/ServerRestInterface.java
  adminServer.ServerRestInterface
-simulators/Measurement.java
- simulators.Measurement
+cleaningBot/threads/FixHelperThread.java
+ cleaningBot.threads.FixHelperThread
 cleaningBot/BotUtilities.java
  cleaningBot.BotUtilities
- cleaningBot.BotUtilities$1
 cleaningBot/BotIdentityComparator.java
  cleaningBot.BotIdentityComparator
 cleaningBot/threads/MeasurementGatheringThread.java
  cleaningBot.threads.MeasurementGatheringThread
 exceptions/BotAlreadyExistsException.java
  exceptions.BotAlreadyExistsException
-extra/ThreadSafeStructures/ThreadSafeHashMap.java
- extra.ThreadSafeStructures.ThreadSafeHashMap
+cleaningBot/threads/MaintenanceThread.java
+ cleaningBot.threads.MaintenanceThread
 adminClient/AdminClient.java
  adminClient.AdminClient
  adminClient.AdminClient$1
@@ -45,29 +49,18 @@ cleaningBot/Position.java
  cleaningBot.Position
 simulators/Simulator.java
  simulators.Simulator
-cleaningBot/threads/PollutionSensorThread.java
- cleaningBot.threads.PollutionSensorThread
+cleaningBot/threads/QuitHelperThread.java
+ cleaningBot.threads.QuitHelperThread
 cleaningBot/MeasurementBuffer.java
  cleaningBot.MeasurementBuffer
 beans/AverageList.java
  beans.AverageList
 cleaningBot/CleaningBot.java
  cleaningBot.CleaningBot
-adminServer/AdminServer.java
- adminServer.AdminServer
- adminServer.AdminServer$1
- adminServer.AdminServer$1$1
-services/grpc/BotServicesGrpc.java
- services.grpc.BotServicesGrpc
- services.grpc.BotServicesGrpc$1
- services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesBlockingStub
- services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesFutureStub
- services.grpc.BotServicesGrpc$BotServicesImplBase
- services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
- services.grpc.BotServicesGrpc$BotServicesStub
- services.grpc.BotServicesGrpc$MethodHandlers
+cleaningBot/service/WaitingThread.java
+ cleaningBot.service.WaitingThread
+cleaningBot/service/BotServices.java
+ cleaningBot.service.BotServices
 extra/Logger/Logger.java
  extra.Logger.Logger
 services/grpc/BotGRPC.java
@@ -97,29 +90,35 @@ services/grpc/BotGRPC.java
  services.grpc.BotGRPC$Position$1
  services.grpc.BotGRPC$Position$Builder
  services.grpc.BotGRPC$PositionOrBuilder
-cleaningBot/service/BotServices.java
- cleaningBot.service.BotServices
-cleaningBot/threads/FixHelperThread.java
- cleaningBot.threads.FixHelperThread
-cleaningBot/threads/EliminatorThread.java
- cleaningBot.threads.EliminatorThread
- cleaningBot.threads.EliminatorThread$1
- cleaningBot.threads.EliminatorThread$2
-cleaningBot/service/ServiceComparator.java
- cleaningBot.service.ServiceComparator
-cleaningBot/threads/InputThread.java
- cleaningBot.threads.InputThread
+cleaningBot/threads/PollutionSensorThread.java
+ cleaningBot.threads.PollutionSensorThread
+extra/ThreadSafeStructures/ThreadSafeHashMap.java
+ extra.ThreadSafeStructures.ThreadSafeHashMap
+services/grpc/BotServicesGrpc.java
+ services.grpc.BotServicesGrpc
+ services.grpc.BotServicesGrpc$1
+ services.grpc.BotServicesGrpc$BotServicesBaseDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesBlockingStub
+ services.grpc.BotServicesGrpc$BotServicesFileDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesFutureStub
+ services.grpc.BotServicesGrpc$BotServicesImplBase
+ services.grpc.BotServicesGrpc$BotServicesMethodDescriptorSupplier
+ services.grpc.BotServicesGrpc$BotServicesStub
+ services.grpc.BotServicesGrpc$MethodHandlers
+adminServer/AdminServer.java
+ adminServer.AdminServer
+ adminServer.AdminServer$1
+ adminServer.AdminServer$1$1
 cleaningBot/threads/GrpcServicesThread.java
  cleaningBot.threads.GrpcServicesThread
-cleaningBot/threads/BotThread.java
- cleaningBot.threads.BotThread
- cleaningBot.threads.BotThread$1
- cleaningBot.threads.BotThread$2
- cleaningBot.threads.BotThread$3
-cleaningBot/threads/QuitHelperThread.java
- cleaningBot.threads.QuitHelperThread
-cleaningBot/threads/MaintenanceThread.java
- cleaningBot.threads.MaintenanceThread
+simulators/PM10Simulator.java
+ simulators.PM10Simulator
+extra/ThreadSafeStructures/ThreadSafeArrayList.java
+ extra.ThreadSafeStructures.ThreadSafeArrayList
 cleaningBot/threads/MutualExclusionThread.java
  cleaningBot.threads.MutualExclusionThread
  cleaningBot.threads.MutualExclusionThread$1
+simulators/Measurement.java
+ simulators.Measurement
+extra/AtomicFlag/AtomicFlag.java
+ extra.AtomicFlag.AtomicFlag

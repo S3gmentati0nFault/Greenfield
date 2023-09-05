@@ -3,6 +3,8 @@ public class Variables {
     public static final Boolean DEBUGGING = false;
     public static final Boolean BOT_THREAD_DEBUGGING = false;
     public static final Boolean BOT_SERVICES_DEBUGGING = false;
+    public static final Boolean ELIMINATOR_THREAD_DEBUGGING = true;
+    public static final Boolean MUTUAL_EXCLUSION_DEBUGGING = true;
 
     public static final String HOST = "localhost";
     public static final String PORT = "3000";

@@ -92,7 +92,7 @@ public class EliminatorThread extends Thread {
         int currentSize = fleetSnapshot.size();
 
         if (fleetSnapshot.isEmpty()) {
-            if(quitting) {
+            if (quitting) {
                 System.exit(0);
             }
             return true;
@@ -155,12 +155,12 @@ public class EliminatorThread extends Thread {
         fleetSnapshot.add(BotThread.getInstance().getIdentity());
         currentSize++;
 
-        Logger.whiteDebuggingPrint("DIMENSIONE DELLA LISTA POST ELIMINAZIONE -> " + fleetSnapshot.size(), DEBUGGING);
+        Logger.whiteDebuggingPrint("DIMENSIONE DELLA LISTA POST ELIMINAZIONE -> " + fleetSnapshot.size(), ELIMINATOR_THREAD_DEBUGGING);
 
         List<Queue<BotIdentity>> districtDistribution = distributionCalculator(fleetSnapshot);
 
-        if (DEBUGGING) {
-            Logger.whiteDebuggingPrint("SITUAZIONE INIZIALE", DEBUGGING);
+        if (ELIMINATOR_THREAD_DEBUGGING) {
+            System.out.println("SITUAZIONE INIZIALE");
             for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
                 System.out.println("DISTRICT " + (i + 1) + " < " + districtDistribution.get(i).size() + " >");
                 for (BotIdentity botIdentity : districtDistribution.get(i)) {
@@ -172,9 +172,7 @@ public class EliminatorThread extends Thread {
         int limit = (currentSize / 4) + Math.min(currentSize % 4, 1);
         int reducedLimit = (currentSize / 4);
 
-        if (DEBUGGING) {
-            System.out.println("LIMIT -> " + limit);
-        }
+        Logger.whiteDebuggingPrint("LIMIT -> " + limit, ELIMINATOR_THREAD_DEBUGGING);
 
         for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
             while (districtDistribution.get(i).size() > limit) {
@@ -182,8 +180,8 @@ public class EliminatorThread extends Thread {
             }
         }
 
-        if (DEBUGGING) {
-            Logger.whiteDebuggingPrint("TERMINE PROCESSO", DEBUGGING);
+        if (ELIMINATOR_THREAD_DEBUGGING) {
+            System.out.println("TERMINE DEL PROCESSO");
             for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
                 System.out.println("DISTRICT " + (i + 1) + " < " + districtDistribution.get(i).size() + " >");
                 for (BotIdentity botIdentity : districtDistribution.get(i)) {
@@ -197,40 +195,41 @@ public class EliminatorThread extends Thread {
 
     private static void moveBotsAround(List<Queue<BotIdentity>> distribution, int limit, int overpopulatedDistrict, int reducedLimit) {
 
-        if (DEBUGGING) {
-            System.out.println("MOVING SOME ROBOTS AWAY FROM " + (overpopulatedDistrict + 1));
-        }
+        Logger.whiteDebuggingPrint("MOVING SOME ROBOTS AWAY FROM "
+                + (overpopulatedDistrict + 1), ELIMINATOR_THREAD_DEBUGGING);
 
         int receivingDistrict = 0;
         int min = distribution.get(0).size();
         for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
-            if (DEBUGGING) {
-                System.out.println("Possible district -> " + i + " its distribution: " + distribution.get(i).size());
-            }
+            Logger.whiteDebuggingPrint("Possible district -> "
+                            + i + " its distribution: "
+                            + distribution.get(i).size(),
+                    ELIMINATOR_THREAD_DEBUGGING);
+
             if (distribution.get(i).size() < min && distribution.get(i).size() < limit) {
                 receivingDistrict = i;
                 min = distribution.get(i).size();
             }
         }
 
-        if (DEBUGGING) {
-            System.out.println("RECEIVING DISTRICT -> " + (receivingDistrict + 1));
+        Logger.whiteDebuggingPrint("RECEIVING DISTRICT -> " + (receivingDistrict + 1), ELIMINATOR_THREAD_DEBUGGING);
+
+        if (receivingDistrict == overpopulatedDistrict) {
+            return;
         }
 
         while (distribution.get(receivingDistrict).size() <= reducedLimit &&
                 distribution.get(overpopulatedDistrict).size() > limit) {
 
             final BotIdentity botToBeMoved = distribution.get(overpopulatedDistrict).poll();
-            if (DEBUGGING) {
-                System.out.println("Moving " + botToBeMoved + " to " + (receivingDistrict + 1));
-            }
+
+            Logger.whiteDebuggingPrint("Moving " + botToBeMoved
+                    + " to " + (receivingDistrict + 1), ELIMINATOR_THREAD_DEBUGGING);
 
             distribution.get(receivingDistrict).add(botToBeMoved);
 
             if (botToBeMoved == BotThread.getInstance().getIdentity()) {
-                if (DEBUGGING) {
-                    System.out.println("MOVING MYSELF");
-                }
+                Logger.whiteDebuggingPrint("MOVING MYSELF", ELIMINATOR_THREAD_DEBUGGING);
                 BotThread.getInstance().changeMyPosition(receivingDistrict + 1);
             } else {
                 CommPair communicationPair = retrieveCommunicationPair(botToBeMoved);
