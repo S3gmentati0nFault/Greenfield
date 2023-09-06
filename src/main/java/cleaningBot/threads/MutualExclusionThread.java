@@ -81,6 +81,7 @@ public class MutualExclusionThread extends Thread {
                     new StreamObserver<BotGRPC.Acknowledgement>() {
                         @Override
                         public synchronized void onNext(BotGRPC.Acknowledgement value) {
+                            System.out.println(Thread.currentThread().getId() + " onNext");
                             Logger.whiteDebuggingPrint("onNext", MUTUAL_EXCLUSION_DEBUGGING);
                             counter.decrement();
 //                            if(MUTUAL_EXCLUSION_DEBUGGING) {
@@ -104,6 +105,7 @@ public class MutualExclusionThread extends Thread {
 
                         @Override
                         public synchronized void onCompleted() {
+                            System.out.println(Thread.currentThread().getId() + " onCompleted");
                             Logger.whiteDebuggingPrint("onCompleted", MUTUAL_EXCLUSION_DEBUGGING);
                             maintenanceAccess(nonRespondingRobots);
                         }

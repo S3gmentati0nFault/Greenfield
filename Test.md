@@ -60,3 +60,41 @@ robot (dopo l'eliminazione di alcune entità)
     6) Inizializzare altri due processi CleaningBot, uno leggermente dopo l'altro
       6a) Consentire ai processi di stabilizzarsi e controllare che la rete sia 
           in uno stato coerente
+
+<h3>Test specifico stile proposto in esame</h3>
+Test simile a quello proposto in esame
+
+    1) Inizializzazione di un processo AdminServer
+    2) Inizializzazione di un processo AdminClient
+    3) Inizializzazione di tre processi CleaningBot
+        3a) Consentirne l'avviamento e controllare che il processo AdminClient contenga le informazioni corrette
+    4) Utilizzare il comando FIX per mandare tutti i processi in manutenzione
+        4a) Controllare i log per dimostrare che i processi non si pestano i piedi tra di loro
+        4b) Rimozione controllata di uno dei processi CleaningBot
+    5) Rimozione incontrollata di uno dei processi CleaningBot
+        5a) Mostrare che la distribuzione è ancora stabile e che la rimozione è stata propagata
+
+In alternativa i passi (5) e (4b) possono essere fusi insieme per fare un test leggermente diverso e un po' più aggressivo
+
+<h3>Test di morte in fase di rimozione</h3>
+In questo test si possono utilizzare, sia la rimozione incontrollata che la rimozione controllata (in quanto quest'ultima 
+ha un effetto simile al processo di rimozione incontrollata se il robot non è in manutenzione).
+
+    1) Settare Variables.BOT_THREAD_DEBUGGING = true
+    2) Inizializzazione di un processo AdminServer
+    3) Inizializzazione di un processo AdminClient
+    4) Inizializzazione di sei processi CleaningBot
+        4a) Dare il tempo ai processi di stabilizzarsi, controllare i log
+    5) Eseguire rimozione di un bot tra i primi del gruppo, questo perchè, per come è costruita la distribuzione, questa sarà maggiormente instabile quando si eliminano i robot che vengono prima
+    6) Identificare i robot che stanno modificando la propria posizione all'interno della rete
+        6a) Rimuoverne almeno uno dopo che ha notificato il cambiamento della propria posizione ad almeno un paio di robot
+    7) Controllare lo stato dei log.
+
+<h3>Boss test di eliminazione e stabilizzazione</h3>
+Test abbastanza critico di eliminazione e stabilizzazione della distribuzione
+    
+    1) Inizializzazione di un processo AdminServer
+    2) Inizializzazione di un processo AdminClient
+    3) Inizializzazione di quattro processi CleaningBot
+    4) Rimozione incontrollata dei processi CleaningBot
+    5) Aggiunta di cinque processi CleaningBot

@@ -63,10 +63,11 @@ public class BotThread extends Thread {
 
         identity = new BotIdentity(
                 random.nextInt(UPPER_ID_LIMIT),
-//                1,
                 random.nextInt(65534),
                 "localhost");
         timestamp = -1;
+
+//        Logger.whiteDebuggingPrint(identity.toString(), BOT_THREAD_DEBUGGING);
 
         otherBots = new ThreadSafeArrayList<>();
         openComms = new ThreadSafeHashMap<>();
@@ -123,13 +124,13 @@ public class BotThread extends Thread {
         maintenanceThread = new MaintenanceThread(botServices);
         maintenanceThread.start();
 
-        Logger.yellow("Starting the pollution measurement sensor thread");
-        pollutionSensorThread = new PollutionSensorThread(district, identity);
-        pollutionSensorThread.start();
-
         Logger.yellow("Starting the measurement gathering thread");
         measurementGatheringThread = new MeasurementGatheringThread();
         measurementGatheringThread.start();
+
+        Logger.yellow("Starting the pollution measurement sensor thread");
+        pollutionSensorThread = new PollutionSensorThread(district, identity);
+        pollutionSensorThread.start();
     }
 
     /**
@@ -513,6 +514,15 @@ public class BotThread extends Thread {
                             .setY(newPosition.getY())
                             .build())
                     .build();
+
+            if(BOT_THREAD_DEBUGGING) {
+                Logger.blue("REMOVE THIS BOT NOW!!");
+                try {
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    Logger.red(WAKEUP_ERROR, e);
+                }
+            }
 
             serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
 

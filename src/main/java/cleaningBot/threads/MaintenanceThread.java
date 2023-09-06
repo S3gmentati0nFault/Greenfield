@@ -27,7 +27,7 @@ public class MaintenanceThread extends Thread {
     public MaintenanceThread(BotServices botServices) {
         this.botServices = botServices;
         inQueue = false;
-        if (DEBUGGING) {
+        if (HIGH_COLLISION_MODE) {
             PROBABILITY = DEBUGGING_MAINTENANCE_PROBABILITY;
             TIMEOUT = DEBUGGING_TIMEOUT;
         } else {

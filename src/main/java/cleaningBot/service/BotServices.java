@@ -28,6 +28,7 @@ public class BotServices extends BotServicesImplBase {
      * Public constructor. Public constructor that builds the comparator necessary to
      * handle the data structure used to keep track of the threads that still need
      * answering.
+     *
      * @param botThread the identity of the parent Thread, used for timestamp comparisons
      *                  when remote requests arrive.
      */
@@ -42,32 +43,32 @@ public class BotServices extends BotServicesImplBase {
      * Method that processes a query to access the Mutual-exclusion zone (the mechanic).
      * Method that processes a query to access the mechanic, it is synchronized because it
      * writes on the data structure associated to the Thread.
-     * @param request The request contains both the timestamp and the identifier of the
-     *                asking thread.
+     *
+     * @param request          The request contains both the timestamp and the identifier of the
+     *                         asking thread.
      * @param responseObserver The callback function.
      */
     public synchronized void maintenanceRequestGRPC(BotGRPC.Identifier request,
                                                     StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("processQueryGRPC");
-        if(DEBUGGING) {
+        if (DEBUGGING) {
             System.out.println("Current Thread: " + Thread.currentThread().getId());
         }
-        if(request.getTimestamp() > botThread.getTimestamp() &&
-                botThread.getTimestamp() != -1){
+        if (request.getTimestamp() > botThread.getTimestamp() &&
+                botThread.getTimestamp() != -1) {
 
             Logger.yellow("The message has a timestamp greater than mine");
             waitingInstances.add(new WaitingThread(this, request.getTimestamp()));
-            try{
+            try {
                 Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS WAITING", BOT_SERVICES_DEBUGGING);
                 wait();
-            }catch(Exception e){
+            } catch (Exception e) {
                 Logger.red(WAKEUP_ERROR);
                 e.printStackTrace();
             }
             Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS NOT WAITING", BOT_SERVICES_DEBUGGING);
             waitingInstances.remove(new WaitingThread(this, request.getTimestamp()));
-        }
-        else{
+        } else {
             Logger.yellow("The message has a lower timestamp than mine");
         }
         responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
@@ -76,7 +77,8 @@ public class BotServices extends BotServicesImplBase {
 
     /**
      * Method that processes the addition of a new robot to the network.
-     * @param request The request contains all the useful information about the new robot.
+     *
+     * @param request          The request contains all the useful information about the new robot.
      * @param responseObserver The callback function.
      */
     public void joinRequestGRPC(BotGRPC.BotInformation request,
@@ -84,28 +86,27 @@ public class BotServices extends BotServicesImplBase {
         Logger.purple("joinAdvertiseGRPC");
 
         BotIdentity newBot = new BotIdentity(request.getId(), request.getPort(), request.getHost(),
-                            new Position(request.getPosition().getX(), request.getPosition().getY()));
+                new Position(request.getPosition().getX(), request.getPosition().getY()));
 
         List<BotIdentity> currentFleet = botThread.getOtherBots().getArrayList();
-        try{
-            if(currentFleet.contains(newBot)) {
+        try {
+            if (currentFleet.contains(newBot)) {
                 responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
-            }
-            else{
+            } else {
                 currentFleet.add(newBot);
                 responseObserver.onNext(BotGRPC.Acknowledgement
                         .newBuilder()
                         .setAck(true)
                         .build());
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             Logger.red(":'(");
             responseObserver.onError(e);
         }
         responseObserver.onCompleted();
     }
 
-//    TODO
+    //    TODO
 //    >> FLAVOUR :: DEBUGGING-ROSSO <<
 //    RIVEDERE COME FUNZIONA LA CRASH NOTIFICATION GRPC E ANDARE A FARE I DOVUTI FIX PER
 //    GESTIRE L'AGGIORNAMENTO DEI ROBOT CHE VENGONO AGGIUNTI ALLA RETE
@@ -117,32 +118,31 @@ public class BotServices extends BotServicesImplBase {
         List<BotIdentity> deadRobots = new ArrayList<>();
         for (BotGRPC.BotInformation information : informations) {
             BotIdentity deadBot = new BotIdentity(information.getId(), information.getPort(), information.getHost(),
-                            new Position(information.getPosition().getX(), information.getPosition().getY()));
+                    new Position(information.getPosition().getX(), information.getPosition().getY()));
             deadRobots.add(deadBot);
         }
-        
-        try {
-            if(botThread.removeBot(deadRobots)) {
-                responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(1).build());
-                responseObserver.onCompleted();
-            }
-        } catch(Exception e) {
-            responseObserver.onError(e);
-            responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(-1).build());
+
+//        try {
+        if (botThread.removeBot(deadRobots)) {
+            responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(1).build());
             responseObserver.onCompleted();
         }
+//        } catch(Exception e) {
+//            responseObserver.onError(e);
+//            responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(-1).build());
+//            responseObserver.onCompleted();
+//        }
     }
 
     public void moveRequestGRPC(BotGRPC.IntegerValue request,
-                                             StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
+                                StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("moveRequestGRPC");
 
-        if(botThread.getDistrict() == request.getValue()) {
+        if (botThread.getDistrict() == request.getValue()) {
             Logger.red("I'm already present in that district");
             responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
             responseObserver.onCompleted();
-        }
-        else {
+        } else {
             synchronized (this) {
                 botThread.changeMyPosition(request.getValue());
                 try {
@@ -174,7 +174,7 @@ public class BotServices extends BotServicesImplBase {
      * Mutual-exclusion area is done.
      */
     public synchronized void clearWaitingQueue() {
-        if(waitingInstances.size() != 0) {
+        if (waitingInstances.size() != 0) {
             waitingInstances.forEach(
                     service -> {
                         Logger.yellow("Waking service " + service.getTimestamp() + " up");
