@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import static cleaningBot.BotUtilities.*;
 import static utilities.Variables.*;
@@ -45,6 +46,18 @@ public class EliminatorThread extends Thread {
         ObjectMapper mapper = new ObjectMapper();
 
         BotThread.getInstance().removeBot(deadRobots);
+
+        if(RANDOM_THREAD_WAIT) {
+            Random random = new Random();
+            if(random.nextInt(10) > 5) {
+                Logger.blue("!!ENTRO IN ATTESA!!");
+                try {
+                    sleep(10000);
+                } catch (InterruptedException e) {
+                    Logger.red(WAKEUP_ERROR, e);
+                }
+            }
+        }
 
         HttpURLConnection connection = buildConnection("DELETE", "http://" +
                 Variables.HOST + ":" +
@@ -169,14 +182,17 @@ public class EliminatorThread extends Thread {
             }
         }
 
-        int limit = (currentSize / 4) + Math.min(currentSize % 4, 1);
-        int reducedLimit = (currentSize / 4);
+//        int limit = (currentSize / 4) + Math.min(currentSize % 4, 1);
+        int limit = (currentSize / 4);
+//        int reducedLimit = (currentSize / 4);
 
         Logger.whiteDebuggingPrint("LIMIT -> " + limit, ELIMINATOR_THREAD_DEBUGGING);
 
         for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
             while (districtDistribution.get(i).size() > limit) {
-                moveBotsAround(districtDistribution, limit, i, reducedLimit);
+                if(!moveBotsAround(districtDistribution, limit, i)) {
+                    break;
+                }
             }
         }
 
@@ -193,12 +209,12 @@ public class EliminatorThread extends Thread {
         return true;
     }
 
-    private static void moveBotsAround(List<Queue<BotIdentity>> distribution, int limit, int overpopulatedDistrict, int reducedLimit) {
+    private static boolean moveBotsAround(List<Queue<BotIdentity>> distribution, int limit, int overpopulatedDistrict) {
 
         Logger.whiteDebuggingPrint("MOVING SOME ROBOTS AWAY FROM "
                 + (overpopulatedDistrict + 1), ELIMINATOR_THREAD_DEBUGGING);
 
-        int receivingDistrict = 0;
+        int receivingDistrict = -1;
         int min = distribution.get(0).size();
         for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
             Logger.whiteDebuggingPrint("Possible district -> "
@@ -212,13 +228,14 @@ public class EliminatorThread extends Thread {
             }
         }
 
-        Logger.whiteDebuggingPrint("RECEIVING DISTRICT -> " + (receivingDistrict + 1), ELIMINATOR_THREAD_DEBUGGING);
+        Logger.whiteDebuggingPrint("RECEIVING DISTRICT -> "
+                + (receivingDistrict + 1), ELIMINATOR_THREAD_DEBUGGING);
 
-        if (receivingDistrict == overpopulatedDistrict) {
-            return;
+        if (receivingDistrict == overpopulatedDistrict || receivingDistrict == -1) {
+            return false;
         }
 
-        while (distribution.get(receivingDistrict).size() <= reducedLimit &&
+        while (distribution.get(receivingDistrict).size() <= limit &&
                 distribution.get(overpopulatedDistrict).size() > limit) {
 
             final BotIdentity botToBeMoved = distribution.get(overpopulatedDistrict).poll();
@@ -255,6 +272,7 @@ public class EliminatorThread extends Thread {
                         });
             }
         }
+        return true;
     }
 
     private static void checkCounter(boolean quitting, AtomicCounter counter) {

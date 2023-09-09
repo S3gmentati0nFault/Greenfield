@@ -80,7 +80,7 @@ In alternativa i passi (5) e (4b) possono essere fusi insieme per fare un test l
 In questo test si possono utilizzare, sia la rimozione incontrollata che la rimozione controllata (in quanto quest'ultima 
 ha un effetto simile al processo di rimozione incontrollata se il robot non è in manutenzione).
 
-    1) Settare Variables.BOT_THREAD_DEBUGGING = true
+    1) Settare Variables.ELIMINATOR_THREAD_DEBUGGING= true
     2) Inizializzazione di un processo AdminServer
     3) Inizializzazione di un processo AdminClient
     4) Inizializzazione di sei processi CleaningBot

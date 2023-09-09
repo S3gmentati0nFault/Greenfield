@@ -19,6 +19,7 @@ import org.codehaus.jackson.type.TypeReference;
 import services.grpc.BotGRPC;
 import services.grpc.BotServicesGrpc;
 
+import javax.naming.CommunicationException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -444,8 +445,6 @@ public class BotThread extends Thread {
         setDistrict(district);
         Logger.cyan("My new district is > " + district + " > My new position is > " + newPosition);
 
-        List<BotIdentity> fleetSnapshot = otherBots.getCopy();
-
         ObjectMapper mapper = new ObjectMapper();
 
         HttpURLConnection connection =
@@ -486,25 +485,13 @@ public class BotThread extends Thread {
         BotUtilities.closeConnection(connection);
 
         List<BotIdentity> nonRespondingBots = new ArrayList<>();
+        List<BotIdentity> fleetSnapshot = otherBots.getCopy();
         AtomicCounter counter = new AtomicCounter(fleetSnapshot.size());
 
         for (BotIdentity botIdentity : fleetSnapshot) {
 
-            ManagedChannel channel;
-            BotServicesGrpc.BotServicesStub serviceStub;
+            CommPair communicationPair = BotUtilities.retrieveCommunicationPair(botIdentity);
 
-            CommPair communicationPair = openComms.getValue(botIdentity);
-            if (communicationPair == null) {
-                channel = ManagedChannelBuilder
-                        .forTarget(botIdentity.getIp() + ":" + botIdentity.getPort())
-                        .usePlaintext()
-                        .build();
-
-                serviceStub = BotServicesGrpc.newStub(channel);
-                newCommunicationChannel(botIdentity, channel, serviceStub);
-            } else {
-                serviceStub = communicationPair.getCommunicationStub();
-            }
             BotGRPC.BotInformation botInfo = BotGRPC.BotInformation.newBuilder()
                     .setId(identity.getId())
                     .setHost(identity.getIp())
@@ -515,7 +502,7 @@ public class BotThread extends Thread {
                             .build())
                     .build();
 
-            if(BOT_THREAD_DEBUGGING) {
+            if (BOT_THREAD_DEBUGGING) {
                 Logger.blue("REMOVE THIS BOT NOW!!");
                 try {
                     sleep(10000);
@@ -524,26 +511,27 @@ public class BotThread extends Thread {
                 }
             }
 
-            serviceStub.positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
+            communicationPair.getCommunicationStub()
+                    .positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {
 
-                @Override
-                public void onNext(BotGRPC.Acknowledgement value) {
-                    counter.decrement();
-                }
+                        @Override
+                        public void onNext(BotGRPC.Acknowledgement value) {
+                            counter.decrement();
+                        }
 
-                @Override
-                public void onError(Throwable t) {
-                    Logger.red("Robot " + botIdentity.getId() + " did not reply");
-                    counter.decrement();
-                    nonRespondingBots.add(botIdentity);
-                    checkAndWakeup(nonRespondingBots, counter);
-                }
+                        @Override
+                        public void onError(Throwable t) {
+                            Logger.red("Robot " + botIdentity.getId() + " did not reply");
+                            counter.decrement();
+                            nonRespondingBots.add(botIdentity);
+                            checkAndWakeup(nonRespondingBots, counter);
+                        }
 
-                @Override
-                public void onCompleted() {
-                    checkAndWakeup(nonRespondingBots, counter);
-                }
-            });
+                        @Override
+                        public void onCompleted() {
+                            checkAndWakeup(nonRespondingBots, counter);
+                        }
+                    });
         }
 
         pollutionSensorThread.closeConnection(district);
@@ -555,6 +543,10 @@ public class BotThread extends Thread {
                 counter.add(10);
                 synchronized (botServices) {
                     botServices.notify();
+                }
+                if(!deadRobots.isEmpty()) {
+                    EliminatorThread eliminatorThread = new EliminatorThread(deadRobots, false);
+                    eliminatorThread.start();
                 }
             }
         }

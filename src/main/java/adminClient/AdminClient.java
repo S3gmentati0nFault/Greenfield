@@ -154,10 +154,6 @@ public class AdminClient {
         }
     }
 
-//    TODO
-//    >> FLAVOUR :: LOGICA-GIALLO <<
-//    CAMBIARE LE SEGUENTI FUNZIONI PERCHÈ ACCETTINO MISURE IN SECONDI COME PUNTO DI PARTENZA E PUNTO DI ARRIVO PER IL
-//    POLLING DELLE INFORMAZIONI
     private static void getNumbers() {
         HttpURLConnection connection =
                 buildConnection("GET", "http://" +
