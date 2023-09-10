@@ -20,8 +20,9 @@ public class AtomicCounter {
 		counter = counter + 1;
 	}
 
-	public synchronized void decrement() {
+	public synchronized int decrement() {
 		counter = counter - 1;
+		return counter;
 	}
 
 	public synchronized void add(int amount) {

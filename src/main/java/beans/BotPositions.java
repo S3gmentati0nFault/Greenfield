@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static utilities.Variables.NUMBER_OF_DISTRICTS;
+import static utilities.Variables.SINGLE_CLUSTER_MODE;
 
 /**
  * BotPositions bean which simulates the city, it stores the position of all
@@ -60,6 +61,15 @@ public class BotPositions {
 //            random.nextInt(9),
 //                random.nextInt(9)
 //        );
+
+        if(SINGLE_CLUSTER_MODE) {
+            Random random = new Random();
+
+            Position pos = new Position(random.nextInt(5), random.nextInt(5));
+            identity.setPosition(pos);
+            city.add(identity);
+            return pos;
+        }
 
         int[] districts = new int[4];
 

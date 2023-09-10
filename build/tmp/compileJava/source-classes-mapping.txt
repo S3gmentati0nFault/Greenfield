@@ -1,7 +1,7 @@
 beans/BotIdentity.java
  beans.BotIdentity
-beans/BotPositions.java
- beans.BotPositions
+simulators/Measurement.java
+ simulators.Measurement
 simulators/Buffer.java
  simulators.Buffer
 exceptions/AlreadyOnMaintenanceException.java
@@ -27,8 +27,8 @@ cleaningBot/threads/BotThread.java
  cleaningBot.threads.BotThread$1
  cleaningBot.threads.BotThread$2
  cleaningBot.threads.BotThread$3
-adminServer/ServerRestInterface.java
- adminServer.ServerRestInterface
+extra/AtomicFlag/AtomicFlag.java
+ extra.AtomicFlag.AtomicFlag
 cleaningBot/threads/FixHelperThread.java
  cleaningBot.threads.FixHelperThread
 cleaningBot/BotUtilities.java
@@ -118,7 +118,7 @@ extra/ThreadSafeStructures/ThreadSafeArrayList.java
 cleaningBot/threads/MutualExclusionThread.java
  cleaningBot.threads.MutualExclusionThread
  cleaningBot.threads.MutualExclusionThread$1
-simulators/Measurement.java
- simulators.Measurement
-extra/AtomicFlag/AtomicFlag.java
- extra.AtomicFlag.AtomicFlag
+adminServer/ServerRestInterface.java
+ adminServer.ServerRestInterface
+beans/BotPositions.java
+ beans.BotPositions

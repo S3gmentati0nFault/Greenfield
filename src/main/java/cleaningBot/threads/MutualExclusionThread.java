@@ -23,18 +23,12 @@ import static utilities.Variables.*;
 
 public class MutualExclusionThread extends Thread {
 
-    private BotServices botServices;
     private AtomicCounter counter;
     private MaintenanceThread maintenanceThread;
 
     @Override
     public void run() {
         agrawalaProcedure();
-    }
-
-    public MutualExclusionThread(MaintenanceThread maintenanceThread, BotServices botServices) {
-        this.maintenanceThread = maintenanceThread;
-        this.botServices = botServices;
     }
 
     public MutualExclusionThread(MaintenanceThread maintenanceThread) {
@@ -72,26 +66,23 @@ public class MutualExclusionThread extends Thread {
                     .setTimestamp(timestamp)
                     .build();
 
-//            TODO
-//            >> FLAVOUR :: DEBUGGING-GIALLO <<
-//            CONTROLLARE UN COMPORTAMENTO STRANO PER CUI, QUALCHE VOLTA, LA STAMPA DEL CONTATORE VIENE RIPETUTA, COME SE
-//            NON CI FOSSE SINCRONIZZAZIONE O COME SE IL THREAD CORRENTE RILASCIASSE SUBITO IL MONITOR.
-//            ESEMPIO: 1, 1, 0 ANZICHÈ 2, 1, 0
             communicationPair.getCommunicationStub().maintenanceRequestGRPC(identifier,
                     new StreamObserver<BotGRPC.Acknowledgement>() {
                         @Override
-                        public synchronized void onNext(BotGRPC.Acknowledgement value) {
-                            System.out.println(Thread.currentThread().getId() + " onNext");
-                            Logger.whiteDebuggingPrint("onNext", MUTUAL_EXCLUSION_DEBUGGING);
-                            counter.decrement();
-//                            if(MUTUAL_EXCLUSION_DEBUGGING) {
-//                                try {
-//                                    sleep(5000);
-//                                } catch (InterruptedException e) {
-//                                    Logger.red(WAKEUP_ERROR, e);
-//                                }
-//                            }
-                            Logger.green("The response was positive! Still waiting for " + counter.getCounter() + " answers");
+                        public void onNext(BotGRPC.Acknowledgement value) {
+                            synchronized(counter) {
+                                Logger.whiteDebuggingPrint("ONNEXT "
+                                        + Thread.currentThread().getId() + " "
+                                        + System.currentTimeMillis(),
+                                        MUTUAL_EXCLUSION_DEBUGGING);
+
+                                Logger.green("The response was positive! Still waiting for " + counter.decrement() + " answers");
+
+                                Logger.whiteDebuggingPrint("FINE ONNEXT"
+                                        + Thread.currentThread().getId()  + " "
+                                        + System.currentTimeMillis(),
+                                        MUTUAL_EXCLUSION_DEBUGGING);
+                            }
                         }
 
                         @Override
@@ -105,8 +96,7 @@ public class MutualExclusionThread extends Thread {
 
                         @Override
                         public synchronized void onCompleted() {
-                            System.out.println(Thread.currentThread().getId() + " onCompleted");
-                            Logger.whiteDebuggingPrint("onCompleted", MUTUAL_EXCLUSION_DEBUGGING);
+                            Logger.whiteDebuggingPrint("ONCOMPLETED", MUTUAL_EXCLUSION_DEBUGGING);
                             maintenanceAccess(nonRespondingRobots);
                         }
                     });

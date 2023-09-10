@@ -182,9 +182,10 @@ public class EliminatorThread extends Thread {
             }
         }
 
-//        int limit = (currentSize / 4) + Math.min(currentSize % 4, 1);
         int limit = (currentSize / 4);
-//        int reducedLimit = (currentSize / 4);
+        if(limit == 0) {
+            limit++;
+        }
 
         Logger.whiteDebuggingPrint("LIMIT -> " + limit, ELIMINATOR_THREAD_DEBUGGING);
 
@@ -215,14 +216,14 @@ public class EliminatorThread extends Thread {
                 + (overpopulatedDistrict + 1), ELIMINATOR_THREAD_DEBUGGING);
 
         int receivingDistrict = -1;
-        int min = distribution.get(0).size();
+        int min = Integer.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
             Logger.whiteDebuggingPrint("Possible district -> "
                             + i + " its distribution: "
                             + distribution.get(i).size(),
                     ELIMINATOR_THREAD_DEBUGGING);
 
-            if (distribution.get(i).size() < min && distribution.get(i).size() < limit) {
+            if (distribution.get(i).size() < min && distribution.get(i).size() < limit + 1) {
                 receivingDistrict = i;
                 min = distribution.get(i).size();
             }
