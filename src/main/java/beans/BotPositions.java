@@ -9,8 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.IOException;
 import java.util.*;
 
-import static utilities.Variables.NUMBER_OF_DISTRICTS;
-import static utilities.Variables.SINGLE_CLUSTER_MODE;
+import static utilities.Variables.*;
 
 /**
  * BotPositions bean which simulates the city, it stores the position of all
@@ -33,7 +32,7 @@ public class BotPositions {
      * via the instance variable.
      */
     public static BotPositions getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new BotPositions();
         }
         return instance;
@@ -51,18 +50,24 @@ public class BotPositions {
     /**
      * Method to add a bot to the city map. With this method a bot can be added to
      * the city, its position is generated randomly.
+     *
      * @return The method will return either the position or null if the bot was already
      * present in the system.
      */
     public Position joinBot(BotIdentity identity) {
-//        Random random = new Random();
+        if(UNIFORM_PROBABILITY_MODE){
+            Random random = new Random();
 
-//        Position pos = new Position(
-//            random.nextInt(9),
-//                random.nextInt(9)
-//        );
+            Position pos = new Position(
+                    random.nextInt(9),
+                    random.nextInt(9)
+            );
+            identity.setPosition(pos);
+            city.add(identity);
+            return pos;
+        }
 
-        if(SINGLE_CLUSTER_MODE) {
+        if (SINGLE_CLUSTER_MODE) {
             Random random = new Random();
 
             Position pos = new Position(random.nextInt(5), random.nextInt(5));
@@ -79,7 +84,7 @@ public class BotPositions {
 
         int min = 0;
 
-        for(int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
+        for (int i = 0; i < NUMBER_OF_DISTRICTS; i++) {
             System.out.println(districts[i]);
             if (districts[i] < districts[min]) {
                 min = i;
@@ -91,7 +96,7 @@ public class BotPositions {
         System.out.println(pos);
         identity.setPosition(pos);
 
-        if(city.contains(identity)) {
+        if (city.contains(identity)) {
             return null;
         }
         city.add(identity);
@@ -110,10 +115,9 @@ public class BotPositions {
         Logger.blue("deletion");
 
         for (BotIdentity robot : robots) {
-            if(city.contains(robot)){
+            if (city.contains(robot)) {
                 returnValue &= city.remove(robot);
-            }
-            else {
+            } else {
                 Logger.red("The indicated bot is not present in the data structure");
             }
         }
@@ -124,10 +128,9 @@ public class BotPositions {
     public boolean modifyBot(BotIdentity oldPosition, BotIdentity newPosition) {
         Logger.blue("modification");
 
-        if(!city.contains(oldPosition)) {
+        if (!city.contains(oldPosition)) {
             return false;
-        }
-        else {
+        } else {
             city.remove(oldPosition);
             city.add(newPosition);
             return true;
@@ -136,7 +139,7 @@ public class BotPositions {
 
     public boolean searchId(int id) {
         for (BotIdentity botIdentity : city) {
-            if(botIdentity.getId() == id) {
+            if (botIdentity.getId() == id) {
                 return true;
             }
         }
@@ -147,6 +150,7 @@ public class BotPositions {
      * Method to create a json string to be sent to the bot. Method that creates a json
      * string starting from the bot position and the identities of all the bots in the
      * system.
+     *
      * @param botPosition the position of the bot inside the system.
      * @return A json string containing the bot position and the identity of all the bots
      * present inside the system enclosed in an array. The position object and the json
@@ -154,22 +158,20 @@ public class BotPositions {
      */
     public String jsonBuilder(Position botPosition) {
         String json = "";
-        try{
+        try {
             ObjectMapper mapper = new ObjectMapper();
-            if(botPosition != null){
+            if (botPosition != null) {
                 json = mapper.writeValueAsString(botPosition);
                 json = json + "-[";
-            }
-            else{
+            } else {
                 json = json + "[";
             }
-            for (BotIdentity bot: city) {
+            for (BotIdentity bot : city) {
                 json = json + mapper.writeValueAsString(bot) + ",";
             }
             json = json.replaceAll(",$", "") + "]";
             Logger.blue(json);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logger.red("There was an error while constructing the response");
         }
         System.out.println(json);
