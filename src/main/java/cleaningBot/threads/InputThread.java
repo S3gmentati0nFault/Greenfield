@@ -64,10 +64,12 @@ public class InputThread extends Thread {
                 if (quitting.isFlag()) {
                     Logger.red("Already quitting the program, wait please...");
                 }
-                quitting.setFlag(true);
-                Logger.cyan("Initiating the quit procedure...");
-                quitHelperThread = new QuitHelperThread();
-                quitHelperThread.start();
+                else {
+                    quitting.setFlag(true);
+                    Logger.cyan("Initiating the quit procedure...");
+                    quitHelperThread = new QuitHelperThread();
+                    quitHelperThread.start();
+                }
             } else {
                 Logger.red("Input could not be recognized");
             }
