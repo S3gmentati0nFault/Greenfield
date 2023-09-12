@@ -11,6 +11,7 @@ public class Variables {
     public static final Boolean RANDOM_THREAD_WAIT = false;
     public static final Boolean SINGLE_CLUSTER_MODE = false;
     public static final Boolean UNIFORM_PROBABILITY_MODE = false;
+    public static final Boolean QUEUE_DEBUGGING = true;
 
     public static final String HOST = "localhost";
     public static final String PORT = "3000";

@@ -117,16 +117,10 @@ public class BotServices extends BotServicesImplBase {
             deadRobots.add(deadBot);
         }
 
-//        try {
         if (botThread.removeBot(deadRobots)) {
             responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(1).build());
             responseObserver.onCompleted();
         }
-//        } catch(Exception e) {
-//            responseObserver.onError(e);
-//            responseObserver.onNext(BotGRPC.IntegerValue.newBuilder().setValue(-1).build());
-//            responseObserver.onCompleted();
-//        }
     }
 
     public void moveRequestGRPC(BotGRPC.IntegerValue request,
@@ -181,6 +175,14 @@ public class BotServices extends BotServicesImplBase {
         if (!waitingInstances.isEmpty()) {
             waitingInstances.forEach(
                     service -> {
+                        if(QUEUE_DEBUGGING) {
+                            Logger.blue("SLEEPING");
+                            try {
+                                sleep(10000);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                         Logger.yellow("Waking service " + service.getTimestamp() + " up");
                         service.getBotServices().notify();
                     }
