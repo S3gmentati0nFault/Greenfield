@@ -8,14 +8,22 @@ import extra.Logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utilities.Variables.DEBUGGING;
-import static utilities.Variables.WAKEUP_ERROR;
+import static utilities.Variables.*;
 
 public class MeasurementGatheringThread extends Thread {
     List<Float> averages;
     MeasurementBuffer buffer;
 
     public MeasurementGatheringThread() {
+        if (MEASUREMENT_THREAD_DEBUGGING) {
+            synchronized (this) {
+                try {
+                    wait(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         averages = new ArrayList<>();
     }
 
@@ -30,11 +38,11 @@ public class MeasurementGatheringThread extends Thread {
     }
 
     public void readingProcess() {
-        while(true) {
-            if(BotThread.getInstance().getMaintenanceThread().isDoingMaintenance()) {
+        while (true) {
+            if (BotThread.getInstance().getMaintenanceThread().isDoingMaintenance()) {
                 buffer.setRunning(false);
                 Logger.whiteDebuggingPrint(this.getClass() + " IS WAITING", DEBUGGING);
-                synchronized(this) {
+                synchronized (this) {
                     try {
                         wait();
                     } catch (InterruptedException e) {
@@ -54,15 +62,15 @@ public class MeasurementGatheringThread extends Thread {
     }
 
     private void gatherMeasurements() {
-            List<Measurement> measurements = buffer.readAllAndClean();
-            float avg = 0;
-            for (Measurement measurement : measurements) {
-                avg += measurement.getValue();
-            }
-            avg = avg / 8f;
-            synchronized(this) {
-                averages.add(avg);
-            }
+        List<Measurement> measurements = buffer.readAllAndClean();
+        float avg = 0;
+        for (Measurement measurement : measurements) {
+            avg += measurement.getValue();
+        }
+        avg = avg / 8f;
+        synchronized (this) {
+            averages.add(avg);
+        }
     }
 
     public synchronized List<Float> getAverages() {

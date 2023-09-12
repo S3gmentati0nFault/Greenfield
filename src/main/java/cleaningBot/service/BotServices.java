@@ -56,17 +56,16 @@ public class BotServices extends BotServicesImplBase {
         }
         if (request.getTimestamp() > botThread.getTimestamp() &&
                 botThread.getTimestamp() != -1) {
-
             Logger.yellow("The message has a timestamp greater than mine");
             waitingInstances.add(new WaitingThread(this, request.getTimestamp()));
             try {
-                Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS WAITING", BOT_SERVICES_DEBUGGING);
-                wait();
+                Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS WAITING", AGRAWALA_DEBUGGING);
+                wait(1000000);
             } catch (Exception e) {
                 Logger.red(WAKEUP_ERROR);
                 e.printStackTrace();
             }
-            Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS NOT WAITING", BOT_SERVICES_DEBUGGING);
+            Logger.whiteDebuggingPrint(this.getClass() + ".maintenanceRequest IS NOT WAITING", AGRAWALA_DEBUGGING);
             waitingInstances.remove(new WaitingThread(this, request.getTimestamp()));
         } else {
             Logger.yellow("The message has a lower timestamp than mine");
@@ -142,12 +141,12 @@ public class BotServices extends BotServicesImplBase {
             synchronized (this) {
                 botThread.changeMyPosition(request.getValue());
                 try {
-                    Logger.whiteDebuggingPrint(this.getClass() + ".moveRequest IS WAITING", BOT_SERVICES_DEBUGGING);
+                    Logger.whiteDebuggingPrint(this.getClass() + ".moveRequest IS WAITING", MOVE_REQUEST_DEBUGGING);
                     wait();
                 } catch (InterruptedException e) {
                     Logger.red(WAKEUP_ERROR, e);
                 }
-                Logger.whiteDebuggingPrint(this.getClass() + ".moveRequest IS NOT WAITING", BOT_SERVICES_DEBUGGING);
+                Logger.whiteDebuggingPrint(this.getClass() + ".moveRequest IS NOT WAITING", MOVE_REQUEST_DEBUGGING);
 
                 responseObserver.onNext(BotGRPC.Acknowledgement.newBuilder().setAck(true).build());
                 responseObserver.onCompleted();
@@ -158,6 +157,15 @@ public class BotServices extends BotServicesImplBase {
     public synchronized void positionModificationRequestGRPC(BotGRPC.BotInformation request,
                                                              StreamObserver<BotGRPC.Acknowledgement> responseObserver) {
         Logger.purple("positionModificationRequestGRPC");
+
+        if(MOVE_REQUEST_DEBUGGING) {
+            Logger.blue("PUTTING MYSELF TO SLEEP");
+            try {
+                sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         botThread.updatePosition(new BotIdentity(request.getId(), request.getPort(), "localhost",
                 new Position(request.getPosition().getX(), request.getPosition().getY())));
@@ -170,7 +178,7 @@ public class BotServices extends BotServicesImplBase {
      * Mutual-exclusion area is done.
      */
     public synchronized void clearWaitingQueue() {
-        if (waitingInstances.size() != 0) {
+        if (!waitingInstances.isEmpty()) {
             waitingInstances.forEach(
                     service -> {
                         Logger.yellow("Waking service " + service.getTimestamp() + " up");

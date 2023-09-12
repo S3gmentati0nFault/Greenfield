@@ -236,6 +236,8 @@ public class EliminatorThread extends Thread {
             return false;
         }
 
+        Logger.whiteDebuggingPrint("FACCIO MOVE REQUEST", MOVE_REQUEST_DEBUGGING);
+
         while (distribution.get(receivingDistrict).size() <= limit &&
                 distribution.get(overpopulatedDistrict).size() > limit) {
 
@@ -258,7 +260,7 @@ public class EliminatorThread extends Thread {
                         .moveRequestGRPC(district, new StreamObserver<BotGRPC.Acknowledgement>() {
                             @Override
                             public void onNext(BotGRPC.Acknowledgement value) {
-
+                                Logger.whiteDebuggingPrint("ONNEXT MOVEREQUEST", MOVE_REQUEST_DEBUGGING);
                             }
 
                             @Override
@@ -268,7 +270,7 @@ public class EliminatorThread extends Thread {
 
                             @Override
                             public void onCompleted() {
-
+                                Logger.whiteDebuggingPrint("ONCOMPLETED MOVEREQUEST", MOVE_REQUEST_DEBUGGING);
                             }
                         });
             }
@@ -276,7 +278,7 @@ public class EliminatorThread extends Thread {
         return true;
     }
 
-    private static void checkCounter(boolean quitting, AtomicCounter counter) {
+    private synchronized static void checkCounter(boolean quitting, AtomicCounter counter) {
         if (counter.getCounter() == 0) {
             counter.add(10);
             if (quitting) {

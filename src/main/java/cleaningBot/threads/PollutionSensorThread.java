@@ -13,8 +13,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.io.IOException;
 import java.util.List;
 
-import static utilities.Variables.DEBUGGING;
-import static utilities.Variables.WAKEUP_ERROR;
+import static utilities.Variables.*;
 
 public class PollutionSensorThread extends Thread {
     private int district;
@@ -60,11 +59,8 @@ public class PollutionSensorThread extends Thread {
                         Logger.red(WAKEUP_ERROR, e);
                     }
                     if (BotThread.getInstance().getMaintenanceThread().isDoingMaintenance()) {
-//                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS WAITING");
                         wait();
-//                        Logger.whiteDebuggingPrint(this.getClass() + ".brokering IS NOT WAITING");
                     }
-                    notify();
                 }
                 publishAverages();
             }
@@ -87,8 +83,8 @@ public class PollutionSensorThread extends Thread {
         StringBuilder payload = null;
         try {
             payload = new StringBuilder(botIdentity.getId()
-                + "-" + mapper.writeValueAsString(System.currentTimeMillis())
-                + "-[");
+                    + "-" + mapper.writeValueAsString(System.currentTimeMillis())
+                    + "-[");
         } catch (JsonMappingException e) {
             Logger.red("There was a problem while trying to build the payload for the MQTT message", e);
         } catch (JsonGenerationException e) {
@@ -97,7 +93,7 @@ public class PollutionSensorThread extends Thread {
             Logger.red("There was a problem while trying to build the payload for the MQTT message", e);
         }
 
-        if(payload == null) {
+        if (payload == null) {
             Logger.red("There was problems while trying to build the MQTT message");
             return;
         }
@@ -125,12 +121,6 @@ public class PollutionSensorThread extends Thread {
         Logger.cyan("Changing MQTT topic");
 
         synchronized (this) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Logger.red(WAKEUP_ERROR, e);
-            }
-
             System.out.println("DISTRICT -> " + district);
             this.district = district;
             topic = "greenfield/pollution/" + district;

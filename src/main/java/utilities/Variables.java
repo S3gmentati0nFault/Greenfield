@@ -2,10 +2,11 @@ package utilities;
 public class Variables {
     public static final Boolean DEBUGGING = false;
     public static final Boolean BOT_THREAD_DEBUGGING = false;
-    public static final Boolean BOT_SERVICES_DEBUGGING = false;
     public static final Boolean ELIMINATOR_THREAD_DEBUGGING = false;
     public static final Boolean MUTUAL_EXCLUSION_DEBUGGING = false;
-
+    public static final Boolean MOVE_REQUEST_DEBUGGING = false;
+    public static final Boolean AGRAWALA_DEBUGGING = false;
+    public static final Boolean MEASUREMENT_THREAD_DEBUGGING = false;
     public static final Boolean HIGH_COLLISION_MODE = false;
     public static final Boolean RANDOM_THREAD_WAIT = false;
     public static final Boolean SINGLE_CLUSTER_MODE = false;

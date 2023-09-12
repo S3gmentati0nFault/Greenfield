@@ -365,19 +365,6 @@ public class BotThread extends Thread {
     }
 
     public synchronized MeasurementGatheringThread getMeasurementGatheringThread() {
-        if (measurementGatheringThread == null) {
-            if (DEBUGGING) {
-                System.out.println("WAITING...");
-            }
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Logger.red(WAKEUP_ERROR, e.getCause());
-            }
-            if (DEBUGGING) {
-                System.out.println("NOT WAITING ANYMORE...");
-            }
-        }
         return measurementGatheringThread;
     }
 
@@ -501,15 +488,6 @@ public class BotThread extends Thread {
                             .setY(newPosition.getY())
                             .build())
                     .build();
-
-            if (BOT_THREAD_DEBUGGING) {
-                Logger.blue("REMOVE THIS BOT NOW!!");
-                try {
-                    sleep(10000);
-                } catch (InterruptedException e) {
-                    Logger.red(WAKEUP_ERROR, e);
-                }
-            }
 
             communicationPair.getCommunicationStub()
                     .positionModificationRequestGRPC(botInfo, new StreamObserver<BotGRPC.Acknowledgement>() {

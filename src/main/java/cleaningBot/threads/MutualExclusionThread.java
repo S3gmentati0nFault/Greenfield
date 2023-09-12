@@ -70,34 +70,36 @@ public class MutualExclusionThread extends Thread {
                     new StreamObserver<BotGRPC.Acknowledgement>() {
                         @Override
                         public void onNext(BotGRPC.Acknowledgement value) {
-                            synchronized(counter) {
-                                Logger.whiteDebuggingPrint("ONNEXT "
-                                        + Thread.currentThread().getId() + " "
-                                        + System.currentTimeMillis(),
-                                        MUTUAL_EXCLUSION_DEBUGGING);
-
+                            Logger.whiteDebuggingPrint("ONNEXT "
+                                            + Thread.currentThread().getId() + " "
+                                            + System.currentTimeMillis(),
+                                    MUTUAL_EXCLUSION_DEBUGGING);
+                            synchronized (counter) {
                                 Logger.green("The response was positive! Still waiting for " + counter.decrement() + " answers");
+                            }
+                            Logger.whiteDebuggingPrint("FINE ONNEXT"
+                                            + Thread.currentThread().getId() + " "
+                                            + System.currentTimeMillis(),
+                                    MUTUAL_EXCLUSION_DEBUGGING);
+                        }
 
-                                Logger.whiteDebuggingPrint("FINE ONNEXT"
-                                        + Thread.currentThread().getId()  + " "
-                                        + System.currentTimeMillis(),
-                                        MUTUAL_EXCLUSION_DEBUGGING);
+                        @Override
+                        public void onError(Throwable t) {
+                            Logger.red("Robot " + botIdentity.getId() + " did not reply to my maintenanceRequest call");
+                            synchronized (counter) {
+                                counter.decrement();
+                                Logger.green("Defaulting to positive reply, still waiting for " + counter.getCounter() + " answers");
+                                nonRespondingRobots.add(botIdentity);
+                                maintenanceAccess(nonRespondingRobots);
                             }
                         }
 
                         @Override
-                        public synchronized void onError(Throwable t) {
-                            Logger.red("Robot " + botIdentity.getId() + " did not reply to my maintenanceRequest call");
-                            counter.decrement();
-                            Logger.green("Defaulting to positive reply, still waiting for " + counter.getCounter() + " answers");
-                            nonRespondingRobots.add(botIdentity);
-                            maintenanceAccess(nonRespondingRobots);
-                        }
-
-                        @Override
-                        public synchronized void onCompleted() {
+                        public void onCompleted() {
                             Logger.whiteDebuggingPrint("ONCOMPLETED", MUTUAL_EXCLUSION_DEBUGGING);
-                            maintenanceAccess(nonRespondingRobots);
+                            synchronized (counter) {
+                                maintenanceAccess(nonRespondingRobots);
+                            }
                         }
                     });
         }
