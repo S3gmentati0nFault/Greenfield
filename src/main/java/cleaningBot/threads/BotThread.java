@@ -82,7 +82,7 @@ public class BotThread extends Thread {
      * initiates the communication channel with the administration server.
      */
     @Override
-    public synchronized void run() {
+    public void run() {
         boolean isServerRunning = false;
         Random random = new Random();
         while (!isServerRunning) {

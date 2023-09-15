@@ -141,11 +141,9 @@ public class MutualExclusionThread extends Thread {
 
             BotThread.getInstance().getBotServices().clearWaitingQueue();
 
-            QuitHelperThread quitHelperThread = BotThread.getInstance().getInputThread().getQuitHelperThread();
-            if (quitHelperThread != null) {
-                synchronized (quitHelperThread) {
-                    quitHelperThread.notify();
-                }
+            InputThread inputThread = BotThread.getInstance().getInputThread();
+            synchronized (inputThread) {
+                inputThread.notify();
             }
 
             BotThread.getInstance().setTimestamp(-1);

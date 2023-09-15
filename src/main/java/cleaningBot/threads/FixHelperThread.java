@@ -1,18 +1,22 @@
 package cleaningBot.threads;
 
 import exceptions.AlreadyOnMaintenanceException;
+import extra.AtomicFlag.AtomicFlag;
 import extra.Logger.Logger;
 
-public class FixHelperThread extends Thread{
-    public FixHelperThread(InputThread inputThread) {}
+public class FixHelperThread extends Thread {
+    private AtomicFlag maintenanceRequested;
 
-    @Override
+    public FixHelperThread(AtomicFlag maintenanceRequested) {
+        this.maintenanceRequested = maintenanceRequested;
+    }
+
     public void run() {
-        try{
+        try {
             BotThread.getInstance().getMaintenanceThread().doMaintenance();
         } catch (AlreadyOnMaintenanceException e) {
             Logger.red("The thread is already in maintenance!", e);
         }
-        BotThread.getInstance().getInputThread().getMaintenanceRequested().setFlag(false);
+        maintenanceRequested.setFlag(false);
     }
 }
