@@ -99,6 +99,7 @@ Both FIX and QUIT commands are being handled through dedicated threads, created 
 <h2>Final thoughts and future upgrades</h2>
 The solution I found is far from simple and still a bit rough around the edges. A couple of steps that I will take in the near future to make the solution better are:
 
+  - [ ] Cleaning the repository
   - [ ] Lower the project complexity, find ways to merge functionalities together and lower the amount of threads per process
   - [ ] Do code refactoring to better define responsibilities inside the network
   - [ ] Change a couple of asynchronous GRPCs to better suited synchronous remote procedure calls
